@@ -1,0 +1,39 @@
+<div class="modal-body d-flex justify-content-center p-0">
+  <form *ngIf="!isOTPRequested" (submit)="requestOTP(userForm.value)" class="common-form" #userForm="ngForm">
+    <div class="inner-form">
+      <h4 class="modal-title">Login</h4>
+      <div class="form-group">
+        <label for="emp_id" class="form-label-empId">
+          <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        </label>
+        <input type="number" class="form-input" id="number" name="emp_id" ngModel #emp_id="ngModel" required
+          placeholder="Enter employee Id">
+      </div>
+      <div *ngIf="emp_id.touched && emp_id.invalid" class="text-danger d-flex justify-content-center">
+        Please enter a valid employee ID.
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="form-button">REQUEST OTP</button>
+      </div>
+    </div>
+  </form>
+
+  <form *ngIf="isOTPRequested" (submit)="verifyOTP(otpForm.value)" class="common-form" #otpForm="ngForm">
+    <div class="inner-form">
+      <h4 class="modal-title">Verify OTP</h4>
+      <div class="form-group">
+        <label for="otp">
+          <i class="fa fa-lock" aria-hidden="true"></i>
+        </label>
+        <input type="text" class="form-input" id="otp" name="otp" ngModel #otp="ngModel" maxlength="6" required
+          placeholder="Enter OTP">
+      </div>
+      <div *ngIf="otp.touched && otp.invalid" class="text-danger d-flex justify-content-center">
+        Please enter a valid OTP.
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="form-button">VERIFY OTP</button>
+      </div>
+    </div>
+  </form>
+</div>

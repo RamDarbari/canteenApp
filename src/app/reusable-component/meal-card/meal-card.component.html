@@ -1,0 +1,39 @@
+<section>
+  <div class="container mt-4">
+    <div class="row w-100">
+      <div class="col-md-4 p-0 meal-image d-flex justify-content-center align-items-center">
+        <div class="card border-0 bg-transparent ">
+          <img
+            src="assets/aloo-paratha-gobi-paratha-also-known-as-potato-cauliflower-stuffed-flatbread-dish-originating-from-indian-subcontinent 1.png"
+            class="card-img-top" alt="Image">
+        </div>
+      </div>
+      <div class="meal-info d-flex align-items-center">
+        <div class="card border-0 bg-transparent w-100">
+          <div>
+            <p class="card-title">{{ selectedCategory }}</p>
+            <p></p>
+
+          </div>
+          <div class="card-body" *ngIf="meals && meals.length > 0">
+            <div *ngFor="let meal of meals">
+              <div class=" d-flex flex-wrap gap-3" *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+                <div class="card-items" *ngFor="let item of meal.items">
+                  <div class="card mb-3 border-0 shadow">
+                    <div class="card-body inner-body d-flex justify-content-center align-items-center text-center"
+                      (click)="addItemToCart(item.item_name, item.price)">
+                      <div>
+                        <h6 class="card-subtitle mb-2">{{ item.item_name }}</h6>
+                        <p class="card-text text-muted">RS. {{ item.price }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

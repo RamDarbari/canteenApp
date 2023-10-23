@@ -1,0 +1,46 @@
+section {
+  margin-top: 5%;
+}
+.about-us {
+  min-height: 563px;
+  background-color: #f6f6f6;
+  width: 91%;
+
+  .employee-images {
+    img {
+      width: 579px;
+      height: 563px;
+    }
+  }
+  .team-details {
+    .title {
+      width: 59%;
+      height: 15%;
+      h2 {
+        font-family: PoetsenOne;
+        font-size: 44px;
+        font-weight: 400;
+      }
+    }
+    .body {
+      height: 55%;
+      p {
+        width: 80%;
+        font-family: Poppins;
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+    .footer {
+      width: 42%;
+      button {
+        width: 200px;
+        height: 50px;
+        border-radius: 50px;
+        border: 1px solid #9122e8;
+        background-color: transparent;
+        color: #9122e8;
+      }
+    }
+  }
+}
