@@ -18,6 +18,4 @@ export class HomeComponent implements OnInit {
     this.selectedCategory = category;
     console.log('Selected Category:', this.selectedCategory);
   }
-
-  addMealToCart() {}
 }

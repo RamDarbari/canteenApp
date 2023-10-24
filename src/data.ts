@@ -8,13 +8,14 @@ export interface data {
   password: string;
   _id: string;
   title: string;
+  time: string;
   items: [];
 }
 
 export interface OrderDataItem {
   item_name: string;
-  quantity: string; // or number, depending on the API requirement
-  price: string; // or number, depending on the API requirement
+  quantity: string;
+  price: string;
 }
 
 export interface OrderData {

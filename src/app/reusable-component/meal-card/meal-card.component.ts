@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { data } from 'src/data';
 
 @Component({
   selector: 'app-meal-card',
@@ -40,6 +41,15 @@ export class MealCardComponent implements OnInit {
   }
 
   addItemToCart(item_name: string, price: number): void {
+    const userJSON = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+
+    if (!userJSON) {
+      this.toastr.error('You must be logged in to add items to the cart.');
+      return;
+    }
+
     const cartItem = {
       item_name: item_name,
       quantity: 1,
@@ -47,9 +57,15 @@ export class MealCardComponent implements OnInit {
     };
     const existingItems = localStorage.getItem('cartItems');
     let cartItems = [];
+
     if (existingItems) {
       cartItems = JSON.parse(existingItems);
+      if (cartItems.some((item) => item.item_name === item_name)) {
+        this.toastr.error('Item with the same name is already in the cart.');
+        return;
+      }
     }
+
     cartItems.push(cartItem);
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     this.toastr.success('Item added to cart successfully!');

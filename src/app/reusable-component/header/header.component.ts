@@ -3,6 +3,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../modal/modal.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +12,30 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 })
 export class HeaderComponent implements OnInit {
   cartItems: any[] = [];
+  quantity: false;
+  get hasToken(): boolean {
+    const userJSON = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+    return !!userJSON;
+  }
+  get hasCartItems(): boolean {
+    const existingItems = localStorage.getItem('cartItems');
+    return !!existingItems && JSON.parse(existingItems).length > 0;
+  }
+  get cartItemCount(): number {
+    const existingItems = localStorage.getItem('cartItems');
+    if (existingItems) {
+      const cartItems = JSON.parse(existingItems);
+      return cartItems.length;
+    }
+    return 0;
+  }
   constructor(
     private modalService: NgbModal,
     private offcanvasService: NgbOffcanvas,
-    private _https: CommonServiceService
+    private _https: CommonServiceService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +58,6 @@ export class HeaderComponent implements OnInit {
     this.cartItems[index].quantity = quantity;
     this.saveCartItems();
     this.loadCartItems();
-    localStorage.removeItem('cartItems');
   }
 
   openEnd(content: TemplateRef<any>) {
@@ -89,7 +109,7 @@ export class HeaderComponent implements OnInit {
           console.log(response);
           localStorage.removeItem('cartItems');
           this.offcanvasService.dismiss();
-          this.updateLocalStorageAndCart(0, this.cartItems.length);
+          this.loadCartItems();
           window.location.reload();
         });
       } else {
@@ -99,6 +119,7 @@ export class HeaderComponent implements OnInit {
       console.error('Error placing order:', error);
     }
   }
+
   closeCanvas() {
     this.offcanvasService.dismiss();
   }
@@ -118,5 +139,10 @@ export class HeaderComponent implements OnInit {
   increaseQuantity(index: number): void {
     this.cartItems[index].quantity++;
     this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
+  }
+
+  logout() {
+    localStorage.clear();
+    this.toastr.success('LogOut Successful');
   }
 }

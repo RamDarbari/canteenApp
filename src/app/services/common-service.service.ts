@@ -9,6 +9,8 @@ import { OrderData, OrderDataItem, data, login } from 'src/data';
   providedIn: 'root',
 })
 export class CommonServiceService {
+  private apiUrl = 'http://10.8.11.160:5000';
+
   isuserLoggedIn = new BehaviorSubject<boolean>(false);
   isLogginFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
@@ -20,17 +22,15 @@ export class CommonServiceService {
     private _router: Router,
     private toastr: ToastrService
   ) {}
-  requestOTP(data: login): Observable<any> {
-    return this._http.post<any>('http://10.8.11.160:5000/login', {
-      emp_id: data.emp_id,
-    });
+  requestOTP(emp_id: number): Observable<any> {
+    const url = `${this.apiUrl}/login`;
+    const data = { emp_id };
+    return this._http.post(url, data);
   }
 
-  verifyOTP(data: login, empId: number): Observable<any> {
-    return this._http.post<any>('http://10.8.11.160:5000/verifyOTP', {
-      otp: data.otp,
-      emp_id: empId,
-    });
+  verifyOTP(loginData: login, token: any): Observable<any> {
+    const url = `${this.apiUrl}/verifyOTP`;
+    return this._http.post(url, loginData);
   }
 
   reloadSeller() {

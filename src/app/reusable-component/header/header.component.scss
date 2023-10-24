@@ -220,6 +220,13 @@ header {
   }
 }
 
+.item-counter {
+  right: -20px;
+  top: -9px;
+  background: linear-gradient(0deg, #9122e8, #9122e8);
+  color: #fff;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
