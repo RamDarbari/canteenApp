@@ -21,7 +21,8 @@ export class ModalComponent {
   constructor(
     private loginService: CommonServiceService,
     private modalService: NgbModal,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   sendOTP() {
@@ -54,8 +55,15 @@ export class ModalComponent {
         .subscribe((response) => {
           if (response.success) {
             localStorage.setItem('user', JSON.stringify(response));
-            this.modalService.dismissAll();
-            this.toastr.success('Login Successful');
+            const userRole = response.data.empDetails.role;
+            if (userRole === 'user') {
+              this.modalService.dismissAll();
+              this.toastr.success('Login Successful');
+            } else if (userRole === 'admin') {
+              this.toastr.success('Admin Login Successful');
+              this.router.navigate(['/admin/dashboard']);
+              this.modalService.dismissAll();
+            }
           }
         });
     } catch (error) {

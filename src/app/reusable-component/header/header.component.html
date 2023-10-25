@@ -1,6 +1,6 @@
-<header>
+<header id="user" *ngIf="!showUserSection">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="user">
       <div class="upper-header d-flex">
         <div class="logo">
           <a>
@@ -18,8 +18,23 @@
             </button>
           </div>
           <div class="login d-flex justify-content-end">
-            <button *ngIf="hasToken" (click)="logout()"
-              class="rounded-pill btn btn-primary rounded-pill">Logout</button>
+            <div class="dropdown" *ngIf="hasToken">
+              <button class="btn btn-secondary rounded-pill btn btn-primary rounded-pill dropdown-toggle profile-button"
+                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <span>
+                  {{userProfileDetails.FirstName}}
+                </span>
+                <span>
+                  {{userProfileDetails.LastName}}
+                </span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" [routerLink]="['/admin/dashboard']"
+                    routerLinkActive="router-link-active">admin</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+              </ul>
+            </div>
             <button *ngIf="!hasToken" (click)="openLoginModal($event)" class="rounded-pill btn btn-primary rounded-pill"
               data-toggle="modal" data-target="#loginModal">Login</button>
           </div>
@@ -95,5 +110,11 @@
         </ng-template>
       </div>
     </div>
+  </div>
+</header>
+
+<header id="admin" *ngIf="showAdminSection" class="admin-header">
+  <div class="row">
+    <p>kkkkk</p>
   </div>
 </header>

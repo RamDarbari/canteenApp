@@ -1,9 +1,17 @@
 import { OrderData, OrderDataItem } from 'src/data';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../modal/modal.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { ToastrService } from 'ngx-toastr';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +19,29 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  showUserSection: boolean = true;
+  showAdminSection: boolean = true;
   cartItems: any[] = [];
   quantity: false;
+  constructor(
+    private modalService: NgbModal,
+    private offcanvasService: NgbOffcanvas,
+    private _https: CommonServiceService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCartItems();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.url;
+        this.showUserSection = currentRoute !== '/home';
+        this.showAdminSection = currentRoute == '/admin/dashboard';
+      }
+    });
+  }
+
   get hasToken(): boolean {
     const userJSON = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
@@ -31,16 +60,11 @@ export class HeaderComponent implements OnInit {
     }
     return 0;
   }
-  constructor(
-    private modalService: NgbModal,
-    private offcanvasService: NgbOffcanvas,
-    private _https: CommonServiceService,
-    private toastr: ToastrService
-  ) {}
-
-  ngOnInit(): void {
-    this.loadCartItems();
-    // this.confirmOrder();
+  get userProfileDetails() {
+    const userDetails = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails
+      : '';
+    return userDetails;
   }
 
   private saveCartItems(): void {
@@ -120,29 +144,45 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  closeCanvas() {
-    this.offcanvasService.dismiss();
-  }
-
   deleteItem(index: number): void {
     this.cartItems.splice(index, 1);
     localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 
-  decreaseQuantity(index: number): void {
-    if (this.cartItems[index].quantity > 1) {
-      this.cartItems[index].quantity--;
+  increaseQuantity(index: number): void {
+    if (this.cartItems[index].quantity < 999) {
+      this.cartItems[index].quantity++;
+      // this.updatePrice(index);
       this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
     }
   }
 
-  increaseQuantity(index: number): void {
-    this.cartItems[index].quantity++;
-    this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
+  decreaseQuantity(index: number): void {
+    if (this.cartItems[index].quantity > 1) {
+      this.cartItems[index].quantity--;
+      // this.updatePrice(index);
+      this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
+    }
   }
+
+  // updatePrice(index: number): void {
+  //   const originalItemPrice = this.cartItems[index].originalPrice;
+
+  //   if (this.cartItems[index].quantity > 0) {
+  //     this.cartItems[index].price =
+  //       originalItemPrice * this.cartItems[index].quantity;
+  //   } else {
+  //     this.cartItems[index].price = 0;
+  //   }
+
+  //   this.saveCartItems();
+  // }
 
   logout() {
     localStorage.clear();
-    this.toastr.success('LogOut Successful');
+    this.toastr.success('Log-out Successful');
+  }
+  closeCanvas() {
+    this.offcanvasService.dismiss();
   }
 }

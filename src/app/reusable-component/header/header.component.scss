@@ -33,6 +33,18 @@ header {
       .login {
         width: 30%;
 
+        .profile-button {
+          width: 100%;
+          height: 46px;
+          border: 1px;
+          background: linear-gradient(0deg, #9122e8, #9122e8);
+          color: #fff;
+          font-family: Poppins;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 27px;
+          outline: #9122e8;
+        }
         button {
           width: 140px;
           height: 46px;
@@ -225,6 +237,10 @@ header {
   top: -9px;
   background: linear-gradient(0deg, #9122e8, #9122e8);
   color: #fff;
+}
+
+.admin-header {
+  height: 100px;
 }
 
 input::-webkit-outer-spin-button,
