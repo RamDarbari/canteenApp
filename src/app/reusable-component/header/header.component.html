@@ -1,4 +1,4 @@
-<header id="user" *ngIf="!showUserSection">
+<header id="user" *ngIf="showUserSection">
   <div class="container">
     <div class="row justify-content-center" id="user">
       <div class="upper-header d-flex">
@@ -29,8 +29,11 @@
                 </span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" [routerLink]="['/admin/dashboard']"
-                    routerLinkActive="router-link-active">admin</a></li>
+                <li *ngIf="isAdmin">
+                  <a class="dropdown-item" [routerLink]="['/admin/dashboard']"
+                    routerLinkActive="router-link-active">admin</a>
+                </li>
+
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                 <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
               </ul>
@@ -113,8 +116,8 @@
   </div>
 </header>
 
-<header id="admin" *ngIf="showAdminSection" class="admin-header">
+<!-- <header id="admin" *ngIf="showAdminSection" class="admin-header">
   <div class="row">
     <p>kkkkk</p>
   </div>
-</header>
+</header> -->

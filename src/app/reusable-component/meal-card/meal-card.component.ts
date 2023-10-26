@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-import { data } from 'src/data';
 
 @Component({
   selector: 'app-meal-card',

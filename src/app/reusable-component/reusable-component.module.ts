@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { MealCardComponent } from './meal-card/meal-card.component';
+import { TableComponent } from './table/table.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { MealCardComponent } from './meal-card/meal-card.component';
     SidebarComponent,
     ModalComponent,
     MealCardComponent,
+    TableComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +33,7 @@ import { MealCardComponent } from './meal-card/meal-card.component';
     ModalComponent,
     SidebarComponent,
     MealCardComponent,
+    TableComponent,
   ],
 })
 export class ReusableComponentModule {}

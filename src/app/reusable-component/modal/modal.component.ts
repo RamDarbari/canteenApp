@@ -36,6 +36,7 @@ export class ModalComponent {
             localStorage.setItem('user', JSON.stringify(response));
           } else {
             this.otpVerified = false;
+            this.toastr.error('Failed to send OTP');
           }
         });
     } catch (error) {

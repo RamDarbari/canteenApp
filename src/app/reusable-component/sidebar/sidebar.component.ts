@@ -1,4 +1,13 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,39 +15,57 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  // closeResult: string;
-  // itemList: menuItem[] = [];
-  // token: string = '';
-  // constructor(
-  //   private offcanvasService: NgbOffcanvas,
-  //   private _http: CommonServiceService
-  // ) {}
+  meals: any[] = [];
+  selectedItemId: string | null = null; // Variable to store the selected item's ID
+
+  constructor(
+    private _https: AdminService,
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private offcanvasService: NgbOffcanvas
+  ) {}
 
   ngOnInit(): void {
-    // this.menuListItemFetch();
+    this.filterMeals();
   }
 
-  // openNoKeyboard(content: TemplateRef<any>) {
-  //   this.offcanvasService.open(content, { keyboard: false });
-  // }
+  openNoKeyboard(content: TemplateRef<any>) {
+    this.offcanvasService.open(content, { keyboard: false });
+  }
 
-  // menuListItemFetch() {
-  //   try {
-  //     const token = localStorage.getItem('user')
-  //       ? JSON.parse(localStorage.getItem('user')).data.token
-  //       : '';
-  //     this._http.menuList(token).subscribe(
-  //       (response: menuItem[]) => {
-  //         if (response) {
-  //           this.itemList = response;
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error(error);
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  filterMeals() {
+    try {
+      this._https.addMenuList().subscribe((response) => {
+        if (response.data && response.data.length > 0) {
+          this.meals = response.data.map((item) => {
+            return {
+              menu_id: item._id,
+              title: item.title,
+            };
+          });
+          console.log(this.meals);
+        } else {
+          this.meals = [];
+        }
+        this.cdr.detectChanges();
+      });
+    } catch (error) {
+      console.error(error);
+      this.toastr.error(
+        'An unexpected error occurred. Please try again later.'
+      );
+      this.cdr.detectChanges();
+    }
+  }
+
+  selectItem(menu_id: string) {
+    this.selectedItemId = menu_id;
+    console.log('Selected Item ID:', this.selectedItemId);
+    this.offcanvasService.dismiss();
+    // window.location.reload();
+    this.router.navigate(['/admin'], {
+      queryParams: { menu_id: this.selectedItemId },
+    });
+  }
 }

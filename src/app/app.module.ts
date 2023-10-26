@@ -9,7 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { authReducer, fetchMealReducer } from './Store/reducers';
+// import { authReducer, fetchMealReducer } from './Store/reducers';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
@@ -20,8 +20,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    StoreModule.forRoot({ authReducer, fetchMealReducer }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    // StoreModule.forRoot({ authReducer, fetchMealReducer }),
+    // StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ToastrModule.forRoot({
       timeOut: 1000,
       positionClass: 'toast-top-left',

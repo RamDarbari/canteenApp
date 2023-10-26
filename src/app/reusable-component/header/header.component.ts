@@ -23,6 +23,8 @@ export class HeaderComponent implements OnInit {
   showAdminSection: boolean = true;
   cartItems: any[] = [];
   quantity: false;
+  isAdmin: boolean = false; // Flag to check if the user is an admin
+
   constructor(
     private modalService: NgbModal,
     private offcanvasService: NgbOffcanvas,
@@ -32,14 +34,17 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCartItems();
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const currentRoute = event.url;
-        this.showUserSection = currentRoute !== '/home';
-        this.showAdminSection = currentRoute == '/admin/dashboard';
-      }
-    });
+    this.isAdmin = this.getUserRole() === 'admin';
+    this.getUserRole();
+  }
+
+  // ... (existing methods)
+
+  getUserRole(): string {
+    const userRole = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.role
+      : '';
+    return userRole;
   }
 
   get hasToken(): boolean {
@@ -134,7 +139,7 @@ export class HeaderComponent implements OnInit {
           localStorage.removeItem('cartItems');
           this.offcanvasService.dismiss();
           this.loadCartItems();
-          window.location.reload();
+          // window.location.reload();
         });
       } else {
         console.log('No items in the cart.');

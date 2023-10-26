@@ -1,0 +1,37 @@
+<header id="admin" class="d-flex align-items-center">
+  <div class="container">
+    <div class="row justify-content-center" id="user">
+      <div class="upper-header d-flex">
+        <div class="sidebar-menu d-flex align-items-center justify-content-center">
+          <app-sidebar></app-sidebar>
+        </div>
+        <div class="logo d-flex align-items-center">
+          <a>
+            <h2 class="m-0">Seasia Admin Panel</h2>
+          </a>
+        </div>
+        <div class="header-menu d-flex justify-content-end align-items-center">
+          <div class="cart d-flex justify-content-end">
+          </div>
+          <div class="login d-flex justify-content-end">
+            <div class="dropdown" *ngIf="hasToken">
+              <button class="btn btn-secondary rounded-pill btn btn-primary rounded-pill dropdown-toggle profile-button"
+                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <span>
+                  {{userProfileDetails.FirstName}}
+                </span>
+                <span>
+                  {{userProfileDetails.LastName}}
+                </span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

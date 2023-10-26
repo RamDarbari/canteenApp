@@ -1,0 +1,51 @@
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="add-product-container">
+        <h3>Add Product</h3>
+        <form #addProduct="ngForm" (ngSubmit)="onSubmit(addProduct.value, addProduct)">
+          <div class="form-group">
+            <label for="item_name">Product Name:</label>
+            <input type="text" id="item_name" name="item_name" class="form-control" ngModel required
+              placeholder="Rajma Chawal">
+          </div>
+          <div class="form-group">
+            <label for="price">Price:</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <!-- <div class="input-group-text">$</div> -->
+              </div>
+              <label for="price"></label>
+              <input type="number" id="price" name="price" class="form-control" ngModel required placeholder="$">
+            </div>
+          </div>
+          <button type="submit" class="btn ">Add Product</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="product-table-container">
+    <h3>Product List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let menuItem of menuItems">
+          <td>{{ menuItem.item_name }}</td>
+          <td>{{ menuItem.price }}</td>
+          <td>
+            <button class="edit" (click)="editProduct()"><i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+            <button class="delete" (click)="deleteProduct(menuItem._id)"><i class="fa fa-trash"
+                aria-hidden="true"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

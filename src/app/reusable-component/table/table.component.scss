@@ -1,0 +1,160 @@
+section {
+  background-color: #232227;
+}
+
+h2 {
+  color: white;
+  padding: 30px;
+}
+
+.add-product-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+
+  h3,
+  p {
+    text-align: center;
+    color: white;
+  }
+
+  form {
+    margin-top: 20px;
+
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: white;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        appearance: none;
+
+        &:focus {
+          color: #495057;
+          background-color: #fff;
+          border-color: #80bdff;
+          outline: 0;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+
+      textarea {
+        resize: vertical;
+        height: 100px;
+      }
+
+      .input-group-text {
+        background-color: #fff;
+        border-color: #ced4da;
+        border-radius: 0.25rem;
+      }
+
+      .form-control-file {
+        padding: 0;
+        height: auto;
+      }
+    }
+
+    .btn {
+      display: block;
+      margin: auto;
+      background-color: #4b49ac;
+      color: white;
+
+      &:hover {
+        background-color: #3e3e40;
+      }
+    }
+  }
+}
+
+.product-table-container {
+  text-align: center;
+  padding: 20px;
+
+  h3 {
+    color: #fff;
+  }
+
+  table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 100%;
+    color: white;
+
+    th,
+    td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #333;
+      color: #fff;
+    }
+
+    img {
+      height: 100px;
+      width: 100px;
+      object-fit: cover;
+    }
+
+    .delete {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darkred;
+      }
+
+      &:active {
+        background-color: red;
+      }
+    }
+
+    .edit {
+      background-color: green;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 73px;
+
+      &:hover {
+        background-color: darkgreen;
+      }
+
+      &:active {
+        background-color: green;
+      }
+    }
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { OrderData, OrderDataItem, data, login } from 'src/data';
+import { OrderData, OrderDataItem, login } from 'src/data';
 
 @Injectable({
   providedIn: 'root',
@@ -11,17 +11,13 @@ import { OrderData, OrderDataItem, data, login } from 'src/data';
 export class CommonServiceService {
   private apiUrl = 'http://10.8.11.160:5000';
 
-  isuserLoggedIn = new BehaviorSubject<boolean>(false);
-  isLogginFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
   token!: string;
-  data: data[];
   constructor(
     private _http: HttpClient,
     private _router: Router,
     private toastr: ToastrService
   ) {}
+
   requestOTP(emp_id: number): Observable<any> {
     const url = `${this.apiUrl}/login`;
     const data = { emp_id };
@@ -35,7 +31,6 @@ export class CommonServiceService {
 
   reloadSeller() {
     if (localStorage.getItem('user')) {
-      this.isuserLoggedIn.next(true);
       this._router.navigate(['./login']);
     }
   }
@@ -50,7 +45,7 @@ export class CommonServiceService {
     }
   }
   menuList(): Observable<any> {
-    return this._http.get('http://10.8.11.160:5000/admin/listMenu');
+    return this._http.get('http://10.8.11.160:5000/admin/listSubMenu');
   }
 
   placeOrder(orderData: OrderData, token: any) {

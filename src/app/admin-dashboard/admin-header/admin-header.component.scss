@@ -1,0 +1,65 @@
+header {
+  background: linear-gradient(
+    75.98deg,
+    #ffcb46 0%,
+    #eeb219 100.74%,
+    #ffdc82 100.75%
+  );
+
+  height: 100px;
+  .upper-header {
+    .sidebar-menu {
+      width: 4%;
+    }
+    .logo {
+      width: 50%;
+
+      h2 {
+        font-family: Poppins;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 36px;
+      }
+    }
+    .header-menu {
+      width: 50%;
+
+      .cart {
+        width: 10%;
+
+        i {
+          margin-right: 5px;
+          font-size: 30px;
+        }
+      }
+      .login {
+        width: 30%;
+
+        .profile-button {
+          width: 100%;
+          height: 46px;
+          border: 1px;
+          background: linear-gradient(0deg, #9122e8, #9122e8);
+          color: #fff;
+          font-family: Poppins;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 27px;
+          outline: #9122e8;
+        }
+        button {
+          width: 140px;
+          height: 46px;
+          border: 1px;
+          background: linear-gradient(0deg, #9122e8, #9122e8);
+          color: #fff;
+          font-family: Poppins;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 27px;
+          outline: #9122e8;
+        }
+      }
+    }
+  }
+}
