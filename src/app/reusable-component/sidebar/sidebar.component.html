@@ -2,6 +2,47 @@
   <i class="fa fa-bars fs-5" aria-hidden="true"></i>
 </button>
 
+<!-- <ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title ">Admin Panel</h4>
+  </div>
+  <div class="offcanvas-body">
+    <div class="dropdown d-flex justify-content-center w-100">
+      <button class="btn btn-secondary d-flex justify-content-between w-100" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        <span>
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          Menu List
+        </span>
+        <span class="dropdown-toggle"></span>
+      </button>
+
+      <button class="btn btn-secondary d-flex justify-content-between w-100" type="button" id="dropdownMenuButton2"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        <span>
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          User List
+        </span>
+        <span class="dropdown-toggle"></span>
+      </button>
+
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
+        <ng-container>
+          <button ngbDropdownItem><a href></a></button>
+          <button ngbDropdownItem><a [routerLink]="['/menu/addProduct']" routerLinkActive="router-link-active">Add
+              Product</a></button>
+          <button ngbDropdownItem> <a [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">Menu
+              Catalogue</a></button>
+        </ng-container>
+      </ul>
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2"></ul>
+    </div>
+    <div class="text-end">
+    </div>
+  </div>
+</ng-template> -->
+
+
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
     <h4 class="offcanvas-title">Admin Panel</h4>
@@ -22,6 +63,11 @@
         <ng-container *ngIf="!(meals && meals.length > 0)">
           <li><a class="dropdown-item" href="#">No meals available</a></li>
         </ng-container>
+      </ul>
+      <ul>
+        <li>
+          <a [routerLink]="['/menu/addProduct']" routerLinkActive="router-link-active">Add Product</a>
+        </li>
       </ul>
     </div>
   </div>

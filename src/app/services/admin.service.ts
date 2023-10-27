@@ -9,7 +9,8 @@ import { OrderDataItem } from 'src/data';
   providedIn: 'root',
 })
 export class AdminService {
-  apiUrl: 'http://10.8.11.160:5000';
+  private apiUrl = 'http://10.8.11.160:5000';
+
   constructor(
     private _http: HttpClient,
     private _router: Router,
@@ -43,9 +44,12 @@ export class AdminService {
     );
   }
 
-  updateItems(token: string) {
-    this._http.put('http://10.8.11.160:5000/admin/updateMenu', {
-      headers: { Authorization: `Bearer ${token}` },
+  updateItems(token: string, id: string, updatedData: any) {
+    const url = `http://10.8.11.160:5000/admin/updateSubmenu/?id=${id}`;
+    return this._http.put(url, updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 }

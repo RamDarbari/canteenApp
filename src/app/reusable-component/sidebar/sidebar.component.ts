@@ -63,8 +63,8 @@ export class SidebarComponent implements OnInit {
     this.selectedItemId = menu_id;
     console.log('Selected Item ID:', this.selectedItemId);
     this.offcanvasService.dismiss();
-    // window.location.reload();
-    this.router.navigate(['/admin'], {
+    this.filterMeals();
+    this.router.navigate(['/menu/addProduct'], {
       queryParams: { menu_id: this.selectedItemId },
     });
   }

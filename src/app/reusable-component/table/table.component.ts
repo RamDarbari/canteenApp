@@ -17,12 +17,6 @@ interface MenuItem {
   quantity: number;
 }
 
-interface MenuResponse {
-  data: {
-    items: MenuItem[];
-  };
-}
-
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -30,6 +24,7 @@ interface MenuResponse {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent implements OnInit {
+  editedItem: MenuItem | null = null;
   addProductMessage: string;
   menuItems: MenuItem[] = [];
   itemId: string;
@@ -45,24 +40,43 @@ export class TableComponent implements OnInit {
     this.getproduct();
   }
 
+  editProduct(menuItem: MenuItem) {
+    this.editedItem = { ...menuItem };
+  }
+
   onSubmit(data: any, addProduct: NgForm) {
     try {
-      // Get itemId from query parameters
       const itemId = this.route.snapshot.queryParamMap.get('menu_id');
-
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
       data.menu_id = itemId;
       console.log(data.menu_id, 'ooooooo');
-      this.http.addItem(data, token).subscribe((result) => {
-        console.log(result);
-        if (result) {
-          this.toastr.success('Item Added Successfully ');
-        } else {
-          this.toastr.error('Failed to Add Item');
-        }
-      });
+
+      if (this.editedItem) {
+        data._id = this.editedItem._id;
+        this.http.updateItems(token, data._id, data).subscribe((result) => {
+          console.log(result);
+          if (result) {
+            this.toastr.success('Item Updated Successfully');
+            this.editedItem = null;
+          } else {
+            this.toastr.error('Failed to Update Item');
+          }
+        });
+      } else {
+        this.http.addItem(data, token).subscribe((result) => {
+          console.log(result);
+          if (result) {
+            this.toastr.success('Item Added Successfully');
+          } else {
+            this.toastr.error('Failed to Add Item');
+          }
+        });
+      }
+
+      // Fetch products again after addition or update
+      this.getproduct();
     } catch (error) {
       console.log(error);
     }
@@ -108,5 +122,29 @@ export class TableComponent implements OnInit {
       console.log(error);
     }
   }
-  editProduct() {}
+  saveEditedItem() {
+    if (this.editedItem) {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      const itemId = this.editedItem._id;
+
+      this.http
+        .updateItems(token, itemId, this.editedItem)
+        .subscribe((result) => {
+          console.log(result);
+          if (result) {
+            this.toastr.success('Item Updated Successfully');
+            this.editedItem = null;
+            this.getproduct();
+          } else {
+            this.toastr.error('Failed to Update Item');
+          }
+        });
+    }
+  }
+
+  cancelEdit() {
+    this.editedItem = null;
+  }
 }
