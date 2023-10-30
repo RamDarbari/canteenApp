@@ -29,6 +29,9 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.filterMeals();
   }
+  selectUser(userId: number) {
+    // TODO: Implement this method to handle the selection of a user
+  }
 
   openNoKeyboard(content: TemplateRef<any>) {
     this.offcanvasService.open(content, { keyboard: false });
@@ -36,7 +39,7 @@ export class SidebarComponent implements OnInit {
 
   filterMeals() {
     try {
-      this._https.addMenuList().subscribe((response) => {
+      this._https.addminMenuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data.map((item) => {
             return {

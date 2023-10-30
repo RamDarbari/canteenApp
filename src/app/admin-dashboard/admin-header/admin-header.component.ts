@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { EncryptionService } from 'src/app/services/encryption-service.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -8,7 +10,11 @@ import { ToastrService } from 'ngx-toastr';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminHeaderComponent implements OnInit {
-  constructor(private toastr: ToastrService) {}
+  constructor(
+    private toastr: ToastrService,
+    private router: Router,
+    private encryptionService: EncryptionService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -29,5 +35,6 @@ export class AdminHeaderComponent implements OnInit {
   logout() {
     localStorage.clear();
     this.toastr.success('Log-out Successful');
+    this.router.navigate(['/home']); // Navigate to the home page
   }
 }

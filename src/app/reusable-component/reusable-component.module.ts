@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { MealCardComponent } from './meal-card/meal-card.component';
 import { TableComponent } from './table/table.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TableComponent } from './table/table.component';
     ModalComponent,
     MealCardComponent,
     TableComponent,
+    LoaderComponent,
   ],
   imports: [
     CommonModule,

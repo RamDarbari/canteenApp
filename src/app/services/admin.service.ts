@@ -2,14 +2,15 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { OrderDataItem } from 'src/data';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  private apiUrl = 'http://10.8.11.160:5000';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private _http: HttpClient,
@@ -17,7 +18,7 @@ export class AdminService {
     private toastr: ToastrService
   ) {}
 
-  addMenuList(menuId?: string): Observable<any> {
+  addminMenuList(menuId?: string): Observable<any> {
     const apiUrl = menuId
       ? `http://10.8.11.160:5000/admin/listSubMenu?menu_id=${menuId}`
       : 'http://10.8.11.160:5000/admin/listSubMenu';
@@ -36,17 +37,28 @@ export class AdminService {
       Authorization: `Bearer ${token}`,
     });
 
-    return this._http.delete(
-      `http://10.8.11.160:5000/admin/deleteSubMenu?id=${_id}`,
-      {
-        headers,
-      }
-    );
+    return this._http.delete(`${this.apiUrl}/admin/deleteSubMenu?id=${_id}`, {
+      headers,
+    });
   }
 
   updateItems(token: string, id: string, updatedData: any) {
-    const url = `http://10.8.11.160:5000/admin/updateSubmenu/?id=${id}`;
-    return this._http.put(url, updatedData, {
+    return this._http
+      .put(`${this.apiUrl}/admin/updateSubmenu`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .pipe(
+        catchError((error) => {
+          this.toastr.error('Error during updating items');
+          return throwError(error);
+        })
+      );
+  }
+
+  userList(token: any) {
+    return this._http.get(`${this.apiUrl}/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

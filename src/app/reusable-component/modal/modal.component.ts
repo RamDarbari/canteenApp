@@ -15,6 +15,7 @@ export class ModalComponent {
     emp_id: null,
     otp: '',
   };
+  isLoading: boolean = false;
 
   otpVerified: boolean = false;
 
@@ -27,11 +28,13 @@ export class ModalComponent {
 
   sendOTP() {
     try {
+      this.isLoading = true;
       this.loginService
         .requestOTP(this.loginData.emp_id)
         .subscribe((response) => {
           if (response.message === 'Otp send successfully.') {
             this.otpVerified = true;
+            this.isLoading = false;
             this.toastr.success('Otp Sent Successfully');
             localStorage.setItem('user', JSON.stringify(response));
           } else {
@@ -50,11 +53,12 @@ export class ModalComponent {
       const emp_id = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.emp_id
         : null;
-
+      this.isLoading = true;
       this.loginService
         .verifyOTP(this.loginData, emp_id)
         .subscribe((response) => {
           if (response.success) {
+            this.isLoading = false;
             localStorage.setItem('user', JSON.stringify(response));
             const userRole = response.data.empDetails.role;
             if (userRole === 'user') {

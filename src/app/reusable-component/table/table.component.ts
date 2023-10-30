@@ -27,7 +27,6 @@ export class TableComponent implements OnInit {
   editedItem: MenuItem | null = null;
   addProductMessage: string;
   menuItems: MenuItem[] = [];
-  itemId: string;
 
   constructor(
     private http: AdminService,
@@ -37,7 +36,12 @@ export class TableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getproduct();
+    this.route.queryParams.subscribe((params) => {
+      if ('menu_id' in params) {
+        const menuId = params['menu_id'];
+        this.getproduct(menuId);
+      }
+    });
   }
 
   editProduct(menuItem: MenuItem) {
@@ -51,54 +55,47 @@ export class TableComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
       data.menu_id = itemId;
-      console.log(data.menu_id, 'ooooooo');
 
       if (this.editedItem) {
         data._id = this.editedItem._id;
         this.http.updateItems(token, data._id, data).subscribe((result) => {
-          console.log(result);
           if (result) {
             this.toastr.success('Item Updated Successfully');
-            this.editedItem = null;
+            // Update or replace the item in the 'menuItems' array
+            const updatedIndex = this.menuItems.findIndex(
+              (item) => item._id === data._id
+            );
+            if (updatedIndex !== -1) {
+              this.menuItems[updatedIndex] = data;
+            }
           } else {
             this.toastr.error('Failed to Update Item');
           }
         });
       } else {
         this.http.addItem(data, token).subscribe((result) => {
-          console.log(result);
           if (result) {
             this.toastr.success('Item Added Successfully');
+            // Add the new item to the 'menuItems' array
+            this.menuItems.push(data);
           } else {
             this.toastr.error('Failed to Add Item');
           }
         });
       }
-
-      // Fetch products again after addition or update
-      this.getproduct();
     } catch (error) {
       console.log(error);
     }
   }
 
-  getproduct() {
-    try {
-      const menuId = this.route.snapshot.queryParamMap.get('menu_id');
-
-      if (menuId) {
-        this.http.addMenuList(menuId).subscribe((response: any) => {
-          console.log(response, 'response');
-          if (response && response.data && response.data.items) {
-            this.menuItems = response.data.items;
-            console.log(this.menuItems, 'llll');
-          }
-          this.cdr.detectChanges();
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      this.cdr.detectChanges();
+  getproduct(menuId?: string) {
+    if (menuId) {
+      this.http.addminMenuList(menuId).subscribe((response: any) => {
+        if (response && response.data && response.data.items) {
+          this.menuItems = response.data.items;
+        }
+        this.cdr.detectChanges();
+      });
     }
   }
 
@@ -109,11 +106,11 @@ export class TableComponent implements OnInit {
         : '';
 
       this.http.deleteItems(token, itemId).subscribe((response) => {
-        console.log(itemId);
         if (response) {
-          console.log(response);
           this.toastr.success('Item Deleted Successfully');
-          this.getproduct();
+          // Remove the deleted item from the 'menuItems' array
+          this.menuItems = this.menuItems.filter((item) => item._id !== itemId);
+          this.cdr.detectChanges();
         } else {
           console.error('Failed To Delete The Product');
         }
@@ -122,6 +119,7 @@ export class TableComponent implements OnInit {
       console.log(error);
     }
   }
+
   saveEditedItem() {
     if (this.editedItem) {
       const token = localStorage.getItem('user')
@@ -132,11 +130,11 @@ export class TableComponent implements OnInit {
       this.http
         .updateItems(token, itemId, this.editedItem)
         .subscribe((result) => {
-          console.log(result);
           if (result) {
             this.toastr.success('Item Updated Successfully');
             this.editedItem = null;
             this.getproduct();
+            this.cdr.detectChanges();
           } else {
             this.toastr.error('Failed to Update Item');
           }

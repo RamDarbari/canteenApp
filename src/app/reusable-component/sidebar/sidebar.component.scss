@@ -1,3 +1,6 @@
+a {
+  cursor: pointer;
+}
 .offcanvas-header {
   height: 100px;
   background-color: #ebebeb;
@@ -13,5 +16,9 @@
 .offcanvas-body {
   .dropdown-toggle1 {
     height: 50px;
+  }
+
+  .dropdownButton {
+    margin-bottom: 30px;
   }
 }

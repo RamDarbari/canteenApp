@@ -1,60 +1,18 @@
-<button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
+<!-- <button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
   <i class="fa fa-bars fs-5" aria-hidden="true"></i>
 </button>
-
-<!-- <ng-template #content let-offcanvas>
-  <div class="offcanvas-header">
-    <h4 class="offcanvas-title ">Admin Panel</h4>
-  </div>
-  <div class="offcanvas-body">
-    <div class="dropdown d-flex justify-content-center w-100">
-      <button class="btn btn-secondary d-flex justify-content-between w-100" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        <span>
-          <i class="fa fa-archive" aria-hidden="true"></i>
-          Menu List
-        </span>
-        <span class="dropdown-toggle"></span>
-      </button>
-
-      <button class="btn btn-secondary d-flex justify-content-between w-100" type="button" id="dropdownMenuButton2"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        <span>
-          <i class="fa fa-archive" aria-hidden="true"></i>
-          User List
-        </span>
-        <span class="dropdown-toggle"></span>
-      </button>
-
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
-        <ng-container>
-          <button ngbDropdownItem><a href></a></button>
-          <button ngbDropdownItem><a [routerLink]="['/menu/addProduct']" routerLinkActive="router-link-active">Add
-              Product</a></button>
-          <button ngbDropdownItem> <a [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">Menu
-              Catalogue</a></button>
-        </ng-container>
-      </ul>
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2"></ul>
-    </div>
-    <div class="text-end">
-    </div>
-  </div>
-</ng-template> -->
-
 
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
     <h4 class="offcanvas-title">Admin Panel</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
   <div class="offcanvas-body">
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Menu List
+      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        Menus
       </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
         <ng-container *ngIf="meals && meals.length > 0">
           <li *ngFor="let meal of meals">
             <a class="dropdown-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
@@ -64,11 +22,64 @@
           <li><a class="dropdown-item" href="#">No meals available</a></li>
         </ng-container>
       </ul>
-      <ul>
-        <li>
-          <a [routerLink]="['/menu/addProduct']" routerLinkActive="router-link-active">Add Product</a>
-        </li>
+
+      <button class="btn btn-secondary w-100  dropdownButton" type="button" id="dropdownMenuButton2"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        User Details
+      </button>
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2">
+        <ng-container>
+          <li>
+            <a class="dropdown-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active">User List
+            </a>
+          </li>
+        </ng-container>
       </ul>
+    </div>
+  </div>
+</ng-template> -->
+
+
+<button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
+  <i class="fa fa-bars fs-5" aria-hidden="true"></i>
+</button>
+
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Admin Panel</h4>
+  </div>
+  <div class="offcanvas-body">
+    <div class="dropdown">
+      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        Menus
+      </button>
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
+        <ng-container>
+          <li>
+            <a class="dropdown-item">Menu List</a>
+            <a class="dropdown-item">Menu Grid</a>
+            <a class="dropdown-item">Add Product</a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <button class="btn btn-secondary w-100  dropdownButton" type="button" id="dropdownMenuButton2"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        User Details
+      </button>
+      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2">
+        <ng-container>
+          <li>
+            <a class="dropdown-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active">User List
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <button class="btn btn-secondary w-100" type="button">
+        Orders
+      </button>
     </div>
   </div>
 </ng-template>

@@ -28,7 +28,7 @@
                 <div class="card-items" *ngFor="let item of meal.items">
                   <div class="card mb-3 border-0 shadow">
                     <div class="card-body inner-body d-flex justify-content-center align-items-center text-center"
-                      (click)="addItemToCart(item.item_name, item.price)">
+                      (click)="addItemToCart(item.item_name, item.price,item._id )">
                       <div>
                         <h6 class="card-subtitle mb-2">{{ item.item_name }}</h6>
                         <p class="card-text text-muted">RS. {{ item.price }}</p>

@@ -39,7 +39,7 @@ export class MealCardComponent implements OnInit {
     }
   }
 
-  addItemToCart(item_name: string, price: number): void {
+  addItemToCart(item_name: string, price: number, _id: string): void {
     const userJSON = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
@@ -53,7 +53,13 @@ export class MealCardComponent implements OnInit {
       item_name: item_name,
       quantity: 1,
       price: price,
+      _id: _id,
+      bill_status: 'paid',
+      menu_id: '',
     };
+
+    console.log(cartItem.menu_id);
+
     const existingItems = localStorage.getItem('cartItems');
     let cartItems = [];
 
@@ -62,6 +68,17 @@ export class MealCardComponent implements OnInit {
       if (cartItems.some((item) => item.item_name === item_name)) {
         this.toastr.error('Item with the same name is already in the cart.');
         return;
+      }
+    }
+    for (const meal of this.meals) {
+      for (const item of meal.items) {
+        if (item._id === _id) {
+          cartItem.menu_id = meal.menu_id;
+          break;
+        }
+      }
+      if (cartItem.menu_id) {
+        break;
       }
     }
 

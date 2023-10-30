@@ -1,0 +1,27 @@
+<section>
+  <div class="product-table-container">
+    <h3>User List</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>EmployeeId</th>
+          <th>FirstName</th>
+          <th>LastName</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of pagedEmployeeData">
+          <td>{{ employee.EmployeeId }}</td>
+          <td>{{ employee.FirstName }}</td>
+          <td>{{ employee.LastName }}</td>
+          <td>{{ employee.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <mat-paginator style="color: white;" [length]="totalItems" [pageSize]="pageSize" [pageIndex]="currentPage"
+      (page)="pageChanged($event)"></mat-paginator>
+
+  </div>
+</section>

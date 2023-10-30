@@ -16,7 +16,7 @@
     width: 360px;
     height: 172px;
     border-radius: 20px;
-    border: 2px;
+    border: 2px solid transparent; /* Added 'solid' to specify the border style */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,7 +58,7 @@
     }
   }
 
-  .active-button {
+  button.active-button {
     border: 1px solid #6d00c2;
 
     .st0 {

@@ -5,8 +5,12 @@ header {
     #eeb219 100.74%,
     #ffdc82 100.75%
   );
-
   height: 465px;
+
+  a {
+    cursor: pointer;
+  }
+
   .upper-header {
     margin-top: 1%;
     .logo {
