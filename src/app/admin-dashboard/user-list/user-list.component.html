@@ -1,27 +1,42 @@
-<section>
-  <div class="product-table-container">
-    <h3>User List</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>EmployeeId</th>
-          <th>FirstName</th>
-          <th>LastName</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let employee of pagedEmployeeData">
-          <td>{{ employee.EmployeeId }}</td>
-          <td>{{ employee.FirstName }}</td>
-          <td>{{ employee.LastName }}</td>
-          <td>{{ employee.email }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <mat-paginator style="color: white;" [length]="totalItems" [pageSize]="pageSize" [pageIndex]="currentPage"
-      (page)="pageChanged($event)"></mat-paginator>
-
+<section class="user-list-container">
+  <div class="title">
+    <h3 class="text-center">User List</h3>
   </div>
+  <table class="table align-middle mb-0 bg-white table-hover">
+    <thead class="bg-light">
+      <tr>
+        <th scope="col">EmployeeId</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of pagedEmployeeData">
+        <td>
+          <div class="d-flex align-items-center justify-content-center">
+            {{ employee.EmployeeId }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center ">
+            {{ employee.FirstName }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center">
+            {{ employee.LastName }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center">
+            {{ employee.email }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems" [pageSize]="pageSize"
+    [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
 </section>

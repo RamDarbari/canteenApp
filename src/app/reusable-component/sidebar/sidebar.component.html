@@ -1,4 +1,4 @@
-<!-- <button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
+<button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
   <i class="fa fa-bars fs-5" aria-hidden="true"></i>
 </button>
 
@@ -21,45 +21,11 @@
         <ng-container *ngIf="!(meals && meals.length > 0)">
           <li><a class="dropdown-item" href="#">No meals available</a></li>
         </ng-container>
-      </ul>
-
-      <button class="btn btn-secondary w-100  dropdownButton" type="button" id="dropdownMenuButton2"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        User Details
-      </button>
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2">
         <ng-container>
           <li>
-            <a class="dropdown-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active">User List
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-  </div>
-</ng-template> -->
-
-
-<button class="bg-transparent border-0" type="button" (click)="openNoKeyboard(content)">
-  <i class="fa fa-bars fs-5" aria-hidden="true"></i>
-</button>
-
-<ng-template #content let-offcanvas>
-  <div class="offcanvas-header">
-    <h4 class="offcanvas-title">Admin Panel</h4>
-  </div>
-  <div class="offcanvas-body">
-    <div class="dropdown">
-      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        Menus
-      </button>
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
-        <ng-container>
-          <li>
-            <a class="dropdown-item">Menu List</a>
-            <a class="dropdown-item">Menu Grid</a>
-            <a class="dropdown-item">Add Product</a>
+            <a class="dropdown-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu
+              List</a>
+            <!-- <a class="dropdown-item">Menu Grid</a> -->
           </li>
         </ng-container>
       </ul>
@@ -76,10 +42,6 @@
           </li>
         </ng-container>
       </ul>
-
-      <button class="btn btn-secondary w-100" type="button">
-        Orders
-      </button>
     </div>
   </div>
 </ng-template>

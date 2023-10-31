@@ -102,8 +102,15 @@
               <div class="text-end d-flex">
                 <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">Confirm
                   Order</button>
-                <button class="cancel-button" (click)="closeCanvas()" data-bs-dismiss="offcanvas"
-                  aria-label="Close">Cancel</button>
+                <div ngbDropdown class="d-inline-block">
+                  <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
+                    Bill Status
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button (click)="setBillStatus('Paid')" ngbDropdownItem>Paid</button>
+                    <button (click)="setBillStatus('Unpaid')" ngbDropdownItem>Unpaid</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

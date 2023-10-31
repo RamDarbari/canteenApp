@@ -1,17 +1,10 @@
 import { OrderData, OrderDataItem } from 'src/data';
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../modal/modal.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { ToastrService } from 'ngx-toastr';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -112,35 +105,46 @@ export class HeaderComponent implements OnInit {
     modalRef.componentInstance.product = {};
   }
 
+  setBillStatus(status: string) {
+    // Loop through your cartItems and set the bill_status property for each item
+    this.cartItems.forEach((item) => {
+      item.bill_status = status;
+    });
+  }
+
   confirmOrder() {
     try {
       const storedCartItems = localStorage.getItem('cartItems');
       if (storedCartItems) {
         const cartItems: OrderDataItem[] = JSON.parse(storedCartItems);
 
-        const orderItems: OrderDataItem[] = cartItems.map((item) => {
-          return {
-            item_name: item.item_name,
-            quantity: item.quantity.toString(),
-            price: item.price.toString(),
+        if (cartItems) {
+          const orderItems: OrderDataItem[] = cartItems.map((item) => {
+            return {
+              itemId: item.itemId,
+              quantity: item.quantity ? item.quantity.toString() : '0', // Check for quantity
+              price: item.price ? item.price.toString() : '0', // Check for price
+            };
+          });
+
+          const orderPayload: OrderData = {
+            order_rec: orderItems,
+            bill_status: 'unpaid', // Set the bill_status here
           };
-        });
 
-        const orderPayload: OrderData = {
-          order_rec: orderItems,
-        };
+          const token = localStorage.getItem('user')
+            ? JSON.parse(localStorage.getItem('user')).data.token
+            : '';
 
-        const token = localStorage.getItem('user')
-          ? JSON.parse(localStorage.getItem('user')).data.token
-          : '';
-
-        this._https.placeOrder(orderPayload, token).subscribe((response) => {
-          console.log(response);
-          localStorage.removeItem('cartItems');
-          this.offcanvasService.dismiss();
-          this.loadCartItems();
-          // window.location.reload();
-        });
+          this._https.placeOrder(orderPayload, token).subscribe((response) => {
+            console.log(response);
+            localStorage.removeItem('cartItems');
+            this.offcanvasService.dismiss();
+            this.loadCartItems();
+          });
+        } else {
+          console.log('No items in the cart.');
+        }
       } else {
         console.log('No items in the cart.');
       }

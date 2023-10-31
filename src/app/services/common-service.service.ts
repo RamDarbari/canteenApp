@@ -24,7 +24,7 @@ export class CommonServiceService {
 
     return this._http.post(url, data).pipe(
       catchError((error) => {
-        this.toastr.error('Error in requestOTP:', error);
+        this.toastr.error('Error in requestOTP:');
         return throwError(error);
       })
     );

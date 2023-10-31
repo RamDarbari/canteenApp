@@ -53,12 +53,8 @@ export class MealCardComponent implements OnInit {
       item_name: item_name,
       quantity: 1,
       price: price,
-      _id: _id,
-      bill_status: 'paid',
-      menu_id: '',
+      itemId: _id,
     };
-
-    console.log(cartItem.menu_id);
 
     const existingItems = localStorage.getItem('cartItems');
     let cartItems = [];
@@ -70,18 +66,6 @@ export class MealCardComponent implements OnInit {
         return;
       }
     }
-    for (const meal of this.meals) {
-      for (const item of meal.items) {
-        if (item._id === _id) {
-          cartItem.menu_id = meal.menu_id;
-          break;
-        }
-      }
-      if (cartItem.menu_id) {
-        break;
-      }
-    }
-
     cartItems.push(cartItem);
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     this.toastr.success('Item added to cart successfully!');

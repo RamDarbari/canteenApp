@@ -1,5 +1,72 @@
 section {
-  background-color: #232227;
+  padding: 30px;
+}
+.add-product-container {
+  .title {
+    height: 72px;
+    align-items: center;
+    h3 {
+      font-family: PoetsenOne;
+      font-size: 60px;
+      font-weight: 400;
+      text-align: center;
+    }
+  }
+
+  .add-product-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 300px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .add-product-form__group {
+    width: 70%;
+    margin-bottom: 16px;
+  }
+
+  .add-product-form__label {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .add-product-form__input {
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    box-shadow: none;
+
+    &:focus {
+      border-color: #ffb959;
+      box-shadow: 0 0 4px rgba(255, 185, 91, 0.5);
+    }
+  }
+
+  .add-product-form__submit {
+    width: 50%;
+    height: 46px;
+    border: 1px;
+    background: linear-gradient(0deg, #9122e8, #9122e8);
+    color: #fff;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 27px;
+    outline: #9122e8;
+
+    &:hover {
+      background-color: white;
+    }
+  }
 }
 
 h2 {
@@ -7,154 +74,81 @@ h2 {
   padding: 30px;
 }
 
-.add-product-container {
-  max-width: 600px;
-  margin: auto;
+.product-table-container {
+  width: 100%;
+  margin: 0 auto;
+  // border: 1px solid #ccc;
   padding: 20px;
 
-  h3,
-  p {
-    text-align: center;
-    color: white;
+  .title {
+    height: 72px;
+    align-items: center;
+    h3 {
+      font-family: PoetsenOne;
+      font-size: 60px;
+      font-weight: 400;
+    }
   }
 
-  form {
-    margin-top: 20px;
+  table {
+    width: 100%;
+    border-collapse: collapse;
 
-    .form-group {
-      margin-bottom: 20px;
-
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: white;
-      }
-
-      input[type="text"],
-      input[type="number"],
-      textarea {
-        width: 100%;
-        padding: 8px 12px;
-        font-size: 16px;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        appearance: none;
-
-        &:focus {
-          color: #495057;
-          background-color: #fff;
-          border-color: #80bdff;
-          outline: 0;
-          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-      }
-
-      textarea {
-        resize: vertical;
-        height: 100px;
-      }
-
-      .input-group-text {
-        background-color: #fff;
-        border-color: #ced4da;
-        border-radius: 0.25rem;
-      }
-
-      .form-control-file {
-        padding: 0;
-        height: auto;
+    thead {
+      th {
+        background-color: #ffcb46;
+        padding: 10px;
+        // border: 1px solid #ccc;
+        text-align: center;
+        width: 25%;
       }
     }
 
-    .btn {
-      display: block;
-      margin: auto;
-      background-color: #4b49ac;
-      color: white;
+    tbody {
+      tr {
+        td {
+          padding: 10px;
+          // border: 1px solid #ccc;
+          text-align: center;
+        }
 
-      &:hover {
-        background-color: #3e3e40;
+        &:nth-child(even) {
+          background-color: #f9f9f9;
+        }
       }
     }
   }
 }
 
-.product-table-container {
-  text-align: center;
-  padding: 20px;
-
-  h3 {
-    color: #fff;
-  }
-
-  table {
-    margin: auto;
-    border-collapse: collapse;
-    width: 100%;
-    color: white;
-
-    th,
-    td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #333;
-      color: #fff;
-    }
-
-    img {
-      height: 100px;
-      width: 100px;
-      object-fit: cover;
-    }
-
-    .delete {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: darkred;
-      }
-
-      &:active {
-        background-color: red;
-      }
-    }
-
-    .edit {
-      background-color: green;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 73px;
-
-      &:hover {
-        background-color: darkgreen;
-      }
-
-      &:active {
-        background-color: green;
-      }
-    }
-  }
+.mat-paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.edit,
+.delete {
+  background-color: transparent;
+  margin-right: 20px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.edit i,
+.delete i {
+  font-size: 30px;
+  color: #6c757d;
+}
+
+.edit:hover i,
+.delete:hover i {
+  color: #ffb959;
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ButtonDisabledService } from 'src/app/services/button-disabled.service';
 
 @Component({
   selector: 'app-home',
@@ -8,11 +9,23 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
   isActive: boolean = false;
 
-  selectedCategory: string = 'Breakfast';
+  selectedCategory: string = '';
 
-  constructor() {}
+  constructor(private buttonDisablerService: ButtonDisabledService) {}
 
   ngOnInit(): void {}
+
+  isBreakfastDisabled(): boolean {
+    return this.buttonDisablerService.isDisabled('breakfast', new Date());
+  }
+
+  isLunchDisabled(): boolean {
+    return this.buttonDisablerService.isDisabled('lunch', new Date());
+  }
+
+  isSnacksDisabled(): boolean {
+    return this.buttonDisablerService.isDisabled('snacks', new Date());
+  }
 
   updateSelectedCategory(category: string) {
     this.selectedCategory = category;

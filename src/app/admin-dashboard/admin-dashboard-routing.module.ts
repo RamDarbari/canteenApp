@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RoutesComponent } from './routes/routes.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { NotfoundComponent } from '../notfound/notfound.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       //   path: 'modal',
       //   component: ,
       // },
+      {
+        path: '**',
+        component: NotfoundComponent,
+      },
     ],
   },
   {

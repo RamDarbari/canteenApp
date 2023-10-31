@@ -9,6 +9,8 @@ import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReusableComponentModule,
     NgbModule,
     MatPaginatorModule,
+    MatTableModule,
+    MatInputModule,
   ],
 })
 export class AdminDashboardModule {}

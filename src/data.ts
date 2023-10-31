@@ -3,12 +3,12 @@ export interface login {
   otp: string;
 }
 export interface OrderDataItem {
-  item_name: string;
+  itemId: string;
   quantity: string;
   price: string;
-  // menu_id: string;
 }
 
 export interface OrderData {
   order_rec: OrderDataItem[];
+  bill_status: string;
 }

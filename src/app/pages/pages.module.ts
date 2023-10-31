@@ -10,5 +10,6 @@ import { AboutUsComponent } from './about-us/about-us.component';
 @NgModule({
   declarations: [HomeComponent, RoutesComponent, AboutUsComponent],
   imports: [CommonModule, PagesRoutingModule, ReusableComponentModule],
+  exports: [HomeComponent],
 })
 export class PagesModule {}

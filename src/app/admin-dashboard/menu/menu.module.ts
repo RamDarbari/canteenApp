@@ -10,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CdkTableModule } from '@angular/cdk/table';
+import { PagesModule } from 'src/app/pages/pages.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatFormFieldModule,
     MatInputModule,
     CdkTableModule,
+    PagesModule,
   ],
   exports: [AddProductComponent],
 })
