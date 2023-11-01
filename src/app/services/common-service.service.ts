@@ -51,7 +51,7 @@ export class CommonServiceService {
     }
   }
   menuList(): Observable<any> {
-    const url = `${environment.apiUrl}/admin/listSubMenu`;
+    const url = `${environment.apiUrl}/listSubMenu`;
     return this._http.get(url);
   }
 
@@ -78,5 +78,11 @@ export class CommonServiceService {
           }
         })
       );
+  }
+
+  logout(token: any) {
+    return this._http.post('http://10.8.11.160:4000/logout', token, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 }

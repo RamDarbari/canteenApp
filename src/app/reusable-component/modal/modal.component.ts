@@ -61,13 +61,13 @@ export class ModalComponent {
             this.isLoading = false;
             localStorage.setItem('user', JSON.stringify(response));
             const userRole = response.data.empDetails.role;
-            if (userRole === 'user') {
+            if (userRole === 'admin') {
+              this.toastr.success('Admin Login Successful');
+              this.router.navigate(['/menu/menulist']);
+              this.modalService.dismissAll();
+            } else {
               this.modalService.dismissAll();
               this.toastr.success('Login Successful');
-            } else if (userRole === 'admin') {
-              this.toastr.success('Admin Login Successful');
-              this.router.navigate(['/admin/dashboard']);
-              this.modalService.dismissAll();
             }
           }
         });

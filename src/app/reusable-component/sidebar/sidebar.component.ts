@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit {
         } else {
           this.meals = [];
         }
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       });
     } catch (error) {
       console.error(error);

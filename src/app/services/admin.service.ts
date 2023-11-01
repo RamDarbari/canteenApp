@@ -20,8 +20,8 @@ export class AdminService {
 
   addminMenuList(menuId?: string): Observable<any> {
     const apiUrl = menuId
-      ? `http://10.8.11.160:5000/admin/listSubMenu?menu_id=${menuId}`
-      : 'http://10.8.11.160:5000/admin/listSubMenu';
+      ? `http://10.8.11.160:5000/listSubMenu?menu_id=${menuId}`
+      : 'http://10.8.11.160:5000/listSubMenu';
 
     return this._http.get(apiUrl);
   }
@@ -58,10 +58,33 @@ export class AdminService {
   }
 
   userList(token: any) {
-    return this._http.get(`${this.apiUrl}/listUsers`, {
+    return this._http.get(`${this.apiUrl}/admin/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+  }
+
+  orderList(token: any) {
+    return this._http.get(`${this.apiUrl}/admin/pendingOrderList`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  orderStatus(token: string, status: string, order_id: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const body = {
+      order_id: order_id,
+    };
+
+    return this._http.post(
+      `${this.apiUrl}/admin/order/updateStatus?status=${status}`,
+      body,
+      { headers }
+    );
   }
 }

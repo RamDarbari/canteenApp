@@ -42,6 +42,16 @@
           </li>
         </ng-container>
       </ul>
+
+      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton3"
+        [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active" aria-expanded="false">
+        Orders
+      </button>
+
+      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton4"
+        [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active" aria-expanded="false">
+        Order History
+      </button>
     </div>
   </div>
 </ng-template>

@@ -122,14 +122,13 @@ export class HeaderComponent implements OnInit {
           const orderItems: OrderDataItem[] = cartItems.map((item) => {
             return {
               itemId: item.itemId,
-              quantity: item.quantity ? item.quantity.toString() : '0', // Check for quantity
-              price: item.price ? item.price.toString() : '0', // Check for price
+              quantity: item.quantity ? item.quantity.toString() : '0',
             };
           });
 
           const orderPayload: OrderData = {
             order_rec: orderItems,
-            bill_status: 'unpaid', // Set the bill_status here
+            bill_status: 'unpaid',
           };
 
           const token = localStorage.getItem('user')
@@ -188,6 +187,19 @@ export class HeaderComponent implements OnInit {
   // }
 
   logout() {
+    // const token = localStorage.getItem('user')
+    //   ? JSON.parse(localStorage.getItem('user')).data.token
+    //   : '';
+    // try {
+    //   this._https.logout(token).subscribe((response) => {
+    //     if (response) {
+    //       localStorage.clear();
+    //       this.toastr.success('Log-out Successful');
+    //     }
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    // }
     localStorage.clear();
     this.toastr.success('Log-out Successful');
   }

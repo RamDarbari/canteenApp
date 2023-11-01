@@ -9,6 +9,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 })
 export class MealCardComponent implements OnInit {
   @Input() selectedCategory: string;
+  @Input() displayNormalMealCard: boolean = false;
+  @Input() displayAddItemToCartCard: boolean = false;
   meals: any[] = [];
 
   constructor(
@@ -39,7 +41,7 @@ export class MealCardComponent implements OnInit {
     }
   }
 
-  addItemToCart(item_name: string, price: number, _id: string): void {
+  addItemToCart(item_name: string, price: number, itemId: string): void {
     const userJSON = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
@@ -53,7 +55,7 @@ export class MealCardComponent implements OnInit {
       item_name: item_name,
       quantity: 1,
       price: price,
-      itemId: _id,
+      itemId: itemId,
     };
 
     const existingItems = localStorage.getItem('cartItems');

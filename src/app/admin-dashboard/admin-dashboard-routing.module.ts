@@ -13,10 +13,6 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'userList', component: UserListComponent },
-      // {
-      //   path: 'modal',
-      //   component: ,
-      // },
       {
         path: '**',
         component: NotfoundComponent,
@@ -26,6 +22,11 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./menu/menu.module').then((m) => m.MenuModule),
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./orders/orders.module').then((m) => m.OrdersModule),
   },
 ];
 
