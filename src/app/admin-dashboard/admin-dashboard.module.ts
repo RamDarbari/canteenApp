@@ -12,6 +12,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     RoutesComponent,
@@ -25,6 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     ReusableComponentModule,
     NgbModule,
     MatPaginatorModule,
+    ReactiveFormsModule,
+    FormsModule,
     MatTableModule,
     MatInputModule,
   ],

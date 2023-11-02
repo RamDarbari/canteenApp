@@ -1,24 +1,75 @@
-a {
-  cursor: pointer;
-}
+/* Custom styles for the accordion menu */
+
 .offcanvas-header {
-  height: 100px;
-  background-color: #ebebeb;
-
+  background: linear-gradient(
+    75.98deg,
+    #ffcb46 0%,
+    #eeb219 100.74%,
+    #ffdc82 100.75%
+  );
+  height: 105px;
+  justify-content: center;
+  text-align: center;
   h4 {
-    font-family: Poppins;
-    font-size: 24px;
-    font-weight: 800;
-    line-height: 36px;
+    color: #fff;
+    font-family: PoetsenOne;
+    padding: 15px;
+    font-size: 30px;
+    margin: 0 auto;
   }
 }
 
-.offcanvas-body {
-  .dropdown-toggle1 {
-    height: 50px;
-  }
+.accordion-button {
+  background-color: transparent;
+  color: #333;
+  border: none;
+  border-radius: 0;
+  padding: 10px 20px;
+  text-align: left;
+  font-family: Poppins;
+  list-style: none;
+}
 
-  .dropdownButton {
-    margin-bottom: 30px;
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(
+    75.98deg,
+    #ffcb46 0%,
+    #eeb219 100.74%,
+    #ffdc82 100.75%
+  );
+  outline: #eeb219;
+  color: #fff;
+}
+
+.accordion-item {
+  font-family: Poppins;
+  ul {
+    padding: 0;
+    li {
+      list-style: none;
+      height: 35px;
+      background: none;
+
+      a {
+        font-family: Poppins;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 30px;
+        text-decoration: none;
+        border: 1px;
+        cursor: pointer;
+        width: 100%;
+        background-color: transparent;
+        text-align: center;
+        margin-left: 10px;
+        display: flex;
+      }
+    }
+    li:hover {
+      background: linear-gradient(0deg, #9122e8, #9122e8);
+      a {
+        color: white;
+      }
+    }
   }
 }

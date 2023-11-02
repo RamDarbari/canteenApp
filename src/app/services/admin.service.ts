@@ -57,15 +57,18 @@ export class AdminService {
       );
   }
 
-  userList(token: any) {
+  userList(token: any, page: number, searchName: string) {
     return this._http.get(`${this.apiUrl}/admin/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: {
+        page: page.toString(),
+        searchName: searchName,
+      },
     });
   }
-
-  orderList(token: any) {
+  orderList(token: string) {
     return this._http.get(`${this.apiUrl}/admin/pendingOrderList`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,5 +89,13 @@ export class AdminService {
       body,
       { headers }
     );
+  }
+
+  getOrderHistory(token: string) {
+    return this._http.get(`${this.apiUrl}/admin/listorder`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }

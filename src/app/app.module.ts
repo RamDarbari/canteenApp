@@ -5,8 +5,6 @@ import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 // import { authReducer, fetchMealReducer } from './Store/reducers';

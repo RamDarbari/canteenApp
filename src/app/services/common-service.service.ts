@@ -51,7 +51,7 @@ export class CommonServiceService {
     }
   }
   menuList(): Observable<any> {
-    const url = `${environment.apiUrl}/listSubMenu`;
+    const url = `${environment.apiUrl}/listTodayMenu`;
     return this._http.get(url);
   }
 

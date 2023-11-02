@@ -63,8 +63,8 @@
         <div class="card border-0 bg-transparent w-100">
           <div>
             <p></p>
-            <div *ngIf="meals && meals.length > 0">
-              <div *ngFor="let meal of meals">
+            <div *ngIf="submenu && submenu.length > 0">
+              <div *ngFor="let meal of submenu">
                 <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
                   class="d-flex justify-content-between">
                   <p class="card-title">{{ selectedCategory }}</p>
@@ -73,8 +73,8 @@
               </div>
             </div>
           </div>
-          <div class="card-body normal-meal-card p-0" style="height: 157px;" *ngIf="meals && meals.length > 0">
-            <div *ngFor="let meal of meals">
+          <div class="card-body normal-meal-card p-0" style="height: 157px;" *ngIf="submenu && submenu.length > 0">
+            <div *ngFor="let meal of submenu">
               <div class=" d-flex flex-wrap gap-3" *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                 <div class="card-items" *ngFor="let item of meal.items">
                   <div class="card mb-3 border-0 shadow">

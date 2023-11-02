@@ -7,51 +7,85 @@
     <h4 class="offcanvas-title">Admin Panel</h4>
   </div>
   <div class="offcanvas-body">
-    <div class="dropdown">
-      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        Menus
-      </button>
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
-        <ng-container *ngIf="meals && meals.length > 0">
-          <li *ngFor="let meal of meals">
-            <a class="dropdown-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
-          </li>
-        </ng-container>
-        <ng-container *ngIf="!(meals && meals.length > 0)">
-          <li><a class="dropdown-item" href="#">No meals available</a></li>
-        </ng-container>
-        <ng-container>
-          <li>
-            <a class="dropdown-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu
-              List</a>
-            <!-- <a class="dropdown-item">Menu Grid</a> -->
-          </li>
-        </ng-container>
-      </ul>
+    <div class="accordion" id="sidebarAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            Menus
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+          data-bs-parent="#sidebarAccordion">
+          <div class="accordion-body">
+            <ng-container *ngIf="meals && meals.length > 0">
+              <ul>
 
-      <button class="btn btn-secondary w-100  dropdownButton" type="button" id="dropdownMenuButton2"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        User Details
-      </button>
-      <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton2">
-        <ng-container>
-          <li>
-            <a class="dropdown-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active">User List
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-
-      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton3"
-        [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active" aria-expanded="false">
-        Orders
-      </button>
-
-      <button class="btn btn-secondary w-100 dropdownButton" type="button" id="dropdownMenuButton4"
-        [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active" aria-expanded="false">
-        Order History
-      </button>
+                <li *ngFor="let meal of meals">
+                  <a class="accordion-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="!(meals && meals.length > 0)">
+              <ul>
+                <li><a class="accordion-item" href="#">No meals available</a></li>
+              </ul>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            User Management
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+          data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <ng-container>
+              <ul>
+                <li>
+                  <a class="accordion-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active"
+                    (click)="selectOptiion()">User
+                    Lists
+                  </a>
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Orders
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+          data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <ng-container>
+              <ul>
+                <li>
+                  <a class="accordion-item" [routerLink]="['/orders/order-details']"
+                    routerLinkActive="router-link-active" (click)="selectOptiion()">
+                    Pending Orders
+                  </a>
+                </li>
+                <li>
+                  <a class="accordion-item" [routerLink]="['/orders/order-history']"
+                    routerLinkActive="router-link-active" (click)="selectOptiion()">
+                    Order History
+                  </a>
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

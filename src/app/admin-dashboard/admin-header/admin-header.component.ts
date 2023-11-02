@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { EncryptionService } from 'src/app/services/encryption-service.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -10,11 +9,7 @@ import { EncryptionService } from 'src/app/services/encryption-service.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminHeaderComponent implements OnInit {
-  constructor(
-    private toastr: ToastrService,
-    private router: Router,
-    private encryptionService: EncryptionService
-  ) {}
+  constructor(private toastr: ToastrService, private router: Router) {}
 
   ngOnInit(): void {}
 

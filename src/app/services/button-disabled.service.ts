@@ -8,9 +8,9 @@ export class ButtonDisabledService {
 
   isDisabled(button: string, currentTime: Date): boolean {
     const timeRange = {
-      breakfast: { start: '8:00', end: '10:00' },
+      breakfast: { start: '8:00', end: '16:00' },
       lunch: { start: '11:00', end: '16:00' },
-      snacks: { start: '16:00', end: '18:00' },
+      snacks: { start: '16:00', end: '19:00' },
     };
 
     const startTime = new Date();

@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { ModalComponent } from './modal/modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrModule } from 'ngx-toastr';
 import { MealCardComponent } from './meal-card/meal-card.component';
 import { TableComponent } from './table/table.component';
 import { LoaderComponent } from './loader/loader.component';
@@ -28,6 +27,7 @@ import { LoaderComponent } from './loader/loader.component';
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
+    // AdminDashboardModule,
   ],
   exports: [
     HeaderComponent,

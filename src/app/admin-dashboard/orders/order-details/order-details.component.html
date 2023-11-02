@@ -1,4 +1,4 @@
-<section class="user-list-container">
+<section class="pending-order-list-section">
   <div class="title">
     <h3 class="text-center">Pending Order List</h3>
   </div>
@@ -46,7 +46,7 @@
         <td>
           <div class="d-flex align-items-center justify-content-center order-data"
             *ngFor="let record of order.order_rec">
-            {{ record.item_name }}
+            <li> {{ record.item_name }}</li>
           </div>
         </td>
         <td>

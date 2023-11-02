@@ -16,7 +16,8 @@ export class HeaderComponent implements OnInit {
   showAdminSection: boolean = true;
   cartItems: any[] = [];
   quantity: false;
-  isAdmin: boolean = false; // Flag to check if the user is an admin
+  isAdmin: boolean = false;
+  selectedBillStatus: string = 'Unpaid';
 
   constructor(
     private modalService: NgbModal,
@@ -65,6 +66,20 @@ export class HeaderComponent implements OnInit {
     return userDetails;
   }
 
+  get wallet() {
+    const userWalletBalance = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.wallet
+      : '';
+    return userWalletBalance;
+  }
+
+  get totalBalance() {
+    const pendingBalance = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.balance
+      : '';
+    return pendingBalance;
+  }
+
   private saveCartItems(): void {
     localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
@@ -110,6 +125,9 @@ export class HeaderComponent implements OnInit {
     this.cartItems.forEach((item) => {
       item.bill_status = status;
     });
+
+    // Save the updated cartItems to localStorage
+    this.saveCartItems();
   }
 
   confirmOrder() {
@@ -117,8 +135,12 @@ export class HeaderComponent implements OnInit {
       const storedCartItems = localStorage.getItem('cartItems');
       if (storedCartItems) {
         const cartItems: OrderDataItem[] = JSON.parse(storedCartItems);
+        const billStatus = this.selectedBillStatus;
 
         if (cartItems) {
+          const billStatus =
+            cartItems.length > 0 ? cartItems[0].bill_status : 'unpaid';
+
           const orderItems: OrderDataItem[] = cartItems.map((item) => {
             return {
               itemId: item.itemId,
@@ -127,10 +149,10 @@ export class HeaderComponent implements OnInit {
           });
 
           const orderPayload: OrderData = {
+            bill_status: billStatus,
             order_rec: orderItems,
-            bill_status: 'unpaid',
+            emp_id: '3673',
           };
-
           const token = localStorage.getItem('user')
             ? JSON.parse(localStorage.getItem('user')).data.token
             : '';

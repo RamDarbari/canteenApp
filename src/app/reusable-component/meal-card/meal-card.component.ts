@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/services/admin.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
@@ -12,16 +13,19 @@ export class MealCardComponent implements OnInit {
   @Input() displayNormalMealCard: boolean = false;
   @Input() displayAddItemToCartCard: boolean = false;
   meals: any[] = [];
+  submenu: any[] = [];
 
   constructor(
     private _https: CommonServiceService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private http: AdminService
   ) {}
 
   ngOnInit(): void {
     console.log('Meals:', this.meals);
     console.log('Selected Category:', this.selectedCategory);
     this.filterMeals();
+    this.filterSubMenuList();
   }
 
   filterMeals() {
@@ -29,6 +33,23 @@ export class MealCardComponent implements OnInit {
       this._https.menuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
+        } else {
+          this.toastr.error('No meals found');
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.toastr.error(
+        'An unexpected error occurred. Please try again later.'
+      );
+    }
+  }
+
+  filterSubMenuList() {
+    try {
+      this.http.addminMenuList().subscribe((response) => {
+        if (response.data && response.data.length > 0) {
+          this.submenu = response.data;
         } else {
           this.toastr.error('No meals found');
         }

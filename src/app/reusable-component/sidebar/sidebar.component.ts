@@ -29,9 +29,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.filterMeals();
   }
-  selectUser(userId: number) {
-    // TODO: Implement this method to handle the selection of a user
-  }
+  panels = ['First', 'Second', 'Third'];
 
   openNoKeyboard(content: TemplateRef<any>) {
     this.offcanvasService.open(content, { keyboard: false });
@@ -70,5 +68,9 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['/menu/addProduct'], {
       queryParams: { menu_id: this.selectedItemId },
     });
+  }
+
+  selectOptiion() {
+    this.offcanvasService.dismiss();
   }
 }

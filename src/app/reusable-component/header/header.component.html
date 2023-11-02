@@ -27,11 +27,12 @@
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li *ngIf="isAdmin">
-                  <a class="dropdown-item" [routerLink]="['/menu/menulist']"
-                    routerLinkActive="router-link-active">admin</a>
+                  <a class="dropdown-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Admin
+                    Panel</a>
                 </li>
-
-                <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                <li>
+                  <a class="dropdown-item">Wallet Balance:{{wallet | currency:'INR' }}</a>
+                </li>
                 <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
               </ul>
             </div>
@@ -104,7 +105,7 @@
                   Order</button>
                 <div ngbDropdown class="d-inline-block">
                   <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
-                    Bill Status
+                    Bill Status: {{ selectedBillStatus }}
                   </button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button (click)="setBillStatus('Paid')" ngbDropdownItem>Paid</button>

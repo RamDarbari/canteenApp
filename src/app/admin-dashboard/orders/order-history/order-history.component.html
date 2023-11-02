@@ -1,1 +1,78 @@
-<p>order-history works!</p>
+<section class="order-history-section">
+  <div class="title">
+    <h3 class="text-center">Order History</h3>
+  </div>
+  <table class="table align-middle mb-0 bg-white table-hover">
+    <thead class="bg-light">
+      <tr>
+        <th scope="col">OrderId</th>
+        <th scope="col">EmployeeId</th>
+        <th scope="col">Order Status</th>
+        <th scope="col">Bill Status</th>
+        <th scope="col">Item Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">TotalPrice</th>
+        <th scope="col">TotalBalance</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orderHistoryData">
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order._id }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.emp_id }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.order_status }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.bill_status }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data"
+            *ngFor="let record of order.order_rec">
+            <li> {{ record.item_name }}</li>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data"
+            *ngFor="let record of order.order_rec">
+            {{ record.quantity }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data"
+            *ngFor="let record of order.order_rec">
+            {{ record.totalPrice }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.totalBalance }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.date }}
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center justify-content-center order-data">
+            {{ order.time }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

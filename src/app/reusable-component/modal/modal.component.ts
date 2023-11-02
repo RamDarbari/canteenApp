@@ -34,17 +34,20 @@ export class ModalComponent {
         .subscribe((response) => {
           if (response.message === 'Otp send successfully.') {
             this.otpVerified = true;
-            this.isLoading = false;
             this.toastr.success('Otp Sent Successfully');
             localStorage.setItem('user', JSON.stringify(response));
           } else {
             this.otpVerified = false;
             this.toastr.error('Failed to send OTP');
           }
+        })
+        .add(() => {
+          this.isLoading = false;
         });
     } catch (error) {
       console.error('Error sending OTP:', error);
       this.toastr.error('Failed to send OTP');
+      this.isLoading = false;
     }
   }
 
@@ -70,6 +73,9 @@ export class ModalComponent {
               this.toastr.success('Login Successful');
             }
           }
+        })
+        .add(() => {
+          this.isLoading = false;
         });
     } catch (error) {
       console.error('Error verifying OTP:', error);
