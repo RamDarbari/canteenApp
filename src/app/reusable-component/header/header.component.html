@@ -1,4 +1,5 @@
 <header id="user" *ngIf="showUserSection">
+  <app-loader *ngIf="isLoading"></app-loader>
   <div class="container">
     <div class="row justify-content-center" id="user">
       <div class="upper-header d-flex">
@@ -30,9 +31,15 @@
                   <a class="dropdown-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Admin
                     Panel</a>
                 </li>
+                <!-- <li>
+                  <a class="dropdown-item disabled-link">Wallet Balance:{{wallet | currency:'INR' }}</a>
+                </li> -->
                 <li>
-                  <a class="dropdown-item">Wallet Balance:{{wallet | currency:'INR' }}</a>
+                  <a class="dropdown-item disabled-link">Pending Balance: {{ userProfileInfo.balance | currency:'INR'
+                    }}</a>
                 </li>
+
+
                 <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
               </ul>
             </div>
@@ -96,22 +103,28 @@
                   <button (click)="increaseQuantity($index)">+</button>
                 </div>
                 <div>
-                  <p> Price: {{ item.price }}</p>
+                  <p> {{ item.price | currency:'INR' }}</p>
                 </div>
                 <button (click)="deleteItem($index)" class=""><i class="fa fa-trash" aria-hidden="true"></i></button>
               </div>
+              <div class="d-flex justify-content-end align-items-center item-info-body">
+                <div class="item-name-info" style="width: 41%;">
+                  <p> Total: {{ getTotalBalance() | currency:'INR' }}</p>
+                </div>
+              </div>
               <div class="text-end d-flex">
-                <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">Confirm
-                  Order</button>
-                <div ngbDropdown class="d-inline-block">
+                <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
+                  Confirm Order
+                </button>
+                <!-- <div ngbDropdown class="d-inline-block">
                   <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
                     Bill Status: {{ selectedBillStatus }}
                   </button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button (click)="setBillStatus('Paid')" ngbDropdownItem>Paid</button>
-                    <button (click)="setBillStatus('Unpaid')" ngbDropdownItem>Unpaid</button>
+                    <button (click)="setBillStatus('paid')" ngbDropdownItem>Paid</button>
+                    <button (click)="setBillStatus('unpaid')" ngbDropdownItem>Unpaid</button>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

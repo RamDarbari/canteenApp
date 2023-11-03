@@ -17,7 +17,10 @@ export class HeaderComponent implements OnInit {
   cartItems: any[] = [];
   quantity: false;
   isAdmin: boolean = false;
-  selectedBillStatus: string = 'Unpaid';
+  selectedBillStatus: string = 'unpaid';
+  isLoading: boolean = false;
+  hasWallet: boolean = false;
+  userProfileInfo: any;
 
   constructor(
     private modalService: NgbModal,
@@ -30,6 +33,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this.getUserRole() === 'admin';
     this.getUserRole();
+    this.loadCartItems();
+    this.loadBillStatus(); // Load the selected bill status
+    this.getUserProfile();
   }
 
   // ... (existing methods)
@@ -39,6 +45,16 @@ export class HeaderComponent implements OnInit {
       ? JSON.parse(localStorage.getItem('user')).data.empDetails.role
       : '';
     return userRole;
+  }
+
+  getTotalBalance(): number {
+    let totalBalance = 0;
+    if (this.cartItems) {
+      this.cartItems.forEach((item) => {
+        totalBalance += item.price;
+      });
+    }
+    return totalBalance;
   }
 
   get hasToken(): boolean {
@@ -84,11 +100,36 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 
-  private loadCartItems(): void {
+  private saveBillStatus(status: string): void {
+    localStorage.setItem('selectedBillStatus', status); // Save selectedBillStatus to localStorage if needed
+  }
+  private loadBillStatus(): void {
+    const storedStatus = localStorage.getItem('selectedBillStatus');
+    if (storedStatus) {
+      this.selectedBillStatus = storedStatus; // Load selectedBillStatus from localStorage
+    }
+  }
+
+  loadCartItems(): void {
     const storedItems = localStorage.getItem('cartItems');
     if (storedItems) {
       this.cartItems = JSON.parse(storedItems);
+
+      // Calculate initial price for each item
+      this.cartItems.forEach((item) => {
+        item.initialPrice = item.price; // Store the initial price
+      });
     }
+  }
+
+  getTotalPrice(): number {
+    let totalPrice = 0;
+    if (this.cartItems) {
+      this.cartItems.forEach((item) => {
+        totalPrice += item.price;
+      });
+    }
+    return totalPrice;
   }
 
   private updateLocalStorageAndCart(index: number, quantity: number): void {
@@ -121,13 +162,8 @@ export class HeaderComponent implements OnInit {
   }
 
   setBillStatus(status: string) {
-    // Loop through your cartItems and set the bill_status property for each item
-    this.cartItems.forEach((item) => {
-      item.bill_status = status;
-    });
-
-    // Save the updated cartItems to localStorage
-    this.saveCartItems();
+    this.selectedBillStatus = status; // Update the selectedBillStatus
+    this.saveBillStatus(status); // Optionally save it to localStorage
   }
 
   confirmOrder() {
@@ -136,7 +172,7 @@ export class HeaderComponent implements OnInit {
       if (storedCartItems) {
         const cartItems: OrderDataItem[] = JSON.parse(storedCartItems);
         const billStatus = this.selectedBillStatus;
-
+        this.isLoading = true;
         if (cartItems) {
           const billStatus =
             cartItems.length > 0 ? cartItems[0].bill_status : 'unpaid';
@@ -151,18 +187,24 @@ export class HeaderComponent implements OnInit {
           const orderPayload: OrderData = {
             bill_status: billStatus,
             order_rec: orderItems,
-            emp_id: '3673',
+            emp_id: '',
           };
           const token = localStorage.getItem('user')
             ? JSON.parse(localStorage.getItem('user')).data.token
             : '';
 
-          this._https.placeOrder(orderPayload, token).subscribe((response) => {
-            console.log(response);
-            localStorage.removeItem('cartItems');
-            this.offcanvasService.dismiss();
-            this.loadCartItems();
-          });
+          this._https
+            .placeOrder(orderPayload, token)
+            .subscribe((response) => {
+              console.log(response);
+              this.isLoading = true;
+              localStorage.removeItem('cartItems');
+              this.offcanvasService.dismiss();
+              this.loadCartItems();
+            })
+            .add(() => {
+              this.isLoading = false;
+            });
         } else {
           console.log('No items in the cart.');
         }
@@ -180,33 +222,50 @@ export class HeaderComponent implements OnInit {
   }
 
   increaseQuantity(index: number): void {
-    if (this.cartItems[index].quantity < 999) {
+    if (this.cartItems[index].quantity < 10) {
       this.cartItems[index].quantity++;
-      // this.updatePrice(index);
-      this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
+      this.updatePrice(index);
     }
   }
 
   decreaseQuantity(index: number): void {
     if (this.cartItems[index].quantity > 1) {
       this.cartItems[index].quantity--;
-      // this.updatePrice(index);
-      this.updateLocalStorageAndCart(index, this.cartItems[index].quantity);
+      this.updatePrice(index);
     }
   }
+  updatePrice(index: number): void {
+    // Calculate the new price based on the initial price and quantity
+    this.cartItems[index].price =
+      this.cartItems[index].initialPrice * this.cartItems[index].quantity;
+    this.saveCartItems();
+  }
 
-  // updatePrice(index: number): void {
-  //   const originalItemPrice = this.cartItems[index].originalPrice;
+  getUserProfile(): void {
+    console.log('kkkkkkkkkkkkkkkkk');
 
-  //   if (this.cartItems[index].quantity > 0) {
-  //     this.cartItems[index].price =
-  //       originalItemPrice * this.cartItems[index].quantity;
-  //   } else {
-  //     this.cartItems[index].price = 0;
-  //   }
-
-  //   this.saveCartItems();
-  // }
+    console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;');
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+    const emp_id = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
+      : '';
+    try {
+      if (token && emp_id) {
+        console.log('sss');
+        this._https.userProfile(token, emp_id).subscribe((response: any) => {
+          if (response && response.data && response.data.length > 0) {
+            this.userProfileInfo = response.data[0]; // Access the first item in the data array
+            console.log(response.message); // Output the message field if needed
+            console.log(this.userProfileInfo, 'llllllllllll');
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   logout() {
     // const token = localStorage.getItem('user')
@@ -225,6 +284,7 @@ export class HeaderComponent implements OnInit {
     localStorage.clear();
     this.toastr.success('Log-out Successful');
   }
+
   closeCanvas() {
     this.offcanvasService.dismiss();
   }

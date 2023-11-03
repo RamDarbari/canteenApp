@@ -1,14 +1,20 @@
 section {
   background-color: #f6f6f6;
+  display: flex;
+  flex-direction: column; // Stack children vertically
   width: 1200px;
-  height: 286px;
+  overflow: hidden; // Hide content overflow
 }
 
 .meal-image {
-  height: 286px;
+  min-height: 286px;
+  flex-grow: 0; // Do not grow
 }
+
 .meal-info {
   width: 66%;
+  flex-grow: 1; // Allow to grow to fill available space
+  overflow-y: auto; // Add vertical scroll if needed
 }
 .card-title {
   padding-left: 15px;
@@ -26,7 +32,7 @@ section {
 
 .card-items {
   width: 168px;
-  height: 69px;
+  // height: 69px;
   border-radius: 5px;
   border: transparent;
 }
@@ -49,16 +55,15 @@ section {
   }
 
   .description {
-    width: 167px;
-    height: 20px;
-    display: flex;
     width: 100%;
-    justify-content: flex-end;
+    align-items: center;
+    height: 35px;
     p {
       font-family: Poppins;
       font-size: 13px;
       font-weight: 500;
       color: #939393;
+      margin: 0;
     }
   }
 }

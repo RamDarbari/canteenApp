@@ -37,7 +37,10 @@ export class SidebarComponent implements OnInit {
 
   filterMeals() {
     try {
-      this._https.addminMenuList().subscribe((response) => {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this._https.addminMenuList(token).subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data.map((item) => {
             return {

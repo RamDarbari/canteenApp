@@ -33,61 +33,45 @@ export class UserListComponent implements OnInit {
   constructor(private http: AdminService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    debugger;
     this.loadUserData();
   }
-
   loadUserData() {
-    // const pages = page;
-    debugger;
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
 
+    // Calculate the startIndex with 1-based indexing
+    const startIndex = this.currentPage + 1;
+
     this.http
-      .userList(token, this.currentPage, this.searchName)
+      .userList(token, startIndex, this.searchName)
       .subscribe((response: any) => {
         console.log('res', response);
         if (response && response.data) {
           this.pagedEmployeeData = response.data;
           this.totalItems = response.totalPages * this.pageSize;
           console.log('pagedEmployeeData', this.pagedEmployeeData);
-          // this.updatePagedData();
-          // this.cdr.detectChanges();
         }
       });
   }
 
-  // updatePagedData() {
-  //   debugger;
-  //   const startIndex = this.currentPage * this.pageSize;
-  //   this.pagedEmployeeData = this.employeeData.slice(
-  //     startIndex,
-  //     startIndex + this.pageSize
-  //   );
-  //   this.cdr.detectChanges();
-  // }
-
   pageChanged(event: PageEvent) {
-    debugger;
-    // this.currentPage = this.currentPage + 1;
-    this.currentPage = event.pageIndex + 1;
+    this.currentPage = event.pageIndex;
     this.loadUserData();
-    // this.updatePagedData();
   }
+
   searchDebounced(): void {
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     this.http
       .userList(token, 0, this.searchName)
-      .pipe(debounceTime(200))
+      .pipe(debounceTime(500))
       .subscribe((response: any) => {
         if (response && response.data) {
           this.employeeData = response.data;
-          this.totalItems = response.totalPages * this.pageSize;
-          // this.updatePagedData();
-          // this.cdr.detectChanges();
+          this.currentPage = 1;
+          this.loadUserData();
         }
       });
   }

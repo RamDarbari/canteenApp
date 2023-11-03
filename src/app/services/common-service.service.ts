@@ -56,7 +56,7 @@ export class CommonServiceService {
   }
 
   placeOrder(orderData: OrderData, token: any) {
-    const url = `${environment.apiUrl}/admin/addorder`;
+    const url = `${environment.apiUrl}/addOrder`;
     return this._http
       .post(url, orderData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -80,8 +80,14 @@ export class CommonServiceService {
       );
   }
 
-  logout(token: any) {
-    return this._http.post('http://10.8.11.160:4000/logout', token, {
+  // logout(token: any) {
+  //   return this._http.post('http://10.8.11.160:4000/logout', token, {
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+  // }
+
+  userProfile(token: string, emp_id: number) {
+    return this._http.get(`${environment.apiUrl}/viewUser?emp_id=${emp_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   }

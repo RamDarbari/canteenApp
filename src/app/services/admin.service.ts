@@ -18,12 +18,16 @@ export class AdminService {
     private toastr: ToastrService
   ) {}
 
-  addminMenuList(menuId?: string): Observable<any> {
+  addminMenuList(token: string, menuId?: string): Observable<any> {
     const apiUrl = menuId
-      ? `http://10.8.11.160:5000/listSubMenu?menu_id=${menuId}`
-      : 'http://10.8.11.160:5000/listSubMenu';
+      ? `http://10.8.11.160:5000/admin/listSubMenu?menu_id=${menuId}`
+      : 'http://10.8.11.160:5000/admin/listSubMenu';
 
-    return this._http.get(apiUrl);
+    return this._http.get(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   addItem(data: OrderDataItem, token: any) {
@@ -68,6 +72,7 @@ export class AdminService {
       },
     });
   }
+
   orderList(token: string) {
     return this._http.get(`${this.apiUrl}/admin/pendingOrderList`, {
       headers: {
@@ -75,6 +80,7 @@ export class AdminService {
       },
     });
   }
+
   orderStatus(token: string, status: string, order_id: string) {
     const headers = {
       Authorization: `Bearer ${token}`,

@@ -47,7 +47,10 @@ export class MealCardComponent implements OnInit {
 
   filterSubMenuList() {
     try {
-      this.http.addminMenuList().subscribe((response) => {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http.addminMenuList(token).subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.submenu = response.data;
         } else {
@@ -93,4 +96,6 @@ export class MealCardComponent implements OnInit {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     this.toastr.success('Item added to cart successfully!');
   }
+
+  addItemToTodayMenu() {}
 }

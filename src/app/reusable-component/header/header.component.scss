@@ -13,6 +13,20 @@ header {
     font-size: 16px;
     font-weight: 400;
   }
+  app-loader {
+    position: absolute;
+    top: 54%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2;
+  }
+  .disabled-link {
+    pointer-events: none; /* Disables click events */
+    color: #999; /* Set the color to a gray or muted color to indicate it's disabled */
+    text-decoration: none; /* Remove the underline or any text decoration */
+    cursor: not-allowed; /* Display a "not allowed" cursor when hovering */
+  }
 
   .upper-header {
     margin-top: 1%;
