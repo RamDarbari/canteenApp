@@ -9,11 +9,8 @@ import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-
+import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 @NgModule({
   declarations: [
     RoutesComponent,
@@ -29,8 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     ReactiveFormsModule,
     FormsModule,
-    MatTableModule,
-    MatInputModule,
+    NgChartsModule,
   ],
 })
 export class AdminDashboardModule {}

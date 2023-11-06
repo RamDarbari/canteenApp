@@ -56,3 +56,11 @@ export interface OrderItem {
   totalPrice: number;
   _id: string;
 }
+
+export interface detailsCount {
+  total_revenue: number;
+  daily_revenue: number;
+  total_orders: number;
+  today_menu_items: number;
+  total_users: number;
+}

@@ -104,4 +104,15 @@ export class AdminService {
       },
     });
   }
+
+  detailsCount(token: string, currentDate: string): Observable<any> {
+    let date = new HttpParams().set('currentDate', currentDate);
+
+    return this._http.get(`${this.apiUrl}/admin/count`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: date,
+    });
+  }
 }

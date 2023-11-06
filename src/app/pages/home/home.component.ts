@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ButtonDisabledService } from 'src/app/services/button-disabled.service';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +8,7 @@ import { ButtonDisabledService } from 'src/app/services/button-disabled.service'
 export class HomeComponent implements OnInit {
   selectedCategory: string;
 
-  constructor(private buttonDisablerService: ButtonDisabledService) {
+  constructor() {
     this.selectedCategory = this.getInitialCategory();
   }
 
@@ -18,9 +17,9 @@ export class HomeComponent implements OnInit {
   private getInitialCategory(): string {
     const currentTime = new Date();
     const timeRanges = {
-      breakfast: { start: '08:00', end: '10:00' },
-      lunch: { start: '11:00', end: '14:00' },
-      snacks: { start: '16:00', end: '18:00' },
+      Breakfast: { start: '08:00', end: '10:00' },
+      Lunch: { start: '11:00', end: '14:00' },
+      Snacks: { start: '16:00', end: '18:00' },
     };
 
     for (const category in timeRanges) {
@@ -36,12 +35,6 @@ export class HomeComponent implements OnInit {
         return category;
       }
     }
-
-    // Default to 'breakfast' if no category is found
-    return 'snacks';
+    return 'Breakfast';
   }
-  // updateSelectedCategory(category: string) {
-  //   this.selectedCategory = category;
-  //   console.log('Selected Category:', this.selectedCategory);
-  // }
 }

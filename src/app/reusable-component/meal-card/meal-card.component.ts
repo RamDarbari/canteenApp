@@ -14,6 +14,7 @@ export class MealCardComponent implements OnInit {
   @Input() displayAddItemToCartCard: boolean = false;
   meals: any[] = [];
   submenu: any[] = [];
+  items: any[] = []; // Add this line and initialize it to an empty array
 
   constructor(
     private _https: CommonServiceService,

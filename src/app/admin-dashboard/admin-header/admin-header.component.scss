@@ -10,6 +10,10 @@ header {
     cursor: pointer;
   }
 
+  li {
+    list-style: none;
+  }
+
   height: 100px;
   .upper-header {
     .sidebar-menu {
@@ -28,16 +32,37 @@ header {
     .header-menu {
       width: 50%;
 
-      .cart {
+      .notification {
         width: 10%;
 
-        i {
-          margin-right: 5px;
-          font-size: 30px;
+        li {
+          a {
+            background: transparent;
+            border-radius: 50%;
+            .bell-icon {
+              position: absolute;
+              i {
+                color: black;
+                font-size: 30px;
+              }
+            }
+            span {
+              position: relative;
+              height: 22px;
+              padding-top: 6px;
+              bottom: 20px;
+              left: 10px;
+              text-decoration: none;
+              border-color: #9122e8;
+              background-color: #9122e8 !important;
+              color: wheat !important;
+            }
+          }
         }
       }
       .login {
-        width: 30%;
+        width: 22%;
+        border-left: 1px solid white;
 
         .profile-button {
           width: 100%;

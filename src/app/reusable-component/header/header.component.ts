@@ -185,9 +185,9 @@ export class HeaderComponent implements OnInit {
           });
 
           const orderPayload: OrderData = {
-            bill_status: billStatus,
+            bill_status: 'paid',
             order_rec: orderItems,
-            emp_id: '',
+            emp_id: '3673',
           };
           const token = localStorage.getItem('user')
             ? JSON.parse(localStorage.getItem('user')).data.token
