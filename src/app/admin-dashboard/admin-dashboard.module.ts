@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
@@ -11,12 +11,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterOutletWrapperComponent } from './router-outlet-wrapper/router-outlet-wrapper.component';
 @NgModule({
   declarations: [
     RoutesComponent,
     DashboardComponent,
     AdminHeaderComponent,
     UserListComponent,
+    RouterOutletWrapperComponent,
   ],
   imports: [
     CommonModule,
@@ -28,5 +30,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     NgChartsModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminDashboardModule {}

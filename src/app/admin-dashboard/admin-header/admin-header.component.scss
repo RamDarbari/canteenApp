@@ -5,6 +5,9 @@ header {
     #eeb219 100.74%,
     #ffdc82 100.75%
   );
+  position: fixed;
+  z-index: 1;
+  width: 110%;
 
   a {
     cursor: pointer;

@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     const timeRanges = {
       Breakfast: { start: '08:00', end: '10:00' },
       Lunch: { start: '11:00', end: '14:00' },
-      Snacks: { start: '16:00', end: '18:00' },
+      Snacks: { start: '16:00', end: '20:00' },
     };
 
     for (const category in timeRanges) {

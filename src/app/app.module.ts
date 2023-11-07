@@ -1,3 +1,4 @@
+import { SocketioService } from './services/socketio.service';
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,7 +30,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-  providers: [],
+  providers: [SocketioService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

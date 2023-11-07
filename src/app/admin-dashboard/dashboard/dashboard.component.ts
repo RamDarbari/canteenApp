@@ -16,22 +16,36 @@ export class DashboardComponent implements OnInit {
     total_users: 0,
   };
 
+  mostOrderItems: any[] = [];
+  recentOrderItems: any[] = [];
+
   constructor(private http: AdminService) {}
 
   ngOnInit(): void {
     const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in "YYYY-MM-DD" format
     this.totalItemsCount(currentDate);
   }
+
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true,
+    colors: ['#FF0000', '#00FF00'],
   };
 
-  public barChartLabels = ['Breakfast', 'Lunch', 'Snacks'];
+  public barChartLabels: string[] = [];
   public barChartType = 'bar';
   public barChartLegend = true;
 
-  public barChartData = [{ data: [65, 59, 80], label: 'Series A' }];
+  public barChartData: any[] = [
+    {
+      label: 'revenue',
+      data: [],
+    },
+    {
+      label: 'count-orders',
+      data: [],
+    },
+  ];
 
   totalItemsCount(currentDate: string) {
     try {
@@ -42,6 +56,18 @@ export class DashboardComponent implements OnInit {
         console.log('count', response);
         if (response && response.data) {
           this.totalDetailsCounts = response.data;
+          const menuRevenueData = response.data.menu_revenue;
+          this.barChartLabels = menuRevenueData.map((menu) => menu.title);
+          this.barChartData[0].data = menuRevenueData.map(
+            (menu) => menu.total_revenue
+          );
+          this.barChartData[1].data = menuRevenueData.map(
+            (menu) => menu.count_orders
+          );
+          this.mostOrderItems = response.data.mostOrderItem;
+          console.log(this.mostOrderItems, 'llllllllllllllllllllllllllll');
+          this.recentOrderItems = response.data.recent_pending_orders;
+          console.log(this.recentOrderItems, 'oooooooooooooooooooooooooooo');
         }
       });
     } catch (error) {

@@ -10,6 +10,8 @@ section {
     margin: 0 auto;
   }
 
+  margin-top: 6%;
+
   a {
     cursor: pointer;
   }
@@ -39,12 +41,26 @@ section {
       border-radius: 1.75rem;
       background-color: #fff;
 
+      h2,
       h4 {
         font-family: Poppins;
-        font-size: 15px;
+        // font-size: 15px;
         font-weight: 400;
         line-height: 23px;
         color: #404040;
+      }
+
+      .pending-orders {
+        width: 100px;
+        height: 40px;
+        border: 1px;
+        background: linear-gradient(0deg, #9122e8, #9122e8);
+        color: #fff;
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 27px;
+        outline: #9122e8;
       }
     }
 
@@ -65,15 +81,19 @@ section {
         }
       }
       .svg {
-        position: sticky;
+        position: relative;
 
         svg {
           fill: #9122e8;
         }
       }
       .inner-svg {
-        position: relative;
-        right: 60px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1rem;
+        font-weight: 700;
       }
 
       .num {
@@ -82,6 +102,7 @@ section {
         margin-right: 0.9375rem;
         font-weight: 500;
         color: #d0d0d0;
+        font-family: PoetsenOne;
       }
 
       .item-details {

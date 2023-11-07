@@ -3,11 +3,12 @@
     <div class="row justify-content-center h-100" id="user">
       <div class="upper-header d-flex">
         <div class="sidebar-menu d-flex align-items-center justify-content-center">
-          <app-sidebar></app-sidebar>
+          <!-- <app-sidebar></app-sidebar> -->
+
         </div>
         <div class="logo header-left d-flex align-items-center">
           <a>
-            <h2 class="m-0">Seasia</h2>
+            <!-- <h2 class="m-0">Seasia</h2> -->
           </a>
         </div>
         <div class="header-menu header-right d-flex justify-content-end align-items-center">
@@ -16,6 +17,7 @@
               <a class="d-flex justify-content-center w-100 h-50 align-items-center">
                 <div class="bell-icon">
                   <i class="fa fa-bell" aria-hidden="true"></i>
+
                 </div>
                 <div>
                   <span class="badge light text-white bg-primary rounded-circle">12</span>
@@ -32,8 +34,8 @@
                 </span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" [routerLink]="['/home']" routerLinkActive="router-link-active">User
-                    Panel</a></li>
+                <!-- <li><a class="dropdown-item" [routerLink]="['/home']" routerLinkActive="router-link-active">User
+                    Panel</a></li> -->
                 <li><a class="dropdown-item" (click)="logout() ">Logout</a></li>
               </ul>
             </div>
@@ -42,4 +44,8 @@
       </div>
     </div>
   </div>
+  <ul>
+    <li *ngFor="let notification of notifications">{{ notification }}</li>
+  </ul>
+
 </header>

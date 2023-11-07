@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -9,9 +10,21 @@ import { ToastrService } from 'ngx-toastr';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminHeaderComponent implements OnInit {
-  constructor(private toastr: ToastrService, private router: Router) {}
+  notifications: string[] = [];
+  constructor(
+    private toastr: ToastrService,
+    private router: Router,
+    private socketService: SocketioService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.socketService.on('notification').subscribe((data) => {
+      console.log('Received a notification from the server:', data);
+      this.notifications.push(data);
+      // Update the change detection so that the HTML is updated
+      this.notifications = [...this.notifications];
+    });
+  }
 
   get userProfileDetails() {
     const userDetails = localStorage.getItem('user')

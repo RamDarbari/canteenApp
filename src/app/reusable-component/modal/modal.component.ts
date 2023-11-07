@@ -32,7 +32,7 @@ export class ModalComponent {
       this.loginService
         .requestOTP(this.loginData.emp_id)
         .subscribe((response) => {
-          if (response.message === 'Otp send successfully.') {
+          if (response.message === 'success') {
             this.otpVerified = true;
             this.toastr.success('Otp Sent Successfully');
             localStorage.setItem('user', JSON.stringify(response));

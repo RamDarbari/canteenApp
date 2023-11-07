@@ -89,7 +89,10 @@ export class TableComponent implements OnInit {
 
   getproduct(menuId?: string) {
     if (menuId) {
-      this.http.addminMenuList(menuId).subscribe((response: any) => {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http.addminMenuList(token, menuId).subscribe((response: any) => {
         if (response && response.data && response.data.items) {
           this.menuItems = response.data.items;
         }

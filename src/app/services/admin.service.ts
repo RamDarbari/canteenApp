@@ -23,11 +23,15 @@ export class AdminService {
       ? `http://10.8.11.160:5000/admin/listSubMenu?menu_id=${menuId}`
       : 'http://10.8.11.160:5000/admin/listSubMenu';
 
-    return this._http.get(apiUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    // Create the headers object and set the Authorization header
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
+
+    // Use the HttpHeaders option to set headers in the HTTP request
+    const options = { headers };
+
+    return this._http.get(apiUrl, options);
   }
 
   addItem(data: OrderDataItem, token: any) {
