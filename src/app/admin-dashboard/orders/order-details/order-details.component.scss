@@ -1,5 +1,14 @@
 section {
   margin-top: 6%;
+
+  app-loader {
+    position: absolute;
+    top: 54%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2;
+  }
 }
 .pending-order-list-section {
   width: 100%;

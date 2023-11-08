@@ -36,6 +36,7 @@ import { LoaderComponent } from './loader/loader.component';
     SidebarComponent,
     MealCardComponent,
     TableComponent,
+    LoaderComponent,
   ],
 })
 export class ReusableComponentModule {}

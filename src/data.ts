@@ -65,26 +65,3 @@ export interface detailsCount {
   today_menu_items: number;
   total_users: number;
 }
-
-export const navbarData = [
-  {
-    routeLink: '/admin/dashboard',
-    icon: 'fal fa-home',
-    label: 'Dashboard',
-  },
-  {
-    routeLink: '/orders/order-details',
-    icon: 'fal fa-chart-bar',
-    label: 'Pending Orders',
-  },
-  {
-    routeLink: 'products',
-    icon: 'fal fa-box-open',
-    label: 'Products',
-  },
-  {
-    routeLink: 'statistics',
-    icon: 'fal fa-chart-bar',
-    label: 'Statistics',
-  },
-];

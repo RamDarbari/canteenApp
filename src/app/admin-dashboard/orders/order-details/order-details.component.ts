@@ -13,6 +13,7 @@ export class OrderDetailsComponent implements OnInit {
   totalItems: number;
   currentPage: number = 0;
   pageSize: number = 10;
+  isLoading: boolean = false;
 
   constructor(private https: AdminService) {}
 
@@ -26,16 +27,20 @@ export class OrderDetailsComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
 
+      this.isLoading = true;
+
       this.https.orderList(token).subscribe((response: any) => {
         console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');
         if (response && response.data && response.data.length > 0) {
           this.orders = response.data;
           this.totalItems = this.orders.length;
-          this.updatePagedData();
         }
+        this.isLoading = false;
+        this.updatePagedData();
       });
     } catch (error) {
       console.log(error);
+      this.isLoading = false;
     }
   }
 
@@ -59,7 +64,6 @@ export class OrderDetailsComponent implements OnInit {
         : '';
       this.https.orderStatus(token, status, order_id).subscribe((response) => {
         console.log(response, ';;;;;;;');
-        // Refresh the order list after changing the status
         this.pendingOrderList();
       });
     } catch (error) {

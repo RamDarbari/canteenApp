@@ -7,6 +7,9 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { ReusableComponentModule } from 'src/app/reusable-component/reusable-component.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [OrderHistoryComponent, OrderDetailsComponent],
@@ -16,6 +19,9 @@ import { MatTableModule } from '@angular/material/table';
     MatPaginatorModule,
     MatTableModule,
     MatInputModule,
+    ReusableComponentModule,
+    MatCheckboxModule,
+    MatSelectModule,
   ],
 })
 export class OrdersModule {}

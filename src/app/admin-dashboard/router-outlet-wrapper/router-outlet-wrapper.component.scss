@@ -1,15 +1,15 @@
 .body {
   width: calc(100% - 5rem);
-
   margin-left: 5rem;
   z-index: 0;
   position: relative;
   top: 0;
   transition: all 0.5s ease;
-  background: #f4f7fa;
+  background-color: #ecf0f1;
   padding: 3rem;
   // position: absolute;
   // top: 100px;
+  min-height: 900px;
 }
 
 .body-trimmed {

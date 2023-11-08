@@ -1,5 +1,6 @@
 <section>
   <div class="container">
+    <app-loader *ngIf="isLoading"></app-loader>
     <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-end">
       <div>
         <ol class="breadcrumb">
@@ -14,7 +15,7 @@
         <div class="row">
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Menus</span>
                   <h2>{{ totalDetailsCounts.today_menu_items }}</h2>
@@ -41,7 +42,7 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Revenue</span>
                   <h2>{{totalDetailsCounts.total_revenue}}</h2>
@@ -69,7 +70,7 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body d-flex align-items-center justify-content-between ">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between ">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Oders</span>
                   <h2>{{totalDetailsCounts.total_orders}}</h2>
@@ -96,7 +97,7 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Customers</span>
                   <h2>{{totalDetailsCounts.total_users}}</h2>
@@ -159,7 +160,7 @@
             <div class="card">
               <div class="card-header border-0">
                 <div>
-                  <h4 class="fs-20 mb-1">Daily Trending Menus</h4>
+                  <h4 class="fs-20 mb-1">Trending Menus</h4>
                 </div>
               </div>
               <div class="card-body">
@@ -199,7 +200,6 @@
                 </div>
               </div>
               <div class="card-body pb-2">
-                <!-- Table to display recent pending orders -->
                 <table class="table">
                   <thead>
                     <tr>
@@ -221,7 +221,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>

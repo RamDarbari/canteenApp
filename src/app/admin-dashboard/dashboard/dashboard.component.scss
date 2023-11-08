@@ -1,5 +1,4 @@
 section {
-  background-color: #fbfbfb;
   h1,
   h2,
   h3,
@@ -8,6 +7,16 @@ section {
   h6,
   p {
     margin: 0 auto;
+  }
+
+  app-loader {
+    display: flex;
+    min-height: 600px;
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+    right: 2px;
+    align-items: center;
   }
 
   margin-top: 6%;
@@ -33,12 +42,12 @@ section {
     transition: all 0.5s ease-in-out;
     position: relative;
     border: 0rem solid transparent;
-    border-radius: 1.75rem;
+    border-radius: 0.5rem;
     box-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
     height: calc(100% - 30px);
 
     .card-header {
-      border-radius: 1.75rem;
+      border-radius: 0.5rem;
       background-color: #fff;
 
       h2,
@@ -54,14 +63,18 @@ section {
         width: 100px;
         height: 40px;
         border: 1px;
-        background: linear-gradient(0deg, #9122e8, #9122e8);
+        background: var(--blue);
         color: #fff;
         font-family: Poppins;
         font-size: 18px;
         font-weight: 600;
         line-height: 27px;
-        outline: #9122e8;
+        outline: var(--blue);
       }
+    }
+
+    .info-cards {
+      height: 160px;
     }
 
     .card-body {
@@ -130,6 +143,27 @@ section {
           margin-right: 0.9375rem;
           font-weight: 500;
           color: #d0d0d0;
+        }
+      }
+
+      table {
+        thead {
+          tr,
+          th {
+            font-family: PoetsenOne;
+            font-weight: 400;
+            color: #000 !important;
+          }
+        }
+        tbody {
+          tr,
+          td {
+            font-family: Poppins;
+            font-weight: 300;
+            color: #000 !important;
+            font-size: 0.875rem !important;
+            line-height: 1.6;
+          }
         }
       }
     }

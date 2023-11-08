@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
     today_menu_items: 0,
     total_users: 0,
   };
+  isLoading: boolean = false;
 
   mostOrderItems: any[] = [];
   recentOrderItems: any[] = [];
@@ -48,11 +49,12 @@ export class DashboardComponent implements OnInit {
   ];
 
   totalItemsCount(currentDate: string) {
-    try {
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      this.http.detailsCount(token, currentDate).subscribe((response: any) => {
+    this.isLoading = true; // Set isLoading to true when making the request
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+    this.http.detailsCount(token, currentDate).subscribe(
+      (response: any) => {
         console.log('count', response);
         if (response && response.data) {
           this.totalDetailsCounts = response.data;
@@ -69,9 +71,14 @@ export class DashboardComponent implements OnInit {
           this.recentOrderItems = response.data.recent_pending_orders;
           console.log(this.recentOrderItems, 'oooooooooooooooooooooooooooo');
         }
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      },
+      (error) => {
+        console.error('Error loading data:', error);
+      },
+      () => {
+        // This block will run whether the request is successful or not
+        this.isLoading = false; // Set isLoading to false after the request is completed
+      }
+    );
   }
 }

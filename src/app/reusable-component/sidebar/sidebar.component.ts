@@ -114,7 +114,6 @@ export class SidebarComponent implements OnInit {
   selectItem(menu_id: string) {
     this.selectedItemId = menu_id;
     console.log('Selected Item ID:', this.selectedItemId);
-    this.offcanvasService.dismiss();
     this.filterMeals();
     this.router.navigate(['/menu/addProduct'], {
       queryParams: { menu_id: this.selectedItemId },
