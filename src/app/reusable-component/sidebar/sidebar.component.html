@@ -1,12 +1,13 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+
   <div class="logo-container">
     <button class="logo" (click)="toggleCollapse()" *ngIf="!collapsed">
       <img src="https://seasia.prodacker.com/static/media/logo-new-mini.aa6f2d50482586f8fab04ee427d3d1ca.svg"
         alt="Logo">
     </button>
-    <div class="logo" @fadeInOut *ngIf="collapsed">
+    <button class="logo" (click)="toggleCollapse()" @fadeInOut *ngIf="collapsed">
       <img src="https://seasia.prodacker.com/static/media/logo-new.4a5f48de786a28690944e35048da410a.svg" alt="logo">
-    </div>
+    </button>
   </div>
 
   <ul class="sidenav-nav">

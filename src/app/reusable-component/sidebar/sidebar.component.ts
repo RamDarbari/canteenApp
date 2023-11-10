@@ -34,7 +34,7 @@ interface SideNavToggle {
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
-        animate('350ms', style({ opacity: 0 })),
+        animate('0ms', style({ opacity: 0 })),
       ]),
     ]),
     trigger('rotate', [
@@ -144,5 +144,14 @@ export class SidebarComponent implements OnInit {
       collapsed: this.collapsed,
       screenWidth: this.screenWidth,
     });
+  }
+  toggleSidebar(): void {
+    if (this.screenWidth > 768) {
+      this.collapsed = !this.collapsed;
+      this.onToggleSideNav.emit({
+        collapsed: this.collapsed,
+        screenWidth: this.screenWidth,
+      });
+    }
   }
 }
