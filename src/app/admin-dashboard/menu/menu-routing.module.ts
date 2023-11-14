@@ -12,7 +12,6 @@ const routes: Routes = [
     children: [
       { path: 'menulist', component: MenuListComponent },
       { path: 'menu-catalogue', component: MenuCatalogueComponent },
-      { path: '', component: AddProductComponent },
       { path: 'addProduct', component: AddProductComponent },
     ],
   },

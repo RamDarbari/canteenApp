@@ -1,12 +1,10 @@
-<div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
-
-  <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()" *ngIf="!collapsed">
-      <img src="https://seasia.prodacker.com/static/media/logo-new-mini.aa6f2d50482586f8fab04ee427d3d1ca.svg"
-        alt="Logo">
+<div class="sidenav" [ngClass]="{ 'sidenav-collapsed': collapsed, 'sidenav-expanded': !collapsed }">
+  <div class="logo-container" (click)="toggleCollapse()">
+    <button class="logo" *ngIf="!collapsed">
+      <img src="assets/logo-new-mini.aa6f2d50482586f8fab04ee427d3d1ca.svg" alt="Logo-Mini">
     </button>
-    <button class="logo" (click)="toggleCollapse()" @fadeInOut *ngIf="collapsed">
-      <img src="https://seasia.prodacker.com/static/media/logo-new.4a5f48de786a28690944e35048da410a.svg" alt="logo">
+    <button class="logo" @fadeInOut *ngIf="collapsed">
+      <img src="assets/logo-new.4a5f48de786a28690944e35048da410a.svg" alt="Logo-Full">
     </button>
   </div>
 
@@ -14,7 +12,7 @@
     <!-- Dashboard Accordion -->
     <li class="sidenav-nav-item">
       <div class="accordion-header">
-        <a class="sidenav-nav-link" [routerLink]="['/admin/dashboard']" routerLinkActive="router-link-active"
+        <a class="sidenav-nav-link has-arrow ai-icon" [routerLink]="['/admin/dashboard']" routerLinkActive="active"
           (click)="toggleAccordionItem('dashboard')">
           <i class="sidenav-link-icon fa-solid fa-house"></i>
           <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Dashboard</span>
@@ -51,7 +49,8 @@
       <div class="accordion-header">
         <a class="sidenav-nav-link" (click)="toggleAccordionItem('User Management')">
           <i class="fa-solid fa-users sidenav-link-icon"></i>
-          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">User Management</span>
+          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">User
+            Management</span>
         </a>
       </div>
       <ul class="accordion-items" *ngIf="activeAccordionItem === 'User Management'">
@@ -76,6 +75,11 @@
       <ul class="accordion-items" *ngIf="activeAccordionItem === 'menus'">
         <li *ngFor="let meal of meals">
           <a class="accordion-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
+        </li>
+        <li>
+          <a class="accordion-item" [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">
+            Add Today's Menu
+          </a>
         </li>
         <li>
           <a class="accordion-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu

@@ -1,16 +1,25 @@
-section {
-  margin-top: 6%;
-}
 .order-history-section {
   width: 100%;
-  border: 1px solid #ccc;
   padding: 20px;
+  margin-top: 6%;
 
+  app-loader {
+    position: absolute;
+    top: 54%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2;
+  }
+
+  a {
+    cursor: pointer;
+  }
   .title {
     height: 72px;
     align-items: center;
     h3 {
-      font-family: PoetsenOne;
+      font-family: Poppins;
       font-size: 60px;
       font-weight: 400;
     }
@@ -22,19 +31,10 @@ section {
 
     thead {
       th {
-        background-color: #ffcb46;
+        background-color: var(--blue);
         padding: 10px;
-        // border: 1px solid #ccc;
         text-align: center;
-        // width: 25%;
-      }
-
-      .record {
-        background-color: #ffcb46;
-        // padding: 10px;
-        // border: 1px solid #ccc;
-        text-align: center;
-        // width: 25%;
+        color: white;
       }
     }
 

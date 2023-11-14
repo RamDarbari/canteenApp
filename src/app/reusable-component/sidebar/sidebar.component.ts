@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/services/admin.service';
+import { SidebarService } from 'src/app/services/sidebar.service';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -57,6 +59,7 @@ export class SidebarComponent implements OnInit {
   activeAccordionItem: string | null = null;
   meals: any[] = [];
   selectedItemId: string | null = null;
+  isHovered = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -75,12 +78,16 @@ export class SidebarComponent implements OnInit {
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private offcanvasService: NgbOffcanvas
+    private offcanvasService: NgbOffcanvas,
+    private sidebarService: SidebarService
   ) {}
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
     this.filterMeals();
+    this.sidebarService.sidebarState$.subscribe((state) => {
+      this.collapsed = state;
+    });
   }
 
   filterMeals() {
@@ -138,13 +145,6 @@ export class SidebarComponent implements OnInit {
     this.offcanvasService.dismiss();
   }
 
-  closeSidenav(): void {
-    this.collapsed = false;
-    this.onToggleSideNav.emit({
-      collapsed: this.collapsed,
-      screenWidth: this.screenWidth,
-    });
-  }
   toggleSidebar(): void {
     if (this.screenWidth > 768) {
       this.collapsed = !this.collapsed;

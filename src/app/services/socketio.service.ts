@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketioService {
-  private socket: any;
+  private socket: Socket;
 
   constructor() {
     // Connect to the server
@@ -19,5 +19,10 @@ export class SocketioService {
         observer.next(data);
       });
     });
+  }
+
+  // Add the emit method
+  public emit(event: string, data?: any): void {
+    this.socket.emit(event, data);
   }
 }

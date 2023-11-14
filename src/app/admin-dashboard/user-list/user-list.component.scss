@@ -1,14 +1,14 @@
+@import "/src/theme_var.scss";
 .user-list-container {
   margin-top: 6%;
   width: 100%;
-  border: 1px solid #ccc;
   padding: 20px;
 
   .title {
     height: 72px;
     align-items: center;
     h3 {
-      font-family: PoetsenOne;
+      font-family: Poppins;
       font-size: 60px;
       font-weight: 400;
     }
@@ -42,9 +42,10 @@
 
     thead {
       th {
-        background-color: #ffcb46;
+        background-color: $color-primary;
         padding: 10px;
         // border: 1px solid #ccc;
+        color: #fff;
         text-align: center;
         width: 25%;
       }

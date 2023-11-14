@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { SidebarService } from 'src/app/services/sidebar.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class AdminHeaderComponent implements OnInit {
   constructor(
     private toastr: ToastrService,
     private router: Router,
-    private socketService: SocketioService
+    private socketService: SocketioService,
+    private sidebarService: SidebarService
   ) {}
 
   ngOnInit(): void {
@@ -44,5 +46,8 @@ export class AdminHeaderComponent implements OnInit {
     localStorage.clear();
     this.toastr.success('Log-out Successful');
     this.router.navigate(['/home']); // Navigate to the home page
+  }
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
   }
 }

@@ -1,92 +1,113 @@
 <section class="pending-order-list-section">
   <app-loader *ngIf="isLoading"></app-loader>
-  <div class="title">
-    <h3 class="text-center">Pending Order List</h3>
-  </div>
-  <div *ngIf="orders.length === 0">
-    <p class="text-center">No pending orders available.</p>
-  </div>
-  <table *ngIf="orders.length > 0" class="table align-middle mb-0 bg-white table-hover">
-    <thead class="bg-light">
-      <tr>
-        <th scope="col">OrderId</th>
-        <th scope="col">EmployeeId</th>
-        <th scope="col">Order Status</th>
-        <th scope="col">Bill Status</th>
-        <th scope="col">Item Name</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">TotalPrice</th>
-        <th scope="col">TotalBalance</th>
-        <th scope="col">Date</th>
-        <th scope="col">Time</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of pagedEmployeeData">
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order._id }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.emp_id }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.order_status }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.bill_status }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data"
-            *ngFor="let record of order.order_rec">
-            <li> {{ record.item_name }}</li>
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data"
-            *ngFor="let record of order.order_rec">
-            {{ record.quantity }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data"
-            *ngFor="let record of order.order_rec">
-            {{ record.totalPrice }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.totalBalance }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.date }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            {{ order.time }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center order-data">
-            <button (click)="changeOrderStatus(order._id, 'cancel')">Cancel</button>
-            <button (click)="changeOrderStatus(order._id, 'confirm')">Confirm</button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="title">
+      <h3 class="text-center">Pending Order List</h3>
+    </div>
+    <div class="row">
+      <div *ngIf="orders.length === 0">
+        <p class="text-center">No pending orders available.</p>
+      </div>
+      <table *ngIf="orders.length > 0" class="table align-middle mb-0 bg-white table-hover">
+        <thead class="bg-light">
+          <tr>
+            <th scope="col">OrderId</th>
+            <th scope="col">EmployeeId</th>
+            <th scope="col">Order Status</th>
+            <th scope="col">Bill Status</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">TotalPrice</th>
+            <th scope="col">TotalBalance</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of pagedEmployeeData">
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order._id }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.emp_id }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.order_status }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.bill_status }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data"
+                *ngFor="let record of order.order_rec">
+                <li> {{ record.item_name }}</li>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data"
+                *ngFor="let record of order.order_rec">
+                {{ record.quantity }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data"
+                *ngFor="let record of order.order_rec">
+                {{ record.totalPrice }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.totalBalance }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.date }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center order-data">
+                {{ order.time }}
+              </div>
+            </td>
+            <td>
+              <div class="dropdown ml-auto">
+                <div class="btn-link" data-bs-toggle="dropdown">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M11.0005 12C11.0005 12.5523 11.4482 13 12.0005 13C12.5528 13 13.0005 12.5523 13.0005 12C13.0005 11.4477 12.5528 11 12.0005 11C11.4482 11 11.0005 11.4477 11.0005 12Z"
+                      stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path
+                      d="M18.0005 12C18.0005 12.5523 18.4482 13 19.0005 13C19.5528 13 20.0005 12.5523 20.0005 12C20.0005 11.4477 19.5528 11 19.0005 11C18.4482 11 18.0005 11.4477 18.0005 12Z"
+                      stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path
+                      d="M4.00049 12C4.00049 12.5523 4.4482 13 5.00049 13C5.55277 13 6.00049 12.5523 6.00049 12C6.00049 11.4477 5.55277 11 5.00049 11C4.4482 11 4.00049 11.4477 4.00049 12Z"
+                      stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item text-black" (click)="changeOrderStatus(order._id, 'confirm')"><i
+                      class="far fa-check-circle me-1 text-success"></i>Accept order</a>
+                  <a class="dropdown-item text-black" (click)="changeOrderStatus(order._id, 'cancel')"><i
+                      class="far fa-times-circle me-1 text-danger"></i>Reject order</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-  <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems" [pageSize]="pageSize"
-    [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
+      <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems"
+        [pageSize]="pageSize" [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
+    </div>
+  </div>
 </section>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 import { OrderHistory } from 'src/data';
-import { Selection } from '../../../../selection';
 
 @Component({
   selector: 'app-order-history',
@@ -9,22 +8,12 @@ import { Selection } from '../../../../selection';
   styleUrls: ['./order-history.component.scss'],
 })
 export class OrderHistoryComponent implements OnInit {
-  orderHistoryData: OrderHistory[];
-  selection = new Selection<OrderHistory>();
-
-  displayedColumns: string[] = [
-    'select',
-    'orderId',
-    'employeeId',
-    'orderStatus',
-    'billStatus',
-    'itemName',
-    'quantity',
-    'totalPrice',
-    'totalBalance',
-    'date',
-    'time',
-  ];
+  orderHistoryData: OrderHistory[] = [];
+  pagedEmployeeData: OrderHistory[] = [];
+  totalItems: number;
+  currentPage: number = 0;
+  pageSize: number = 10;
+  isLoading: boolean = false;
 
   constructor(private http: AdminService) {}
 
@@ -38,53 +27,26 @@ export class OrderHistoryComponent implements OnInit {
       : '';
 
     this.http.getOrderHistory(token).subscribe((response: any) => {
-      this.orderHistoryData = response.data as OrderHistory[]; // Assign the data with the correct type
+      this.orderHistoryData = response.data as OrderHistory[];
+
+      // Update the totalItems based on the length of the data
+      this.totalItems = this.orderHistoryData.length;
+
+      // Update the paged data
+      this.updatePagedData();
     });
   }
 
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-    } else {
-      this.orderHistoryData.forEach((row) => {
-        if (!this.selection.isSelected(row)) {
-          this.selection.select(row);
-        }
-      });
-    }
+  updatePagedData() {
+    const startIndex = this.currentPage * this.pageSize;
+    this.pagedEmployeeData = this.orderHistoryData.slice(
+      startIndex,
+      startIndex + this.pageSize
+    );
   }
 
-  hasValue(): boolean {
-    return this.selection.selected.length > 0;
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.orderHistoryData.length;
-    return numSelected === numRows;
-  }
-
-  itemNameTemplate(row: OrderHistory): string {
-    let itemNameTemplate = '';
-    for (const record of row.order_rec) {
-      itemNameTemplate += `<li>${record.item_name}</li>`;
-    }
-    return itemNameTemplate;
-  }
-
-  quantityTemplate(row: OrderHistory): string {
-    let quantityTemplate = '';
-    for (const record of row.order_rec) {
-      quantityTemplate += `<li>${record.quantity}</li>`;
-    }
-    return quantityTemplate;
-  }
-
-  totalPriceTemplate(row: OrderHistory): string {
-    let totalPriceTemplate = '';
-    for (const record of row.order_rec) {
-      totalPriceTemplate += `<li>${record.price}</li>`;
-    }
-    return totalPriceTemplate;
+  pageChanged(event: any) {
+    this.currentPage = event.pageIndex;
+    this.updatePagedData();
   }
 }
