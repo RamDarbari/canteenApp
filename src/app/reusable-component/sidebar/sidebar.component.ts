@@ -10,6 +10,7 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -60,6 +61,9 @@ export class SidebarComponent implements OnInit {
   meals: any[] = [];
   selectedItemId: string | null = null;
   isHovered = false;
+  @Input() sidenav: boolean = true;
+  @Input() adminCart: boolean = false;
+  selectedMenus: any[] = [];
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -88,6 +92,7 @@ export class SidebarComponent implements OnInit {
     this.sidebarService.sidebarState$.subscribe((state) => {
       this.collapsed = state;
     });
+    this.fetchSelectedMenus();
   }
 
   filterMeals() {
@@ -153,5 +158,27 @@ export class SidebarComponent implements OnInit {
         screenWidth: this.screenWidth,
       });
     }
+  }
+
+  fetchSelectedMenus() {
+    const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
+
+    // Convert storedMenus object to an array
+    this.selectedMenus = Object.entries(storedMenus).map(
+      ([menuType, subMenuItems]) => ({
+        menuType,
+        subMenuItems,
+      })
+    );
+    console.log('Fetched selectedMenus from localStorage:', this.selectedMenus);
+  }
+
+  sendTodaysMenu() {
+    try {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      // this._https.addTodayMenu(token);
+    } catch (error) {}
   }
 }

@@ -12,9 +12,11 @@ export class MealCardComponent implements OnInit {
   @Input() selectedCategory: string;
   @Input() displayNormalMealCard: boolean = false;
   @Input() displayAddItemToCartCard: boolean = false;
+  @Input() displayTotalItems: boolean = false;
   meals: any[] = [];
   submenu: any[] = [];
-  items: any[] = []; // Add this line and initialize it to an empty array
+  items: any[] = [];
+  totalMeals: any[] = [];
 
   constructor(
     private _https: CommonServiceService,
@@ -27,6 +29,7 @@ export class MealCardComponent implements OnInit {
     console.log('Selected Category:', this.selectedCategory);
     this.filterMeals();
     this.filterSubMenuList();
+    this.filterTotalItems();
   }
 
   filterMeals() {
@@ -34,6 +37,26 @@ export class MealCardComponent implements OnInit {
       this._https.menuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
+        } else {
+          this.toastr.error('No meals found');
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.toastr.error(
+        'An unexpected error occurred. Please try again later.'
+      );
+    }
+  }
+
+  filterTotalItems() {
+    try {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http.addminMenuList(token).subscribe((response) => {
+        if (response.data && response.data.length > 0) {
+          this.totalMeals = response.data;
         } else {
           this.toastr.error('No meals found');
         }
@@ -98,5 +121,34 @@ export class MealCardComponent implements OnInit {
     this.toastr.success('Item added to cart successfully!');
   }
 
-  addItemToTodayMenu() {}
+  addTodayMenu(
+    menuType: string,
+    subMenuItems: { id: string; menuName: string; itemName: string }[]
+  ) {
+    try {
+      const storedMenus =
+        JSON.parse(localStorage.getItem('selectedMenus')) || {};
+
+      if (!storedMenus[menuType]) {
+        storedMenus[menuType] = [];
+      }
+
+      subMenuItems.forEach((subMenuItem) => {
+        const { id, menuName, itemName } = subMenuItem;
+
+        if (!storedMenus[menuType].some((item) => item.id === id)) {
+          storedMenus[menuType].push({ id, menuName, itemName });
+        }
+      });
+
+      localStorage.setItem('selectedMenus', JSON.stringify(storedMenus));
+
+      console.log('Menu added to localStorage:', storedMenus);
+    } catch (error) {
+      console.error(error);
+      this.toastr.error(
+        'An unexpected error occurred. Please try again later.'
+      );
+    }
+  }
 }

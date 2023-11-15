@@ -1,64 +1,100 @@
 section {
-  width: 100%;
-  padding: 20px;
   margin-top: 6%;
-  a {
-    cursor: pointer;
+}
+app-loader {
+  position: absolute;
+  top: 54%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  z-index: 2;
+}
+.title {
+  align-items: center;
+  h3 {
+    font-family: Poppins;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: normal;
   }
-
-  app-loader {
-    position: absolute;
-    top: 54%;
-    left: 48%;
-    transform: translate(-50%, -50%);
+}
+.view-items {
+  button {
     width: 100%;
-    z-index: 2;
-  }
-  .title {
-    height: 72px;
-    align-items: center;
-    h3 {
-      font-family: Poppins;
-      font-size: 60px;
-      font-weight: 400;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-      th {
-        background-color: var(--blue);
-        padding: 10px;
-        text-align: center;
-        color: white;
-      }
-    }
-
-    tbody {
-      tr {
-        td {
-          padding: 10px;
-          text-align: center;
-        }
-        .order-data {
-          font-family: Poppins;
-          font-size: 24px;
-          font-weight: 400;
-        }
-
-        &:nth-child(even) {
-          background-color: #f9f9f9;
-        }
-      }
-    }
+    height: 46px;
+    border: 1px;
+    background: var(--blue);
+    color: #fff;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 27px;
+    outline: var(--blue);
   }
 }
 
-.mat-paginator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.menu-selection-card {
+  width: 92%;
+
+  button {
+    width: 360px;
+    height: 172px;
+    border-radius: 20px;
+    border: 2px solid transparent; /* Added 'solid' to specify the border style */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Poppins;
+    font-size: 22px;
+    font-weight: 600;
+    background-color: #ffffff;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .st0 {
+      fill: #fff;
+      stroke: #000000;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10;
+    }
+    svg {
+      height: 96px;
+      width: 96px;
+    }
+
+    &:hover {
+      border: 1px solid #6d00c2;
+
+      .st0 {
+        fill: #6d00c2;
+        stroke: #6d00c2;
+      }
+      .st1 {
+        fill: #6d00c2;
+      }
+      .st2 {
+        fill: #6d00c2;
+        stroke: #6d00c2;
+      }
+    }
+  }
+
+  button.active-button {
+    border: 1px solid #6d00c2;
+
+    .st0 {
+      fill: #6d00c2;
+      stroke: #6d00c2;
+    }
+    .st1 {
+      fill: #6d00c2;
+    }
+    .st2 {
+      fill: #6d00c2;
+      stroke: #6d00c2;
+    }
+  }
 }

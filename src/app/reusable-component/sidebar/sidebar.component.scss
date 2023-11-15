@@ -69,6 +69,7 @@
         align-items: center;
         justify-content: flex-start;
         height: 69px;
+        width: 100%;
         border-radius: 50px;
         text-decoration: none;
 
@@ -100,12 +101,15 @@
     .sidenav-nav-item:hover {
       .sidenav-nav-link {
         background-color: rgba(72, 132, 237, 0.355);
-
+        height: 69px;
+        width: 100%;
         .sidenav-link-icon {
           color: #fff;
           display: flex;
           align-items: center;
           justify-content: center;
+          width: 47px;
+          height: 47px;
           margin-left: 10px;
           background-color: rgb(72, 133, 237);
         }
@@ -113,6 +117,7 @@
         .sidenav-link-text {
           margin-left: 10px;
           color: var(--blue);
+          padding-left: 54px;
         }
       }
     }
@@ -120,5 +125,16 @@
 
   li {
     margin: 10px;
+  }
+}
+
+.adminCart {
+  .profile-button {
+    color: #fff;
+    background-color: var(--blue);
+  }
+
+  .offcanvas {
+    margin-top: 6%;
   }
 }

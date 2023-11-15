@@ -14,6 +14,8 @@ interface Employee {
   LastName: string;
   email: string;
   role: string;
+  balance: string;
+  wallet: string;
 }
 
 @Component({

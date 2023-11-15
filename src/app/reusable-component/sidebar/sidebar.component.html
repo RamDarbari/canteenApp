@@ -1,92 +1,129 @@
-<div class="sidenav" [ngClass]="{ 'sidenav-collapsed': collapsed, 'sidenav-expanded': !collapsed }">
-  <div class="logo-container" (click)="toggleCollapse()">
-    <button class="logo" *ngIf="!collapsed">
-      <img src="assets/logo-new-mini.aa6f2d50482586f8fab04ee427d3d1ca.svg" alt="Logo-Mini">
-    </button>
-    <button class="logo" @fadeInOut *ngIf="collapsed">
-      <img src="assets/logo-new.4a5f48de786a28690944e35048da410a.svg" alt="Logo-Full">
-    </button>
+<section class="sidenav-section" *ngIf="sidenav">
+  <div class="sidenav" [ngClass]="{ 'sidenav-collapsed': collapsed, 'sidenav-expanded': !collapsed }">
+    <div class="logo-container" (click)="toggleCollapse()">
+      <button class="logo" *ngIf="!collapsed">
+        <img src="assets/logo-new-mini.aa6f2d50482586f8fab04ee427d3d1ca.svg" alt="Logo-Mini">
+      </button>
+      <button class="logo" @fadeInOut *ngIf="collapsed">
+        <img src="assets/logo-new.4a5f48de786a28690944e35048da410a.svg" alt="Logo-Full">
+      </button>
+    </div>
+
+    <ul class="sidenav-nav">
+      <!-- Dashboard Accordion -->
+      <li class="sidenav-nav-item">
+        <div class="accordion-header">
+          <a class="sidenav-nav-link has-arrow ai-icon" [routerLink]="['/admin/dashboard']" routerLinkActive="active"
+            (click)="toggleAccordionItem('dashboard')">
+            <i class="sidenav-link-icon fa-solid fa-house"></i>
+            <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Dashboard</span>
+          </a>
+        </div>
+      </li>
+
+      <!-- Orders Accordion -->
+      <li class="sidenav-nav-item">
+        <div class="accordion-header">
+          <a class="sidenav-nav-link" (click)="toggleAccordionItem('orders')">
+            <i class="fa-solid fa-cart-shopping sidenav-link-icon"></i>
+            <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Orders</span>
+          </a>
+        </div>
+        <ul class="accordion-items" *ngIf="activeAccordionItem === 'orders'">
+          <li>
+            <a class="accordion-item" [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active"
+              (click)="selectOption()">
+              Pending Orders
+            </a>
+          </li>
+          <li>
+            <a class="accordion-item" [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active"
+              (click)="selectOption()">
+              Order History
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- User List Accordion -->
+      <li class="sidenav-nav-item">
+        <div class="accordion-header">
+          <a class="sidenav-nav-link" (click)="toggleAccordionItem('User Management')">
+            <i class="fa-solid fa-users sidenav-link-icon"></i>
+            <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">User
+              Management</span>
+          </a>
+        </div>
+        <ul class="accordion-items" *ngIf="activeAccordionItem === 'User Management'">
+          <li>
+            <a class="accordion-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active"
+              (click)="selectOption()">User
+              Lists
+            </a>
+          </li>
+          <!-- Add more items as needed -->
+        </ul>
+      </li>
+
+      <!-- Menus Accordion -->
+      <li class="sidenav-nav-item">
+        <div class="accordion-header">
+          <a class="sidenav-nav-link" (click)="toggleAccordionItem('menus')">
+            <i class="sidenav-link-icon fa-solid fa-bars"></i>
+            <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Menus</span>
+          </a>
+        </div>
+        <ul class="accordion-items" *ngIf="activeAccordionItem === 'menus'">
+          <li *ngFor="let meal of meals">
+            <a class="accordion-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
+          </li>
+          <li>
+            <a class="accordion-item" [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">
+              Add Today's Menu
+            </a>
+          </li>
+          <li>
+            <a class="accordion-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu
+              List</a>
+          </li>
+          <!-- Add more items as needed -->
+        </ul>
+      </li>
+    </ul>
   </div>
+  <ng-content select=".sidenav"></ng-content>
+</section>
 
-  <ul class="sidenav-nav">
-    <!-- Dashboard Accordion -->
-    <li class="sidenav-nav-item">
-      <div class="accordion-header">
-        <a class="sidenav-nav-link has-arrow ai-icon" [routerLink]="['/admin/dashboard']" routerLinkActive="active"
-          (click)="toggleAccordionItem('dashboard')">
-          <i class="sidenav-link-icon fa-solid fa-house"></i>
-          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Dashboard</span>
-        </a>
+<section class="adminCart" *ngIf="adminCart">
+  <button class="btn rounded-pill profile-button" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+    View Added Items
+  </button>
+  <div class="sidebar">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">Selected Menus</h5>
       </div>
-    </li>
-
-    <!-- Orders Accordion -->
-    <li class="sidenav-nav-item">
-      <div class="accordion-header">
-        <a class="sidenav-nav-link" (click)="toggleAccordionItem('orders')">
-          <i class="fa-solid fa-cart-shopping sidenav-link-icon"></i>
-          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Orders</span>
-        </a>
+      <div class="offcanvas-body">
+        <div *ngIf="selectedMenus && selectedMenus.length > 0">
+          <div *ngFor="let menu of selectedMenus">
+            <h6>{{ menu.menuType | uppercase }}</h6>
+            <ul>
+              <li *ngFor="let subMenuItem of menu.subMenuItems">
+                {{ subMenuItem.menuName }} - {{ subMenuItem.itemName }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div *ngIf="!selectedMenus || selectedMenus.length === 0">
+          <p>No menus selected.</p>
+        </div>
+        <div>
+          <button>
+            confirm
+          </button>
+        </div>
       </div>
-      <ul class="accordion-items" *ngIf="activeAccordionItem === 'orders'">
-        <li>
-          <a class="accordion-item" [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active"
-            (click)="selectOption()">
-            Pending Orders
-          </a>
-        </li>
-        <li>
-          <a class="accordion-item" [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active"
-            (click)="selectOption()">
-            Order History
-          </a>
-        </li>
-      </ul>
-    </li>
-
-    <!-- User List Accordion -->
-    <li class="sidenav-nav-item">
-      <div class="accordion-header">
-        <a class="sidenav-nav-link" (click)="toggleAccordionItem('User Management')">
-          <i class="fa-solid fa-users sidenav-link-icon"></i>
-          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">User
-            Management</span>
-        </a>
-      </div>
-      <ul class="accordion-items" *ngIf="activeAccordionItem === 'User Management'">
-        <li>
-          <a class="accordion-item" [routerLink]="['/admin/userList']" routerLinkActive="router-link-active"
-            (click)="selectOption()">User
-            Lists
-          </a>
-        </li>
-        <!-- Add more items as needed -->
-      </ul>
-    </li>
-
-    <!-- Menus Accordion -->
-    <li class="sidenav-nav-item">
-      <div class="accordion-header">
-        <a class="sidenav-nav-link" (click)="toggleAccordionItem('menus')">
-          <i class="sidenav-link-icon fa-solid fa-bars"></i>
-          <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">Menus</span>
-        </a>
-      </div>
-      <ul class="accordion-items" *ngIf="activeAccordionItem === 'menus'">
-        <li *ngFor="let meal of meals">
-          <a class="accordion-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
-        </li>
-        <li>
-          <a class="accordion-item" [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">
-            Add Today's Menu
-          </a>
-        </li>
-        <li>
-          <a class="accordion-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu
-            List</a>
-        </li>
-        <!-- Add more items as needed -->
-      </ul>
-    </li>
-  </ul>
-</div>
+    </div>
+  </div>
+</section>
