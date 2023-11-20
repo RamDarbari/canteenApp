@@ -120,7 +120,7 @@ export class AdminService {
     });
   }
 
-  addTodayMenu(token: string, payload: any): Observable<any> {
+  addTodayMenu(token: string, payload?: any): Observable<any> {
     return this._http.post(`${this.apiUrl}/admin/addTodayMenu`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,

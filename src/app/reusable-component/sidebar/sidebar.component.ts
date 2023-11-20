@@ -161,24 +161,103 @@ export class SidebarComponent implements OnInit {
   }
 
   fetchSelectedMenus() {
-    const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
+    try {
+      const storedMenus =
+        JSON.parse(localStorage.getItem('selectedMenus')) || {};
 
-    // Convert storedMenus object to an array
-    this.selectedMenus = Object.entries(storedMenus).map(
-      ([menuType, subMenuItems]) => ({
-        menuType,
-        subMenuItems,
-      })
-    );
-    console.log('Fetched selectedMenus from localStorage:', this.selectedMenus);
+      // Convert storedMenus object to an array
+      this.selectedMenus = Object.keys(storedMenus).map((menuId) => ({
+        menuType: menuId,
+        subMenuItems: storedMenus[menuId],
+      }));
+
+      console.log(
+        'Fetched selectedMenus from localStorage:',
+        this.selectedMenus
+      );
+    } catch (error) {
+      console.error(
+        'An unexpected error occurred while fetching selectedMenus:',
+        error
+      );
+    }
   }
 
-  sendTodaysMenu() {
+  deleteItem(menuId: string, index: number): void {
+    try {
+      // Fetch the selected menus from localStorage
+      const storedMenus =
+        JSON.parse(localStorage.getItem('selectedMenus')) || {};
+
+      // Find the selected menu based on menuId
+      const selectedMenu = storedMenus[menuId];
+
+      if (selectedMenu && selectedMenu.length > index) {
+        // Remove the item at the specified index
+        selectedMenu.splice(index, 1);
+
+        // Update the storedMenus object
+        storedMenus[menuId] = selectedMenu;
+
+        // Save the updated selectedMenus to localStorage
+        localStorage.setItem('selectedMenus', JSON.stringify(storedMenus));
+
+        // Update the selectedMenus array in your component
+        this.selectedMenus = Object.entries(storedMenus).map(
+          ([menuType, subMenuItems]) => ({
+            menuType,
+            subMenuItems,
+          })
+        );
+
+        console.log(
+          'Deleted item at index',
+          index,
+          'from menu with ID',
+          menuId
+        );
+      } else {
+        console.log(
+          'Unable to delete item at index',
+          index,
+          'from menu with ID',
+          menuId
+        );
+      }
+    } catch (error) {
+      console.error(
+        'An unexpected error occurred while deleting the item:',
+        error
+      );
+    }
+  }
+
+  todayMenu() {
     try {
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
-      // this._https.addTodayMenu(token);
-    } catch (error) {}
+
+      // Create an array to hold each menu object
+      const payload = [];
+
+      this.selectedMenus.forEach((menu) => {
+        const menuObject = {
+          menuType: menu.menuType,
+          sub_menu_items: menu.subMenuItems.map((item) => item.id),
+        };
+
+        // Push the menu object to the payload array
+        payload.push(menuObject);
+      });
+
+      // Make the API call with the created payload
+      this._https.addTodayMenu(token, payload).subscribe((response) => {
+        // Handle the API response as needed
+        console.log('Response from addTodayMenu API:', response);
+      });
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+    }
   }
 }

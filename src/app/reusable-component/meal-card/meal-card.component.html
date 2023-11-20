@@ -64,8 +64,8 @@
       <div class="col-md-8 meal-info d-flex align-items-center">
         <div class="card border-0 bg-transparent w-100">
           <div>
-            <div *ngIf="meals && meals.length > 0">
-              <div *ngFor="let meal of meals">
+            <div *ngIf="submenu && submenu.length > 0">
+              <div *ngFor="let meal of submenu">
                 <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
                   class="d-flex justify-content-between align-items-center" style="height: 45px;">
                   <p class="card-title m-0">{{ selectedCategory | uppercase }}</p>
@@ -100,32 +100,26 @@
   <ng-content select=".normal-meal-card"></ng-content>
 </section>
 
-<section *ngIf="displayTotalItems">
+<section class="totalItems" *ngIf="displayTotalItems">
   <div class="container mt-4">
     <div class="row w-100">
-      <div class="col-md-4 p-0 meal-image d-flex justify-content-center align-items-center">
-        <div class="card border-0 bg-transparent ">
-          <img
-            src="assets/aloo-paratha-gobi-paratha-also-known-as-potato-cauliflower-stuffed-flatbread-dish-originating-from-indian-subcontinent 1.png"
-            class="card-img-top" alt="Image">
-        </div>
-      </div>
       <div class="col-md-8 meal-info d-flex align-items-center">
         <div class="card border-0 bg-transparent w-100">
           <div>
-            <div *ngIf="totalMeals && totalMeals.length > 0">
-              <div *ngFor="let meal of totalMeals">
+            <div *ngIf="submenu && submenu.length > 0">
+              <div *ngFor="let meal of submenu">
                 <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
-                  class="d-flex justify-content-between align-items-center" style="height: 45px;">
-                  <p class="card-title m-0">{{ selectedCategory | uppercase }}</p>
+                  class="d-flex justify-content-between align-items-center mb-20" style="height: 45px;">
+                  <p class="card-title m-0">{{ selectedCategory }}</p>
                   <p class="card-time d-flex align-items-center">Timing: {{meal.time}}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card-body p-0" *ngIf="totalMeals && totalMeals.length > 0" style="min-height: 210px;">
-            <div *ngFor="let meal of totalMeals">
-              <div class=" d-flex flex-wrap gap-3" *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+          <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
+            <div *ngFor="let meal of submenu">
+              <div class=" d-flex flex-wrap gap-3 justify-content-center align-items-center"
+                *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                 <div class="card-items" *ngFor="let item of meal.items">
                   <div class="card border-0 shadow h-100"
                     (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }])">

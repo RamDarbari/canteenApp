@@ -5,7 +5,18 @@ section {
   width: 1200px;
   overflow: hidden; // Hide content overflow
 }
+.disabled-card {
+  opacity: 0.5; // or any other style to visually indicate that the card is disabled
+  pointer-events: none; // disable mouse events on the card
+}
 
+.totalItems {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
 .meal-image {
   min-height: 286px;
   flex-grow: 0; // Do not grow
@@ -13,8 +24,8 @@ section {
 
 .meal-info {
   width: 66%;
-  flex-grow: 1; // Allow to grow to fill available space
-  overflow-y: auto; // Add vertical scroll if needed
+  flex-grow: 1;
+  overflow-y: auto;
 }
 .card-title {
   padding-left: 15px;

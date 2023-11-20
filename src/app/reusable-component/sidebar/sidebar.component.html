@@ -94,23 +94,26 @@
   <ng-content select=".sidenav"></ng-content>
 </section>
 
-<section class="adminCart" *ngIf="adminCart">
-  <button class="btn rounded-pill profile-button" type="button" data-bs-toggle="offcanvas"
-    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-    View Added Items
-  </button>
+<section class="adminCart h-100" *ngIf="adminCart">
   <div class="sidebar">
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-      <div class="offcanvas-header">
+    <div class="inner-sidebar">
+      <div class="inner-sidebar-header d-flex align-items-center">
         <h5 id="offcanvasRightLabel">Selected Menus</h5>
       </div>
-      <div class="offcanvas-body">
+      <div class="inner-sidebar-body">
         <div *ngIf="selectedMenus && selectedMenus.length > 0">
           <div *ngFor="let menu of selectedMenus">
-            <h6>{{ menu.menuType | uppercase }}</h6>
             <ul>
-              <li *ngFor="let subMenuItem of menu.subMenuItems">
-                {{ subMenuItem.menuName }} - {{ subMenuItem.itemName }}
+              <li *ngFor="let subMenuItem of menu.subMenuItems; let i = index">
+                <span>
+                  {{ subMenuItem.menuName }}
+                </span>
+                <span>
+                  {{ subMenuItem.itemName }}
+                </span>
+                <span class="delete-items">
+                  <i (click)="deleteItem(menu.menu_id, i)" class="fa fa-trash" aria-hidden="true"></i>
+                </span>
               </li>
             </ul>
           </div>
@@ -119,11 +122,12 @@
           <p>No menus selected.</p>
         </div>
         <div>
-          <button>
+          <button (click)="todayMenu()" class="btn btn-primary">
             confirm
           </button>
         </div>
       </div>
     </div>
   </div>
+  <ng-content select=".total-items-cart"></ng-content>
 </section>

@@ -29,7 +29,6 @@ export class MealCardComponent implements OnInit {
     console.log('Selected Category:', this.selectedCategory);
     this.filterMeals();
     this.filterSubMenuList();
-    this.filterTotalItems();
   }
 
   filterMeals() {
@@ -37,26 +36,6 @@ export class MealCardComponent implements OnInit {
       this._https.menuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
-        } else {
-          this.toastr.error('No meals found');
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      this.toastr.error(
-        'An unexpected error occurred. Please try again later.'
-      );
-    }
-  }
-
-  filterTotalItems() {
-    try {
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      this.http.addminMenuList(token).subscribe((response) => {
-        if (response.data && response.data.length > 0) {
-          this.totalMeals = response.data;
         } else {
           this.toastr.error('No meals found');
         }

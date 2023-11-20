@@ -100,7 +100,7 @@
 
     .sidenav-nav-item:hover {
       .sidenav-nav-link {
-        background-color: rgba(72, 132, 237, 0.355);
+        background-color: #6e00c270;
         height: 69px;
         width: 100%;
         .sidenav-link-icon {
@@ -111,7 +111,7 @@
           width: 47px;
           height: 47px;
           margin-left: 10px;
-          background-color: rgb(72, 133, 237);
+          background-color: #6d00c2;
         }
 
         .sidenav-link-text {
@@ -129,12 +129,60 @@
 }
 
 .adminCart {
-  .profile-button {
-    color: #fff;
-    background-color: var(--blue);
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin: 0;
   }
 
-  .offcanvas {
-    margin-top: 6%;
+  .inner-sidebar-header {
+    height: 55px;
+    border-bottom: 1px solid #dddddd;
+    h5 {
+      font-family: Poppins;
+      font-size: 20px;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+  }
+
+  .inner-sidebar-body {
+    // min-height: 600px;
+    padding-top: 10px;
+    ul {
+      list-style-type: none;
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 12px;
+        height: 42px;
+        border: 1px solid #e2e9ef;
+
+        span {
+          font-family: Poppins;
+          display: flex;
+          justify-content: center;
+          text-align: left;
+          font-size: 15px;
+          font-weight: 400;
+          width: 33.3333333333%;
+        }
+
+        .delete-items {
+          i {
+            cursor: pointer;
+            color: red;
+            width: 18px;
+            height: 18px;
+            padding: 0.43px, 0px, 0.43px, 0px;
+          }
+        }
+      }
+    }
   }
 }

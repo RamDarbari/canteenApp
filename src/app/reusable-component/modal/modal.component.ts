@@ -66,7 +66,7 @@ export class ModalComponent {
             const userRole = response.data.empDetails.role;
             if (userRole === 'admin') {
               this.toastr.success('Admin Login Successful');
-              this.router.navigate(['/menu/menulist']);
+              this.router.navigate(['/admin']);
               this.modalService.dismissAll();
             } else {
               this.modalService.dismissAll();
