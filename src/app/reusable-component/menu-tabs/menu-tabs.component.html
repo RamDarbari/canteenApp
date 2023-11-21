@@ -1,0 +1,259 @@
+<section class="d-flex" *ngIf="todaymenu">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-sm-4">
+      <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-end">
+        <div>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a>Add Today's Menu</a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex flex-column align-items-center">
+        <div class="tabs w-100">
+          <div class="menu-selection-card d-flex justify-content-start pt-3 ">
+            <div class="breakfast">
+              <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
+                (click)="updateSelectedCategory('Breakfast')">
+                Breakfast
+              </button>
+            </div>
+            <div class="lunch">
+              <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
+                (click)="updateSelectedCategory('Lunch')">
+                Lunch
+              </button>
+            </div>
+            <div class="snacks">
+              <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
+                (click)="updateSelectedCategory('Snacks')">
+                Snacks
+              </button>
+            </div>
+          </div>
+          <div class="content">
+            <div class="row w-100">
+              <div class="col-md-8 meal-info d-flex align-items-center">
+                <div class="card border-0 bg-transparent w-100">
+                  <div>
+                    <div *ngIf="submenu && submenu.length > 0">
+                      <div *ngFor="let meal of submenu">
+                        <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
+                          class="d-flex justify-content-between align-items-center mb-20" style="height: 45px;">
+                          <p class="card-title m-0">{{ selectedCategory }}</p>
+                          <p class="card-time d-flex align-items-center">Timing: {{meal.time}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
+                    <div *ngFor="let meal of submenu">
+                      <div class=" d-flex flex-wrap gap-3 justify-content-center align-items-center"
+                        *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+                        <div class="card-items" *ngFor="let item of meal.items">
+                          <div class="card border-0 shadow h-100"
+                            (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }])">
+                            <div
+                              class="card-body inner-body d-flex justify-content-center align-items-center text-center">
+                              <div>
+                                <h6 class="card-subtitle mb-2">{{ item.item_name }}</h6>
+                                <p class="card-text text-muted">RS. {{ item.price }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end description">
+                    <p>click item to add in menu</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="today-Sidebar">
+    <div class="sidebar">
+      <div class="inner-sidebar">
+        <div class="inner-sidebar-header d-flex align-items-center">
+          <h5 id="offcanvasRightLabel">Selected Menus</h5>
+        </div>
+        <div class="inner-sidebar-body">
+          <div *ngIf="selectedMenus && selectedMenus.length > 0">
+            <div *ngFor="let menu of selectedMenus">
+              <ul>
+                <li *ngFor="let subMenuItem of menu.subMenuItems; let i = index">
+                  <span>
+                    {{ subMenuItem.menuName }}
+                  </span>
+                  <span>
+                    {{ subMenuItem.itemName }}
+                  </span>
+                  <span class="delete-items">
+                    <i (click)="deleteItem(menu.menuType, i)" class="fa fa-trash" aria-hidden="true"></i>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div *ngIf="!selectedMenus || selectedMenus.length === 0">
+            <p>No menus selected.</p>
+          </div>
+          <div>
+            <button (click)="todayMenu()" class="btn btn-primary">
+              confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-content select=".todaymenu"></ng-content>
+</section>
+
+
+<section class="d-flex" *ngIf="custommenu">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-sm-4">
+      <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-end">
+        <div>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a>Custom Menu</a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex flex-column align-items-center">
+        <div class="tabs w-100">
+          <div class="menu-selection-card d-flex justify-content-start pt-3 ">
+            <div class="breakfast">
+              <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
+                (click)="updateSelectedCategory('Breakfast')">
+                Breakfast
+              </button>
+            </div>
+            <div class="lunch">
+              <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
+                (click)="updateSelectedCategory('Lunch')">
+                Lunch
+              </button>
+            </div>
+            <div class="snacks">
+              <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
+                (click)="updateSelectedCategory('Snacks')">
+                Snacks
+              </button>
+            </div>
+          </div>
+          <div class="content">
+            <div class="row w-100">
+              <div class="col-md-8 meal-info d-flex align-items-center">
+                <div class="card border-0 bg-transparent w-100">
+                  <div>
+                    <div *ngIf="submenu && submenu.length > 0">
+                      <div *ngFor="let meal of submenu">
+                        <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
+                          class="d-flex justify-content-between align-items-center mb-20" style="height: 45px;">
+                          <p class="card-title m-0">{{ selectedCategory }}</p>
+                          <p class="card-time d-flex align-items-center">Timing: {{meal.time}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center" *ngIf="!submenu || submenu.length === 0">
+                      <!-- <app-loader></app-loader> -->
+                    </div>
+                  </div>
+                  <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
+                    <div *ngFor="let meal of submenu">
+                      <div class=" d-flex flex-wrap gap-3"
+                        *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+                        <div class="card-items" *ngFor="let item of meal.items">
+                          <div class="card border-0 shadow h-100">
+                            <div
+                              class="card-body inner-body d-flex justify-content-center align-items-center text-center"
+                              (click)="addItemToCart(item.item_name, item.price,item._id )">
+                              <div>
+                                <h6 class="card-subtitle mb-2">{{ item.item_name }}</h6>
+                                <p class="card-text text-muted">RS. {{ item.price }}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-center" *ngIf="!item || meal.items.length === 0">
+                            <p>Please wait, the menu will be updated soon!</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end description">
+                    <p>click item to add in menu</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="today-Sidebar">
+    <div class="sidebar">
+      <div class="custom-offcanvas-content w-100">
+        <div class="offcanvas-header">
+          <h4 class="offcanvas-title">Order Details</h4>
+        </div>
+        <div class="offcanvas-body">
+          <div *ngFor="let item of cartItems;let $index = index"
+            class="d-flex justify-content-between align-items-center item-info-body">
+            <div class="item-name-info">
+              <p>{{ item.item_name }} </p>
+            </div>
+            <div class="d-flex quantity-button align-items-center">
+              <p> Qty.</p>
+              <button (click)="decreaseQuantity($index)">-</button>
+              <input class="text-center" [(ngModel)]="cartItems[$index].quantity" [disabled]="!quantity" type="number"
+                min="1">
+              <button (click)="increaseQuantity($index)">+</button>
+            </div>
+            <div>
+              <p> {{ item.price | currency:'INR' }}</p>
+            </div>
+            <button (click)="deleteItems($index)" class=""><i class="fa fa-trash" aria-hidden="true"></i></button>
+          </div>
+          <div class="d-flex justify-content-end align-items-center item-info-body">
+            <div class="item-name-info" style="width: 41%;">
+              <p> Total: {{ getTotalBalance() | currency:'INR' }}</p>
+            </div>
+          </div>
+          <div class="text-end d-flex">
+            <input type="text" placeholder="Enter emp_id" [(ngModel)]="empId">
+            <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
+              Confirm Order
+            </button>
+            <div ngbDropdown class="d-inline-block">
+              <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
+                Bill Status: {{ selectedBillStatus }}
+              </button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button (click)="setBillStatus('paid')" ngbDropdownItem>Paid</button>
+                <button (click)="setBillStatus('unpaid')" ngbDropdownItem>Unpaid</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-content select=".custommenu"></ng-content>
+</section>

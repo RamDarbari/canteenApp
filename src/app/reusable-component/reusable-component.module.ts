@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MealCardComponent } from './meal-card/meal-card.component';
 import { TableComponent } from './table/table.component';
 import { LoaderComponent } from './loader/loader.component';
+import { MenuTabsComponent } from './menu-tabs/menu-tabs.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { LoaderComponent } from './loader/loader.component';
     MealCardComponent,
     TableComponent,
     LoaderComponent,
+    MenuTabsComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { LoaderComponent } from './loader/loader.component';
     MealCardComponent,
     TableComponent,
     LoaderComponent,
+    MenuTabsComponent,
   ],
 })
 export class ReusableComponentModule {}

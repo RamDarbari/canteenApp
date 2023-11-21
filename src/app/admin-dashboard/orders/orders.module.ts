@@ -10,9 +10,10 @@ import { MatTableModule } from '@angular/material/table';
 import { ReusableComponentModule } from 'src/app/reusable-component/reusable-component.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { CustomOrderComponent } from './custom-order/custom-order.component';
 
 @NgModule({
-  declarations: [OrderHistoryComponent, OrderDetailsComponent],
+  declarations: [OrderHistoryComponent, OrderDetailsComponent, CustomOrderComponent],
   imports: [
     CommonModule,
     OrdersRoutingModule,

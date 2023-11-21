@@ -31,15 +31,18 @@
         </div>
         <ul class="accordion-items" *ngIf="activeAccordionItem === 'orders'">
           <li>
-            <a class="accordion-item" [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active"
-              (click)="selectOption()">
+            <a class="accordion-item" [routerLink]="['/orders/order-details']" routerLinkActive="router-link-active">
               Pending Orders
             </a>
           </li>
           <li>
-            <a class="accordion-item" [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active"
-              (click)="selectOption()">
+            <a class="accordion-item" [routerLink]="['/orders/order-history']" routerLinkActive="router-link-active">
               Order History
+            </a>
+          </li>
+          <li>
+            <a class="accordion-item" [routerLink]="['/orders/custom-order']" routerLinkActive="router-link-active">
+              Custom-Order
             </a>
           </li>
         </ul>
@@ -94,7 +97,7 @@
   <ng-content select=".sidenav"></ng-content>
 </section>
 
-<section class="adminCart h-100" *ngIf="adminCart">
+<!-- <section class="adminCart h-100" *ngIf="adminCart">
   <div class="sidebar">
     <div class="inner-sidebar">
       <div class="inner-sidebar-header d-flex align-items-center">
@@ -112,7 +115,7 @@
                   {{ subMenuItem.itemName }}
                 </span>
                 <span class="delete-items">
-                  <i (click)="deleteItem(menu.menu_id, i)" class="fa fa-trash" aria-hidden="true"></i>
+                  <i (click)="deleteItem(menu.id, i)" class="fa fa-trash" aria-hidden="true"></i>
                 </span>
               </li>
             </ul>
@@ -130,4 +133,4 @@
     </div>
   </div>
   <ng-content select=".total-items-cart"></ng-content>
-</section>
+</section> -->

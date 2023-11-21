@@ -4,6 +4,7 @@ import { RoutesComponent } from '../routes/routes.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderHistoryComponent } from './order-history/order-history.component';
 import { NotfoundComponent } from 'src/app/notfound/notfound.component';
+import { CustomOrderComponent } from './custom-order/custom-order.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'order-details', component: OrderDetailsComponent },
       { path: 'order-history', component: OrderHistoryComponent },
+      { path: 'custom-order', component: CustomOrderComponent },
       {
         path: '**',
         component: NotfoundComponent,

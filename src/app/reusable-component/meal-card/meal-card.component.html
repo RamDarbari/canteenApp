@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-center" *ngIf="!meals || meals.length === 0">
-              <p>Please wait, the menu will be updated soon!</p>
+              <app-loader></app-loader>
             </div>
           </div>
           <div class="card-body p-0" *ngIf="meals && meals.length > 0" style="min-height: 210px;">
@@ -37,6 +37,9 @@
                       </div>
                     </div>
                   </div>
+                  <div class="d-flex justify-content-center" *ngIf="!item || meal.items.length === 0">
+                    <p>Please wait, the menu will be updated soon!</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -51,7 +54,7 @@
   <ng-content select=".addItemToCart-meal-card"></ng-content>
 </section>
 
-<section *ngIf="displayNormalMealCard">
+<!-- <section *ngIf="displayNormalMealCard">
   <div class="container mt-4">
     <div class="row w-100">
       <div class="col-md-4 p-0 meal-image d-flex justify-content-center align-items-center">
@@ -98,48 +101,4 @@
     </div>
   </div>
   <ng-content select=".normal-meal-card"></ng-content>
-</section>
-
-<section class="totalItems" *ngIf="displayTotalItems">
-  <div class="container mt-4">
-    <div class="row w-100">
-      <div class="col-md-8 meal-info d-flex align-items-center">
-        <div class="card border-0 bg-transparent w-100">
-          <div>
-            <div *ngIf="submenu && submenu.length > 0">
-              <div *ngFor="let meal of submenu">
-                <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
-                  class="d-flex justify-content-between align-items-center mb-20" style="height: 45px;">
-                  <p class="card-title m-0">{{ selectedCategory }}</p>
-                  <p class="card-time d-flex align-items-center">Timing: {{meal.time}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
-            <div *ngFor="let meal of submenu">
-              <div class=" d-flex flex-wrap gap-3 justify-content-center align-items-center"
-                *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
-                <div class="card-items" *ngFor="let item of meal.items">
-                  <div class="card border-0 shadow h-100"
-                    (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }])">
-                    <div class="card-body inner-body d-flex justify-content-center align-items-center text-center">
-                      <div>
-                        <h6 class="card-subtitle mb-2">{{ item.item_name }}</h6>
-                        <p class="card-text text-muted">RS. {{ item.price }}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex justify-content-end description">
-            <p>click item to add in menu</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <ng-content select=".total-items-meal-card"></ng-content>
-</section>
+</section> -->

@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let employee of pagedEmployeeData">
+      <tr *ngFor="let employee of pagedEmployeeData" (click)="openEnd(content, employee)">
         <td>
           <div class="d-flex align-items-center justify-content-center">
             {{ employee.EmployeeId }}
@@ -57,4 +57,30 @@
   <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems" [pageSize]="pageSize"
     [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
 
+  <div class="sidebar">
+    <ng-template #content let-offcanvas>
+      <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Employee Details</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+      </div>
+      <div class="offcanvas-body">
+        <p *ngIf="selectedEmployee">Employee Id: {{ selectedEmployee.EmployeeId }}</p>
+        <p *ngIf="selectedEmployee">First Name: {{ selectedEmployee.FirstName }}</p>
+        <p *ngIf="selectedEmployee">Last Name: {{ selectedEmployee.LastName }}</p>
+        <p *ngIf="selectedEmployee">Email: {{ selectedEmployee.email }}</p>
+        <p *ngIf="selectedEmployee">
+          Balance: <input type="text" [(ngModel)]="selectedEmployee.balance">
+        </p>
+        <p *ngIf="selectedEmployee">
+          Wallet: <input type="text" [(ngModel)]="selectedEmployee.wallet">
+        </p>
+        <button *ngIf="selectedEmployee" type="button" class="btn btn-outline-dark"
+          (click)="updateEmployee()">Update</button>
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Close click')">Close</button>
+        </div>
+      </div>
+
+    </ng-template>
+  </div>
 </section>

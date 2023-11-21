@@ -65,3 +65,16 @@ export interface detailsCount {
   today_menu_items: number;
   total_users: number;
 }
+
+// menu-item.interface.ts
+
+// menu-item.interface.ts
+
+// menu-item.interface.ts
+
+export interface MenuItem {
+  id: string;
+  menuName: string;
+  // menu_id: string;
+  subMenuItems: { id: string; menuName: string; itemName: string }[];
+}

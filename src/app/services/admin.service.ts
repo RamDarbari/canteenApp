@@ -127,4 +127,20 @@ export class AdminService {
       },
     });
   }
+
+  updateBalance(token: string, emp_id: number, payment: number, bill: number) {
+    return this._http.post(
+      `${this.apiUrl}/admin/updateBalance`,
+      {
+        emp_id,
+        payment,
+        bill,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
 }

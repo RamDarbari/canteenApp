@@ -185,7 +185,7 @@ export class HeaderComponent implements OnInit {
           });
 
           const orderPayload: OrderData = {
-            bill_status: 'paid',
+            bill_status: 'unpaid',
             order_rec: orderItems,
             emp_id: '3673',
           };
@@ -201,6 +201,7 @@ export class HeaderComponent implements OnInit {
               localStorage.removeItem('cartItems');
               this.offcanvasService.dismiss();
               this.loadCartItems();
+              this.toastr.success('order placed succesfully');
             })
             .add(() => {
               this.isLoading = false;

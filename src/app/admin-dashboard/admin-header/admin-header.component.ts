@@ -46,6 +46,7 @@ export class AdminHeaderComponent implements OnInit {
     localStorage.clear();
     this.toastr.success('Log-out Successful');
     this.router.navigate(['/home']); // Navigate to the home page
+    // window.location.reload();
   }
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
