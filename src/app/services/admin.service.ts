@@ -101,10 +101,14 @@ export class AdminService {
     );
   }
 
-  getOrderHistory(token: string) {
+  getOrderHistory(token: string, page: number, searchName: string) {
     return this._http.get(`${this.apiUrl}/admin/listorder`, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page: page.toString(),
+        search: searchName,
       },
     });
   }

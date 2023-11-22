@@ -29,6 +29,7 @@
     "@ngrx/router-store": "^16.3.0",
     "@ngrx/store": "^16.3.0",
     "@ngrx/store-devtools": "^16.3.0",
+    "@nicky-lenaers/ngx-scroll-to": "^14.0.0",
     "@popperjs/core": "^2.11.6",
     "@syncfusion/ej2-angular-charts": "^23.1.43",
     "@syncfusion/ej2-base": "^23.1.41",

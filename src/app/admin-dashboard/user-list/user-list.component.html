@@ -69,7 +69,7 @@
         <p *ngIf="selectedEmployee">Last Name: {{ selectedEmployee.LastName }}</p>
         <p *ngIf="selectedEmployee">Email: {{ selectedEmployee.email }}</p>
         <p *ngIf="selectedEmployee">
-          Balance: <input type="text" [(ngModel)]="selectedEmployee.balance">
+          Balance: {{selectedEmployee.balance}}
         </p>
         <p *ngIf="selectedEmployee">
           Wallet: <input type="text" [(ngModel)]="selectedEmployee.wallet">

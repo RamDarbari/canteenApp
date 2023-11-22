@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 import { OrderHistory } from 'src/data';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-history',
@@ -9,44 +11,39 @@ import { OrderHistory } from 'src/data';
 })
 export class OrderHistoryComponent implements OnInit {
   orderHistoryData: OrderHistory[] = [];
-  pagedEmployeeData: OrderHistory[] = [];
   totalItems: number;
-  currentPage: number = 0;
+  currentPage: number = 1;
   pageSize: number = 10;
-  isLoading: boolean = false;
+  searchName: string = '';
+  private searchNameSubject = new Subject<string>();
 
   constructor(private http: AdminService) {}
 
   ngOnInit(): void {
-    this.orderHistory();
+    this.searchNameSubject.pipe(debounceTime(500)).subscribe(() => {
+      this.getOrderHistory();
+    });
+
+    this.getOrderHistory();
+  }
+  searchDebounced() {
+    this.searchNameSubject.next('');
   }
 
-  orderHistory() {
+  getOrderHistory() {
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
-
-    this.http.getOrderHistory(token).subscribe((response: any) => {
-      this.orderHistoryData = response.data as OrderHistory[];
-
-      // Update the totalItems based on the length of the data
-      this.totalItems = this.orderHistoryData.length;
-
-      // Update the paged data
-      this.updatePagedData();
-    });
-  }
-
-  updatePagedData() {
-    const startIndex = this.currentPage * this.pageSize;
-    this.pagedEmployeeData = this.orderHistoryData.slice(
-      startIndex,
-      startIndex + this.pageSize
-    );
+    this.http
+      .getOrderHistory(token, this.currentPage, this.searchName)
+      .subscribe((response: any) => {
+        this.orderHistoryData = response.data as OrderHistory[];
+        this.totalItems = response.totalRecords;
+      });
   }
 
   pageChanged(event: any) {
-    this.currentPage = event.pageIndex;
-    this.updatePagedData();
+    this.currentPage = event.pageIndex + 1;
+    this.getOrderHistory();
   }
 }

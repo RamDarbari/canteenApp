@@ -20,11 +20,11 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex justify-content-center" *ngIf="!meals || meals.length === 0">
+            <div class="d-flex justify-content-center" *ngIf="!meals || meals.length === 0 ">
               <app-loader></app-loader>
             </div>
           </div>
-          <div class="card-body p-0" *ngIf="meals && meals.length > 0" style="min-height: 210px;">
+          <div class="card-body p-0" *ngIf="meals && meals.length > 0 " style="min-height: 210px;">
             <div *ngFor="let meal of meals">
               <div class=" d-flex flex-wrap gap-3" *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                 <div class="card-items" *ngFor="let item of meal.items">

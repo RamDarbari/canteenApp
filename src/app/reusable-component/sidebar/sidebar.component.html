@@ -10,7 +10,6 @@
     </div>
 
     <ul class="sidenav-nav">
-      <!-- Dashboard Accordion -->
       <li class="sidenav-nav-item">
         <div class="accordion-header">
           <a class="sidenav-nav-link has-arrow ai-icon" [routerLink]="['/admin/dashboard']" routerLinkActive="active"
@@ -20,8 +19,6 @@
           </a>
         </div>
       </li>
-
-      <!-- Orders Accordion -->
       <li class="sidenav-nav-item">
         <div class="accordion-header">
           <a class="sidenav-nav-link" (click)="toggleAccordionItem('orders')">
@@ -47,8 +44,6 @@
           </li>
         </ul>
       </li>
-
-      <!-- User List Accordion -->
       <li class="sidenav-nav-item">
         <div class="accordion-header">
           <a class="sidenav-nav-link" (click)="toggleAccordionItem('User Management')">
@@ -67,8 +62,6 @@
           <!-- Add more items as needed -->
         </ul>
       </li>
-
-      <!-- Menus Accordion -->
       <li class="sidenav-nav-item">
         <div class="accordion-header">
           <a class="sidenav-nav-link" (click)="toggleAccordionItem('menus')">
@@ -77,19 +70,19 @@
           </a>
         </div>
         <ul class="accordion-items" *ngIf="activeAccordionItem === 'menus'">
-          <li *ngFor="let meal of meals">
+          <!-- <li *ngFor="let meal of meals">
             <a class="accordion-item" (click)="selectItem(meal.menu_id)">{{ meal.title }}</a>
+          </li> -->
+          <li>
+            <a class="accordion-item" [routerLink]="['/menu/addProduct']" routerLinkActive="router-link-active">
+              Add Product
+            </a>
           </li>
           <li>
             <a class="accordion-item" [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">
               Add Today's Menu
             </a>
           </li>
-          <li>
-            <a class="accordion-item" [routerLink]="['/menu/menulist']" routerLinkActive="router-link-active">Menu
-              List</a>
-          </li>
-          <!-- Add more items as needed -->
         </ul>
       </li>
     </ul>

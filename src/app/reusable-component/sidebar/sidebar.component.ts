@@ -90,7 +90,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
-    this.filterMeals();
+    // this.filterMeals();
     this.sidebarService.sidebarState$.subscribe((state) => {
       this.collapsed = state;
     });

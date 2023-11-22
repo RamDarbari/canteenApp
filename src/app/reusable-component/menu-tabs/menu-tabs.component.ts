@@ -44,7 +44,7 @@ export class MenuTabsComponent implements OnInit {
   cartItems: any[] = [];
   quantity: false;
   selectedCategory: string = 'Breakfast';
-  selectedBillStatus: string = 'unpaid';
+  selectedBillStatus: string = '';
   @Input() todaymenu: boolean = false;
   @Input() custommenu: boolean = false;
   empId: string = '';

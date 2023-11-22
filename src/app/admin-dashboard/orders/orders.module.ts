@@ -11,11 +11,18 @@ import { ReusableComponentModule } from 'src/app/reusable-component/reusable-com
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomOrderComponent } from './custom-order/custom-order.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [OrderHistoryComponent, OrderDetailsComponent, CustomOrderComponent],
+  declarations: [
+    OrderHistoryComponent,
+    OrderDetailsComponent,
+    CustomOrderComponent,
+  ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     OrdersRoutingModule,
     MatPaginatorModule,
     MatTableModule,

@@ -40,6 +40,11 @@ section {
         border: 1px solid #9122e8;
         background-color: transparent;
         color: #9122e8;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          background-color: #9122e8;
+          color: white;
+        }
       }
     }
   }

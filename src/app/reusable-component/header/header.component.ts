@@ -5,6 +5,7 @@ import { ModalComponent } from '../modal/modal.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { ScrollToService } from '@nicky-lenaers/ngx-scroll-to';
 
 @Component({
   selector: 'app-header',
@@ -27,18 +28,17 @@ export class HeaderComponent implements OnInit {
     private offcanvasService: NgbOffcanvas,
     private _https: CommonServiceService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private scrollToService: ScrollToService
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this.getUserRole() === 'admin';
     this.getUserRole();
     this.loadCartItems();
-    this.loadBillStatus(); // Load the selected bill status
+    this.loadBillStatus();
     this.getUserProfile();
   }
-
-  // ... (existing methods)
 
   getUserRole(): string {
     const userRole = localStorage.getItem('user')
@@ -103,6 +103,7 @@ export class HeaderComponent implements OnInit {
   private saveBillStatus(status: string): void {
     localStorage.setItem('selectedBillStatus', status); // Save selectedBillStatus to localStorage if needed
   }
+
   private loadBillStatus(): void {
     const storedStatus = localStorage.getItem('selectedBillStatus');
     if (storedStatus) {
@@ -114,10 +115,8 @@ export class HeaderComponent implements OnInit {
     const storedItems = localStorage.getItem('cartItems');
     if (storedItems) {
       this.cartItems = JSON.parse(storedItems);
-
-      // Calculate initial price for each item
       this.cartItems.forEach((item) => {
-        item.initialPrice = item.price; // Store the initial price
+        item.initialPrice = item.price;
       });
     }
   }
@@ -132,10 +131,12 @@ export class HeaderComponent implements OnInit {
     return totalPrice;
   }
 
-  private updateLocalStorageAndCart(index: number, quantity: number): void {
-    this.cartItems[index].quantity = quantity;
-    this.saveCartItems();
-    this.loadCartItems();
+  scrollToHomeSection(): void {
+    this.scrollToService.scrollTo({
+      target: 'homeSection',
+      offset: -50,
+      duration: 0,
+    });
   }
 
   openEnd(content: TemplateRef<any>) {
@@ -145,25 +146,22 @@ export class HeaderComponent implements OnInit {
     });
     this.loadCartItems();
   }
-
+  // header.component.ts
   openLoginModal(event: Event): void {
-    // const status = localStorage.getItem('user')
-    //   ? JSON.parse(localStorage.getItem('user')).data.statusValue
-    //   : '';
-    // const status1 = JSON.parse(localStorage.getItem('user1')).status;
-
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
       windowClass: 'custom-modal',
     });
-    modalRef.componentInstance.product = {};
+
+    // Pass the modalType to the opened modal
+    modalRef.componentInstance.modalType = 'login-modal';
   }
 
   setBillStatus(status: string) {
-    this.selectedBillStatus = status; // Update the selectedBillStatus
-    this.saveBillStatus(status); // Optionally save it to localStorage
+    this.selectedBillStatus = status;
+    this.saveBillStatus(status);
   }
 
   confirmOrder() {
@@ -236,7 +234,6 @@ export class HeaderComponent implements OnInit {
     }
   }
   updatePrice(index: number): void {
-    // Calculate the new price based on the initial price and quantity
     this.cartItems[index].price =
       this.cartItems[index].initialPrice * this.cartItems[index].quantity;
     this.saveCartItems();
@@ -257,8 +254,8 @@ export class HeaderComponent implements OnInit {
         console.log('sss');
         this._https.userProfile(token, emp_id).subscribe((response: any) => {
           if (response && response.data && response.data.length > 0) {
-            this.userProfileInfo = response.data[0]; // Access the first item in the data array
-            console.log(response.message); // Output the message field if needed
+            this.userProfileInfo = response.data[0];
+            console.log(response.message);
             console.log(this.userProfileInfo, 'llllllllllll');
           }
         });

@@ -1,6 +1,17 @@
 <section class="order-history-section">
-  <div class="title">
-    <h3 class="text-center">Order History</h3>
+  <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-start">
+    <div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a>Order History</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="searchBar">
+    <input type="text" class="form-control" placeholder="Search users..." [(ngModel)]="searchName"
+      (keydown)="searchDebounced()">
+    <i class="fa fa-search" aria-hidden="true"></i>
   </div>
   <table class="table align-middle mb-0 bg-white table-hover">
     <thead class="bg-light">
@@ -76,5 +87,5 @@
     </tbody>
   </table>
   <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems" [pageSize]="pageSize"
-    [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
+    [pageIndex]="currentPage - 1" (page)="pageChanged($event)"></mat-paginator>
 </section>

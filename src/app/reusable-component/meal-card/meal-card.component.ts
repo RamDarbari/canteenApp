@@ -139,4 +139,28 @@ export class MealCardComponent implements OnInit {
   //     );
   //   }
   // }
+
+  isMealCardEnabled(time: string): boolean {
+    const mealTime = new Date();
+    const currentTime = new Date();
+
+    const [startTime, endTime] = time.split(' - ');
+
+    // Set start time to 15 minutes before the meal starts
+    mealTime.setHours(
+      parseInt(startTime.split(':')[0]),
+      parseInt(startTime.split(':')[1]) - 15,
+      0
+    );
+
+    // Set end time to 15 minutes after the meal ends
+    const endTimeObj = new Date(currentTime);
+    endTimeObj.setHours(
+      parseInt(endTime.split(':')[0]),
+      parseInt(endTime.split(':')[1]) + 15,
+      0
+    );
+
+    return currentTime >= mealTime && currentTime <= endTimeObj;
+  }
 }

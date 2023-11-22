@@ -48,8 +48,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   isActive: boolean = false;
-
   selectedCategory: string = 'Breakfast';
+  currentTime: Date = new Date(); // Add this line
 
   constructor() {}
 

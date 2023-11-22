@@ -59,12 +59,14 @@ export class UserListComponent implements OnInit {
         const { EmployeeId, balance, wallet } = this.selectedEmployee;
         const emp_id = EmployeeId;
         const payment = parseFloat(wallet); // Convert wallet to a number
-        const bill = parseFloat(balance); // Convert balance to a number
+        const bill = 0; // Convert balance to a number
 
         this.http
           .updateBalance(token, emp_id, payment, bill)
           .subscribe((response) => {
             console.log('balance updated', response);
+            this.loadUserData();
+            this.offcanvasService.dismiss();
           });
       }
     } catch (error) {
@@ -76,8 +78,6 @@ export class UserListComponent implements OnInit {
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
-
-    // Calculate the startIndex with 1-based indexing
     const startIndex = this.currentPage + 1;
 
     this.http
@@ -103,7 +103,7 @@ export class UserListComponent implements OnInit {
       : '';
     this.http
       .userList(token, 0, this.searchName)
-      .pipe(debounceTime(300))
+      .pipe(debounceTime(500))
       .subscribe((response: any) => {
         if (response && response.data) {
           this.employeeData = response.data;

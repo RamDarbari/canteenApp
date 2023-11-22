@@ -124,7 +124,12 @@ header {
         border-radius: 50px;
         border: 1px solid #9122e8;
         background-color: transparent;
+        transition: all 0.3s ease-in-out;
         color: #9122e8;
+        &:hover {
+          background-color: #9122e8;
+          color: white;
+        }
       }
     }
 
@@ -213,6 +218,7 @@ header {
     width: 100px;
   }
   .quantity-button {
+    width: 100px;
     input {
       width: 32px;
       border: 1px;

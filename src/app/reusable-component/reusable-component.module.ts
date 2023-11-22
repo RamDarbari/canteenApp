@@ -11,6 +11,7 @@ import { MealCardComponent } from './meal-card/meal-card.component';
 import { TableComponent } from './table/table.component';
 import { LoaderComponent } from './loader/loader.component';
 import { MenuTabsComponent } from './menu-tabs/menu-tabs.component';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MenuTabsComponent } from './menu-tabs/menu-tabs.component';
     ReactiveFormsModule,
     FormsModule,
     // AdminDashboardModule,
+    ScrollToModule.forRoot(),
   ],
   exports: [
     HeaderComponent,

@@ -6,8 +6,10 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/services/admin.service';
+import { ModalComponent } from '../modal/modal.component';
 
 interface MenuItem {
   _id: string;
@@ -31,7 +33,8 @@ export class TableComponent implements OnInit {
     private http: AdminService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -41,50 +44,6 @@ export class TableComponent implements OnInit {
         this.getproduct(menuId);
       }
     });
-  }
-
-  editProduct(menuItem: MenuItem) {
-    this.editedItem = { ...menuItem };
-  }
-
-  onSubmit(data: any, addProduct: NgForm) {
-    try {
-      const itemId = this.route.snapshot.queryParamMap.get('menu_id');
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      data.menu_id = itemId;
-
-      if (this.editedItem) {
-        data._id = this.editedItem._id;
-        this.http.updateItems(token, data._id, data).subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Updated Successfully');
-            // Update or replace the item in the 'menuItems' array
-            const updatedIndex = this.menuItems.findIndex(
-              (item) => item._id === data._id
-            );
-            if (updatedIndex !== -1) {
-              this.menuItems[updatedIndex] = data;
-            }
-          } else {
-            this.toastr.error('Failed to Update Item');
-          }
-        });
-      } else {
-        this.http.addItem(data, token).subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Added Successfully');
-            // Add the new item to the 'menuItems' array
-            this.menuItems.push(data);
-          } else {
-            this.toastr.error('Failed to Add Item');
-          }
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   getproduct(menuId?: string) {
@@ -122,29 +81,22 @@ export class TableComponent implements OnInit {
     }
   }
 
-  saveEditedItem() {
-    if (this.editedItem) {
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      const itemId = this.editedItem._id;
-
-      this.http
-        .updateItems(token, itemId, this.editedItem)
-        .subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Updated Successfully');
-            this.editedItem = null;
-            this.getproduct();
-            this.cdr.detectChanges();
-          } else {
-            this.toastr.error('Failed to Update Item');
-          }
-        });
-    }
-  }
-
   cancelEdit() {
     this.editedItem = null;
+  }
+  editProduct(menuItem: MenuItem) {
+    this.editedItem = { ...menuItem };
+  }
+
+  openAddItemModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'custom-modal',
+    });
+
+    // Pass the modalType to the opened modal
+    modalRef.componentInstance.modalType = 'addItem-modal';
   }
 }

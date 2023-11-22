@@ -1,154 +1,96 @@
 section {
   padding: 30px;
-}
-.add-product-container {
-  .title {
-    height: 72px;
-    align-items: center;
-    h3 {
-      font-family: PoetsenOne;
-      font-size: 60px;
-      font-weight: 400;
-      text-align: center;
-    }
-  }
-
-  .add-product-form {
+  .breadcrumb {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 300px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  .add-product-form__group {
-    width: 70%;
-    margin-bottom: 16px;
-  }
-
-  .add-product-form__label {
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  .add-product-form__input {
-    height: 40px;
-    padding: 0 16px;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    box-shadow: none;
-
-    &:focus {
-      border-color: #ffb959;
-      box-shadow: 0 0 4px rgba(255, 185, 91, 0.5);
-    }
-  }
-
-  .add-product-form__submit {
-    width: 50%;
-    height: 46px;
-    border: 1px;
-    background: linear-gradient(0deg, #9122e8, #9122e8);
-    color: #fff;
+    flex-wrap: wrap;
+    padding: 0 0;
+    margin-bottom: 1rem;
+    list-style: none;
+    font-size: 1.1875rem;
     font-family: Poppins;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 27px;
-    outline: #9122e8;
+    font-weight: 400;
 
-    &:hover {
-      background-color: white;
+    a {
+      text-decoration: none;
+      color: #8b8b8b;
     }
   }
-}
-
-h2 {
-  color: white;
-  padding: 30px;
-}
-
-.product-table-container {
-  width: 100%;
-  margin: 0 auto;
-  // border: 1px solid #ccc;
-  padding: 20px;
-
-  .title {
-    height: 72px;
-    align-items: center;
-    h3 {
-      font-family: PoetsenOne;
-      font-size: 60px;
-      font-weight: 400;
-    }
-  }
-
-  table {
+  .product-table-container {
     width: 100%;
-    border-collapse: collapse;
+    margin: 0 auto;
+    // border: 1px solid #ccc;
+    padding: 20px;
 
-    thead {
-      th {
-        background-color: #ffcb46;
-        padding: 10px;
-        // border: 1px solid #ccc;
-        text-align: center;
-        width: 25%;
+    .title {
+      height: 72px;
+      align-items: center;
+      h3 {
+        font-family: PoetsenOne;
+        font-size: 60px;
+        font-weight: 400;
       }
     }
 
-    tbody {
-      tr {
-        td {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        th {
+          background-color: #ffcb46;
           padding: 10px;
           // border: 1px solid #ccc;
           text-align: center;
+          width: 25%;
         }
+      }
 
-        &:nth-child(even) {
-          background-color: #f9f9f9;
+      tbody {
+        tr {
+          td {
+            padding: 10px;
+            // border: 1px solid #ccc;
+            text-align: center;
+          }
+
+          &:nth-child(even) {
+            background-color: #f9f9f9;
+          }
         }
       }
     }
   }
-}
 
-.mat-paginator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .mat-paginator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-.edit,
-.delete {
-  background-color: transparent;
-  margin-right: 20px;
-  border: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-}
+  .edit,
+  .delete {
+    background-color: transparent;
+    margin-right: 20px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
 
-.edit i,
-.delete i {
-  font-size: 30px;
-  color: #6c757d;
-}
+  .edit i,
+  .delete i {
+    font-size: 30px;
+    color: #6c757d;
+  }
 
-.edit:hover i,
-.delete:hover i {
-  color: #ffb959;
+  .edit:hover i,
+  .delete:hover i {
+    color: #ffb959;
+  }
 }

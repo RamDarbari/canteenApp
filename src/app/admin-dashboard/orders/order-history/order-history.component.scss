@@ -12,16 +12,45 @@
     z-index: 2;
   }
 
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 0;
+    margin-bottom: 1rem;
+    list-style: none;
+    font-size: 1.1875rem;
+    font-family: Poppins;
+    font-weight: 400;
+
+    a {
+      text-decoration: none;
+      color: #8b8b8b;
+    }
+  }
+
   a {
     cursor: pointer;
   }
-  .title {
-    height: 72px;
-    align-items: center;
-    h3 {
-      font-family: Poppins;
-      font-size: 60px;
-      font-weight: 400;
+  .searchBar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+
+    input {
+      width: 20%;
+      height: 40px;
+      border: 1px solid #787878;
+      border-radius: 45px;
+      background-color: #fff;
+      color: #787878;
+      // position: absolute;
+    }
+    i {
+      position: relative;
+      right: 30px;
+      top: 10px;
+      font-size: 16px;
     }
   }
 
