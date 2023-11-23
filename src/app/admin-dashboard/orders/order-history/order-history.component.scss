@@ -1,94 +1,28 @@
-.order-history-section {
-  width: 100%;
-  padding: 20px;
-  margin-top: 6%;
-
-  app-loader {
-    position: absolute;
-    top: 54%;
-    left: 48%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    z-index: 2;
-  }
-
-  .breadcrumb {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 0;
-    margin-bottom: 1rem;
-    list-style: none;
-    font-size: 1.1875rem;
-    font-family: Poppins;
-    font-weight: 400;
-
-    a {
-      text-decoration: none;
-      color: #8b8b8b;
-    }
-  }
-
-  a {
-    cursor: pointer;
-  }
-  .searchBar {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-
-    input {
-      width: 20%;
-      height: 40px;
-      border: 1px solid #787878;
-      border-radius: 45px;
-      background-color: #fff;
-      color: #787878;
-      // position: absolute;
-    }
-    i {
-      position: relative;
-      right: 30px;
-      top: 10px;
-      font-size: 16px;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-      th {
-        background-color: var(--blue);
-        padding: 10px;
-        text-align: center;
-        color: white;
-      }
-    }
-
-    tbody {
-      tr {
-        td {
-          padding: 10px;
-          text-align: center;
-        }
-        .order-data {
-          font-family: Poppins;
-          // font-size: 24px;
-          font-weight: 400;
-        }
-
-        &:nth-child(even) {
-          background-color: #f9f9f9;
-        }
-      }
-    }
-  }
-}
-
-.mat-paginator {
+.searchBar {
+  // width: 25%;
+  height: 40px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  // align-items: center;
+  border: 1px solid #787878;
+  border-radius: 45px;
+  background-color: #fff;
+  border: 2px solid #9122e8;
+
+  input {
+    color: #787878;
+    width: 90%;
+    border: none;
+    border-radius: 45px;
+    padding: 10px;
+    outline: none;
+  }
+  label {
+    width: 13%;
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: 18px;
+    }
+  }
 }

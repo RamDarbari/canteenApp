@@ -65,14 +65,15 @@ export class AdminService {
       );
   }
 
-  userList(token: any, page: number, searchName: string) {
+  userList(token: any, page: number, limit: number, search: string) {
     return this._http.get(`${this.apiUrl}/admin/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
         page: page.toString(),
-        searchName: searchName,
+        limit: limit.toString(), // Add the limit parameter
+        search: search,
       },
     });
   }
@@ -101,7 +102,12 @@ export class AdminService {
     );
   }
 
-  getOrderHistory(token: string, page: number, searchName: string) {
+  getOrderHistory(
+    token: string,
+    page: number,
+    searchName: string,
+    pageSize: number
+  ) {
     return this._http.get(`${this.apiUrl}/admin/listorder`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -109,6 +115,7 @@ export class AdminService {
       params: {
         page: page.toString(),
         search: searchName,
+        limit: pageSize.toString(), // Add page size as a parameter
       },
     });
   }

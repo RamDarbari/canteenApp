@@ -1,86 +1,68 @@
-<section class="user-list-container">
-  <div class="title">
-    <h3 class="text-center">User List</h3>
-  </div>
-  <div class="searchBar">
-    <input type="text" class="form-control" placeholder="Search users..." [(ngModel)]="searchName"
-      (keydown)="searchDebounced()">
-    <i class="fa fa-search" aria-hidden="true"></i>
-  </div>
-  <table class="table align-middle mb-0 bg-white table-hover">
-    <thead class="bg-light">
-      <tr>
-        <th scope="col">EmployeeId</th>
-        <th scope="col">FirstName</th>
-        <th scope="col">LastName</th>
-        <th scope="col">Email</th>
-        <th scope="col">Balance</th>
-        <th scope="col">Wallet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let employee of pagedEmployeeData" (click)="openEnd(content, employee)">
-        <td>
-          <div class="d-flex align-items-center justify-content-center">
-            {{ employee.EmployeeId }}
+<section class="user-list-container pb-4">
+  <div class="user-list-card">
+    <div class="row my-4">
+      <div class="col-12">
+        <div class="card ">
+          <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
+            <span> Company User List</span>
+            <div class="searchBar">
+              <input type="text" placeholder="Search users..." [(ngModel)]="searchName" (keydown)="searchDebounced()">
+              <label for="search-icon"><i class="fa fa-search" aria-hidden="true"></i></label>
+            </div>
           </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center ">
-            {{ employee.FirstName }}
+          <div class="card-body">
+            <div class="table-responsive w-100">
+              <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
+                <ng-container matColumnDef="EmployeeId">
+                  <th mat-header-cell *matHeaderCellDef> EmployeeId</th>
+                  <td mat-cell *matCellDef="let element"> {{ element.EmployeeId }} </td>
+                </ng-container>
+                <ng-container matColumnDef="FirstName">
+                  <th mat-header-cell *matHeaderCellDef> FirstName</th>
+                  <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="LastName">
+                  <th mat-header-cell *matHeaderCellDef> LastName</th>
+                  <td mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef> email</th>
+                  <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+                <ng-container matColumnDef="PlanPrice">
+                  <th mat-header-cell *matHeaderCellDef>PlanPrice</th>
+                  <td mat-cell *matCellDef="let element"> {{element.PlanPrice}} </td>
+                </ng-container>
+                <ng-container matColumnDef="balance">
+                  <th mat-header-cell *matHeaderCellDef> Balance</th>
+                  <td mat-cell *matCellDef="let element"> {{element.balance}} </td>
+                </ng-container>
+                <ng-container matColumnDef="wallet">
+                  <th mat-header-cell *matHeaderCellDef>Wallet</th>
+                  <td mat-cell *matCellDef="let element"> {{element.wallet}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element" style="min-width: 120px;">
+                    <span style="cursor: pointer;" class="material-symbols-rounded">
+                      info
+                    </span>
+                  </td>
+                </ng-container>
+                <!-- Define the table header row -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <!-- Define the table rows -->
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+              <!-- Paginator -->
+              <div class="mat-paginator">
+                <mat-paginator [length]="totalItems" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"
+                  [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
+              </div>
+            </div>
           </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center">
-            {{ employee.LastName }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center">
-            {{ employee.email }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center">
-            {{ employee.balance }}
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center justify-content-center">
-            {{ employee.wallet }}
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <mat-paginator style="color: black; margin-top: 10px; text-align: center;" [length]="totalItems" [pageSize]="pageSize"
-    [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
-
-  <div class="sidebar">
-    <ng-template #content let-offcanvas>
-      <div class="offcanvas-header">
-        <h4 class="offcanvas-title">Employee Details</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
-      </div>
-      <div class="offcanvas-body">
-        <p *ngIf="selectedEmployee">Employee Id: {{ selectedEmployee.EmployeeId }}</p>
-        <p *ngIf="selectedEmployee">First Name: {{ selectedEmployee.FirstName }}</p>
-        <p *ngIf="selectedEmployee">Last Name: {{ selectedEmployee.LastName }}</p>
-        <p *ngIf="selectedEmployee">Email: {{ selectedEmployee.email }}</p>
-        <p *ngIf="selectedEmployee">
-          Balance: {{selectedEmployee.balance}}
-        </p>
-        <p *ngIf="selectedEmployee">
-          Wallet: <input type="text" [(ngModel)]="selectedEmployee.wallet">
-        </p>
-        <button *ngIf="selectedEmployee" type="button" class="btn btn-outline-dark"
-          (click)="updateEmployee()">Update</button>
-        <div class="text-end">
-          <button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Close click')">Close</button>
         </div>
       </div>
-
-    </ng-template>
+    </div>
   </div>
 </section>

@@ -1,0 +1,23 @@
+<section class="communication-wrapper">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <ul class="nav nav-tabs d-flex flex-wrap" id="nav-tab" role="tablist">
+            <li class="">
+              <a class="w-100 nav-item nav-link" routerLink="order-details" routerLinkActive="active" style="flex: 1">
+                Pending Orders
+              </a>
+            </li>
+            <li>
+              <a class="w-100 nav-item nav-link" routerLink="order-history" routerLinkActive="active" style="flex: 1">
+                Order History
+              </a>
+            </li>
+          </ul>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

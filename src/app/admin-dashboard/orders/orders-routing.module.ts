@@ -5,15 +5,27 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { OrderHistoryComponent } from './order-history/order-history.component';
 import { NotfoundComponent } from 'src/app/notfound/notfound.component';
 import { CustomOrderComponent } from './custom-order/custom-order.component';
+import { OrderRoutesComponent } from './order-routes/order-routes.component';
 
 const routes: Routes = [
   {
-    path: 'orders',
+    path: '',
     component: RoutesComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'order-details', component: OrderDetailsComponent },
-      { path: 'order-history', component: OrderHistoryComponent },
+      { path: '', redirectTo: 'order', pathMatch: 'full' },
+      {
+        path: 'order',
+        component: OrderRoutesComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'order-details',
+            pathMatch: 'full',
+          },
+          { path: 'order-details', component: OrderDetailsComponent },
+          { path: 'order-history', component: OrderHistoryComponent },
+        ],
+      },
       { path: 'custom-order', component: CustomOrderComponent },
       {
         path: '**',

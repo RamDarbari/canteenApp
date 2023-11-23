@@ -1,0 +1,361 @@
+@import "../../../theme_var.scss";
+
+//header cssssss
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  height: 80px;
+  padding: 0 1rem;
+  background-color: $light-white-color;
+  border-bottom: 1px solid $light-border-color;
+  z-index: 2;
+  transition: $light-transition;
+  display: flex;
+  align-items: center;
+  width: calc(100% - 260px);
+
+  .navbar {
+    width: 100%;
+    .btn-toggle-menu {
+      font-size: 22px;
+      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      background-color: $light-white-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $light-icon-color;
+      border-radius: 50%;
+      border: 1px solid $light-primmary-color;
+      color: $light-primmary-color;
+      transition: $light-transition;
+
+      &:hover {
+        color: $light-white-color;
+        background: $light-primmary-color;
+      }
+    }
+
+    .search-bar {
+      width: 30%;
+      cursor: pointer;
+
+      .rounded-5 {
+        border-radius: 2rem;
+      }
+    }
+
+    .navbar-nav {
+      flex-direction: row !important;
+
+      .nav-item .nav-link {
+        font-size: 22px;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        background-color: $light-white-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $light-primmary-color;
+        border-radius: 50%;
+        border: 1px solid $light-primmary-color;
+        transition: $light-transition;
+
+        &:hover,
+        &.nav-active {
+          background: $light-primmary-color;
+          color: $light-white-color;
+        }
+      }
+    }
+  }
+
+  &.headerFullWidth {
+    left: 66px;
+    width: calc(100% - 66px);
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .top-header {
+    left: 0px;
+    width: 100%;
+
+    &.headerFullWidth {
+      left: 0px;
+      width: 100%;
+    }
+  }
+}
+
+// headeer css end here
+
+//side nav cssss
+
+aside.sidebar-wrapper {
+  width: 260px;
+  height: 100%;
+  transition: $light-transition;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  border-right: 1px solid $light-border-secondary;
+  overflow: hidden;
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 260px;
+    height: 80px;
+    padding: 0 1.1rem;
+    gap: 0.5rem;
+    border-bottom: 1px solid $light-border-color;
+    position: fixed;
+    top: 0;
+    background-color: #fff;
+    transition: $light-transition;
+    border-right: 1px solid $light-border-color;
+
+    .logo-icon img {
+      width: 35px;
+    }
+
+    .logo-name {
+      h5 {
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0.1rem;
+        color: $light-primmary-color;
+      }
+
+      span {
+        font-size: 10px;
+      }
+    }
+
+    .sideBar-close {
+      cursor: pointer;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      color: $light-primmary-color;
+      visibility: hidden;
+      transition: $light-transition;
+    }
+
+    &.headerShrink {
+      width: 66px;
+      .logo-name {
+        display: none;
+      }
+    }
+  }
+
+  .sidebar-nav {
+    width: 260px;
+    height: calc(100% - 160px);
+    margin-top: 80px;
+    overflow: hidden scroll;
+    padding: 1rem 0rem;
+    background: $light-white-color;
+
+    .list-container {
+      display: flex;
+      flex-direction: column;
+
+      .list-item {
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+
+        a.list-item-inner {
+          text-transform: capitalize;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          padding: 6px 15px;
+          font-size: 15px;
+          color: $light-text-color;
+          outline-width: 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          letter-spacing: 0.5px;
+          // border: 0px solid $light-white-color00;
+          transition: $light-transition;
+
+          .parent-Icon {
+            font-size: 22px;
+            line-height: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: $light-white-color;
+            border: 1px solid $light-border-icon;
+          }
+
+          .menu-title {
+            margin-left: 10px;
+          }
+
+          &.nav-active {
+            color: $light-primmary-color;
+            font-weight: 600;
+          }
+
+          &.nav-active .parent-Icon {
+            color: $light-white-color;
+            text-decoration: none;
+            background: $light-primmary-color;
+            border-color: $light-primmary-color;
+            transition: $light-transition;
+          }
+
+          &:hover .parent-Icon {
+            color: white;
+            background: $light-primmary-color;
+            border-color: $light-primmary-color;
+          }
+
+          &:hover .menu-title {
+            color: $light-primmary-color;
+          }
+        }
+      }
+    }
+
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar {
+      width: 5px;
+      background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: $light-primmary-color;
+    }
+
+    &.sideTitleNone {
+      .menu-title {
+        display: none;
+      }
+    }
+  }
+
+  .sidebar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 260px;
+    height: 80px;
+    border-top: 1px solid $light-border-color;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    transition: $light-transition;
+    border-right: 1px solid $light-border-color;
+    cursor: pointer;
+
+    &.sideBottom {
+      width: 66px;
+    }
+  }
+
+  &.asideShrink {
+    width: 66px;
+  }
+
+  &.asideShrink:hover {
+    width: 260px;
+    .headerShrink {
+      width: 260px;
+
+      .logo-name {
+        display: block;
+      }
+      .sideBar-close {
+        visibility: visible;
+      }
+    }
+
+    .sideTitleNone {
+      .menu-title {
+        display: block;
+      }
+    }
+    .sideBottom {
+      width: 260px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  aside.sidebar-wrapper {
+    left: -260px;
+    &.asideShrink {
+      width: 260px;
+      left: 0px;
+    }
+    .sidebar-header.headerShrink {
+      width: 260px;
+      .logo-name {
+        display: flex;
+      }
+      .sideBar-close {
+        visibility: visible;
+      }
+    }
+
+    .sidebar-bottom.sideBottom {
+      width: 260px;
+    }
+  }
+}
+
+// side nav css ends here
+
+// main content css start here
+.page-content {
+  padding: 1rem 1.5rem;
+  margin-top: 80px;
+  margin-left: 260px;
+  background-color: #e9edf3;
+  background: $light-background-color;
+  height: calc(100vh - 80px);
+  transition: $light-transition;
+  width: calc(100% - 260px);
+
+  &.mainFullwidth {
+    margin-left: 66px;
+    width: calc(100% - 66px);
+    transition: $light-transition;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .page-content {
+    margin-left: 0px;
+    width: 100%;
+    &.mainFullwidth {
+      margin-left: 0px;
+      width: 100%;
+    }
+  }
+}
+
+// main content css ends here

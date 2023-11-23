@@ -1,2 +1,24 @@
-//declaring global css properties
-$color-primary: #6d00c2;
+//light theme varibales setting
+
+$light-primmary-color: #9122e8;
+$light-secondary-color: #9122e8;
+$light-background-color: #f5f5f5;
+$light-border-color: #dee2e6;
+$light-border-secondary: #dee2eb;
+$light-scrool-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+$light-text-color: #5f5f5f;
+$light-icon-color: #212529;
+$light-box-shadow: 0 0 0 0.25rem rgba($light-primmary-color, 0.25);
+$light-font-family: "Poppins", sans-serif;
+$light-transition: all 0.3s ease-out;
+$light-card-header-background: #f5f5f5;
+$light-white-color: #ffffff;
+$light-border-icon: #d8d8d8;
+$light-card-title: #8b8589;
+$light-text-danger: #e84118;
+$light-text-sucess: #44bd32;
+$light-border-invalid: #e84118;
+$light-border-valid: #44bd32;
+$light-box-shadow-valid: 0 0 0 0.25rem rgba($light-border-valid, 0.25);
+$light-box-shadow-invalid: 0 0 0 0.25rem rgba($light-border-invalid, 0.25);
+$light-box-shadow-secondary: rgba(0, 0, 0, 0.35) 0px 5px 15px;

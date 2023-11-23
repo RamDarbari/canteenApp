@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { PendingOrdersService } from 'src/app/services/pending-orders.service';
-import { Order } from 'src/data';
+import { Order, OrderRecord } from 'src/data';
 
 @Component({
   selector: 'app-order-details',
@@ -18,7 +18,21 @@ export class OrderDetailsComponent implements OnInit {
   isLoading: boolean = false;
   private refreshInterval: any;
   private orderSubscription: Subscription;
+  displayedColumns: string[] = [
+    '_id',
+    'emp_id',
+    'order_status',
+    'bill_status',
+    'totalBalance',
+    'date',
+    'time',
+    'itemName', // Add these columns
+    'quantity',
+    'price',
+    'actions',
+  ];
 
+  displayedColumnsOrderRec: string[] = [];
   constructor(
     private https: AdminService,
     private orderService: PendingOrdersService
@@ -33,7 +47,7 @@ export class OrderDetailsComponent implements OnInit {
     this.pendingOrderList();
     this.refreshInterval = setInterval(() => {
       this.pendingOrderList();
-    }, 5 * 1000);
+    }, 50000 * 1000);
   }
 
   ngOnDestroy(): void {
@@ -94,5 +108,17 @@ export class OrderDetailsComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  getItemNames(order: Order): string[] {
+    return order.order_rec.map((record) => record.item_name);
+  }
+
+  getQuantities(order: Order): number[] {
+    return order.order_rec.map((record) => record.quantity);
+  }
+
+  getPrices(order: Order): number[] {
+    return order.order_rec.map((record) => record.price);
   }
 }

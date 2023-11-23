@@ -1,4 +1,86 @@
-<app-admin-header></app-admin-header>
-<app-sidebar (onToggleSideNav)="onToggleSideNav($event)"></app-sidebar>
-<app-router-outlet-wrapper [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-router-outlet-wrapper>
-<app-footer></app-footer>
+<section class="siteContainer">
+  <!-- aside bar starts here  -->
+  <aside class="sidebar-wrapper" [ngClass]="asideShrink ? 'asideShrink' :'sidebar-wrapper'">
+    <div class="sidebar-header" [ngClass]="headerShrink ? 'headerShrink' :'sidebar-header'">
+      <div class="logo-icon">
+        <img src="../../../assets/favicon-new.svg" alt="seasiaLogo">
+      </div>
+      <div class="logo-name flex-grow-1">
+        <h5 class="mb-0">SEASIA</h5>
+        <!-- <span>A CMMI Level 5 Company</span> -->
+      </div>
+      <div class="sideBar-close">
+        <span class="material-symbols-rounded" (click)="reverseChange()">
+          close
+        </span>
+      </div>
+    </div>
+    <div class="sidebar-nav" [ngClass]="sideTitleNone ? 'headerShrink' :'sidebar-nav'">
+      <div class="sidenav-container">
+        <nav>
+          <ul class="list-container" *ngFor="let data of menuData">
+            <li class="list-item">
+              <a class="list-item-inner" (click)="collapse()" [routerLink]="data.route_loc"
+                routerLinkActive="nav-active">
+                <div class="parent-Icon">
+                  <span [class]="data.route_icon_class">{{data.route_icon_name}}</span>
+                </div>
+                <div class="menu-title">
+                  <span>{{data.route_name}}</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="sidebar-bottom" [ngClass]="sideBottom ? 'sideBottom' :'sidebar-bottom'">
+    </div>
+  </aside>
+
+  <!-- aside bar ends here  -->
+
+  <!-- app header starts  -->
+
+  <header class="top-header" [ngClass]="headerfullwidth ? 'headerFullWidth' :'top-header'">
+    <div class="row w-100 align-items-center">
+      <div class="col-12">
+        <nav class="navbar">
+          <div class="btn-toggle-menu">
+            <span class="material-symbols-rounded" (click)="changeClass()">menu</span>
+          </div>
+          <!-- <div class="search-bar position-relative d-lg-block d-none">
+            <input class="form-control form-control-sm rounded-5 px-5" disabled="" type="search" placeholder="Search">
+            <span
+              class="material-symbols-rounded position-absolute ms-3 translate-middle-y start-0 top-50">search</span>
+          </div> -->
+
+          <ul class="navbar-nav top-right-menu d-flex flex-wrap gap-2">
+            <!-- <li class="nav-item">
+              <a routerLink="/home/admin" routerLinkActive="nav-active" class="nav-link">
+                <span class="material-symbols-rounded">settings</span>
+              </a>
+            </li>
+            <li class="nav-item"><a class="nav-link">
+                <span class="material-symbols-rounded">apps</span>
+              </a></li> -->
+            <li class="nav-item"><a class="nav-link" (click)="logout()">
+                <span class="material-symbols-rounded">logout</span>
+              </a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- app header ends  -->
+
+  <!-- main content starts  -->
+
+  <main class="page-content" [ngClass]="mainFullwidth ? 'mainFullwidth' :'page-content' ">
+    <router-outlet></router-outlet>
+    <!-- <app-footer></app-footer> -->
+  </main>
+
+  <!-- main content end here  -->
+</section>

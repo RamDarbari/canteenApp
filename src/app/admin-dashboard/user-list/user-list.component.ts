@@ -5,9 +5,8 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { debounceTime } from 'rxjs';
-import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { PageEvent } from '@angular/material/paginator';
+import { Subject, debounceTime } from 'rxjs';
 
 interface Employee {
   EmployeeId: number;
@@ -25,28 +24,36 @@ interface Employee {
   styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit {
-  employeeData: Employee[] = [];
-  pagedEmployeeData: Employee[] = [];
+  displayedColumns: string[] = [
+    'EmployeeId',
+    'FirstName',
+    'LastName',
+    'email',
+    'balance',
+    'wallet',
+    'actions',
+  ];
+  dataSource: Employee[] = [];
   totalItems: number;
   currentPage: number = 0;
   pageSize: number = 10;
-  pageEvent: PageEvent;
   searchName: string = '';
-  selectedEmployee: Employee | null = null; // Variable to track the selected employee
+  selectedEmployee: Employee | null = null;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  limit: number = this.pageSize;
+  private searchNameSubject = new Subject<string>();
 
-  constructor(
-    private http: AdminService,
-    private cdr: ChangeDetectorRef,
-    private offcanvasService: NgbOffcanvas
-  ) {}
+  constructor(private http: AdminService) {}
 
   ngOnInit(): void {
+    this.searchNameSubject.pipe(debounceTime(500)).subscribe(() => {
+      this.loadUserData();
+    });
     this.loadUserData();
   }
 
-  openEnd(content: TemplateRef<any>, employee: Employee) {
-    this.selectedEmployee = employee; // Set the selected employee
-    this.offcanvasService.open(content, { position: 'end' });
+  searchDebounced() {
+    this.searchNameSubject.next('');
   }
 
   updateEmployee() {
@@ -66,7 +73,7 @@ export class UserListComponent implements OnInit {
           .subscribe((response) => {
             console.log('balance updated', response);
             this.loadUserData();
-            this.offcanvasService.dismiss();
+            this.selectedEmployee = null; // Reset selectedEmployee
           });
       }
     } catch (error) {
@@ -78,38 +85,43 @@ export class UserListComponent implements OnInit {
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
-    const startIndex = this.currentPage + 1;
+    const startIndex = this.currentPage * this.limit + 1;
 
     this.http
-      .userList(token, startIndex, this.searchName)
+      .userList(token, startIndex, this.limit, this.searchName) // Pass 'limit' to the service function
       .subscribe((response: any) => {
         console.log('res', response);
         if (response && response.data) {
-          this.pagedEmployeeData = response.data;
-          this.totalItems = response.totalPages * this.pageSize;
-          console.log('pagedEmployeeData', this.pagedEmployeeData);
+          this.dataSource = response.data;
+          this.totalItems = response.totalPages * this.limit;
+          console.log('dataSource', this.dataSource);
         }
       });
   }
 
   pageChanged(event: PageEvent) {
     this.currentPage = event.pageIndex;
+    this.limit = event.pageSize;
     this.loadUserData();
   }
 
-  searchDebounced(): void {
-    const token = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.token
-      : '';
-    this.http
-      .userList(token, 0, this.searchName)
-      .pipe(debounceTime(500))
-      .subscribe((response: any) => {
-        if (response && response.data) {
-          this.employeeData = response.data;
-          this.currentPage = 0;
-          this.loadUserData();
-        }
-      });
+  // searchDebounced(): void {
+  //   const token = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.token
+  //     : '';
+  //   this.http
+  //     .userList(token, 0, this.limit, this.searchName)
+  //     .pipe(debounceTime(1000))
+  //     .subscribe((response: any) => {
+  //       if (response && response.data) {
+  //         this.dataSource = response.data;
+  //         this.currentPage = 0;
+  //         this.loadUserData();
+  //       }
+  //     });
+  // }
+
+  openEnd(employee: Employee) {
+    this.selectedEmployee = employee;
   }
 }

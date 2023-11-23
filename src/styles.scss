@@ -2,6 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 /* Importing Bootstrap SCSS file. */
 @import "bootstrap/scss/bootstrap";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "/src/theme_var.scss";
 
 @font-face {
   font-family: "PoetsenOne";
@@ -22,14 +24,7 @@
   font-weight: normal;
   font-style: normal;
 }
-
-html,
-body {
-  height: 100%;
-}
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
-@import "/src/theme_var.scss";
 
 * {
   margin: 0;
@@ -37,14 +32,214 @@ body {
   box-sizing: border-box;
 }
 
-body {
-  position: relative;
-  font-family: "Roboto", sans-serif;
+html {
+  scroll-behavior: smooth;
 }
 
-// section {
-//   min-height: 800px;
-// }
-:root {
-  --blue: #6d00c2; /* Corrected color definition */
+body {
+  background-color: $light-background-color;
+  font-family: $light-font-family;
+  font-size: 14px;
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: $light-primmary-color;
+  }
+}
+
+a {
+  text-decoration: none;
+  display: block;
+  color: black;
+  cursor: pointer;
+}
+
+.nav-link {
+  color: inherit;
+}
+
+.nav-link.active {
+  color: $light-primmary-color !important;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gap-10 {
+  gap: 0.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg-primary {
+  background: $light-primmary-color !important;
+}
+
+.rounded-4 {
+  border-radius: 1rem;
+}
+
+.card-header {
+  text-transform: capitalize;
+  background: $light-card-header-background;
+  color: $light-card-title;
+}
+
+.btn-outline-primary {
+  background: $light-primmary-color;
+  border-color: $light-primmary-color;
+  color: #fff;
+  transition: $light-transition;
+}
+
+.btn-outline-primary:hover {
+  background-color: $light-white-color;
+  border-color: $light-primmary-color;
+  color: $light-primmary-color;
+}
+
+.btn-check:active + .btn-outline-primary,
+.btn-check:checked + .btn-outline-primary,
+.btn-outline-primary.active,
+.btn-outline-primary.dropdown-toggle.show,
+.btn-outline-primary:active {
+  color: #fff;
+  background-color: $light-primmary-color;
+  border-color: $light-primmary-color;
+}
+
+button:focus:not(:focus-visible) {
+  outline: 0;
+}
+.btn-check:focus + .btn-outline-primary,
+.btn-outline-primary:focus {
+  box-shadow: $light-box-shadow !important;
+}
+
+button.rounded-50 {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.rounded-50 .material-symbols-rounded {
+  font-weight: 300;
+}
+
+table thead,
+table tbody tr th td {
+  width: auto;
+  padding: 10px 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+table thead tr th {
+  border-bottom: 2px solid $light-primmary-color !important;
+}
+
+.mdc-data-table__table {
+  border: 1px solid $light-border-color !important;
+}
+
+.mat-elevation-z8,
+.mat-mdc-elevation-specific.mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+/* Prevent line breaks within cells */
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 10px 16px !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  font-weight: 300 !important;
+  font-family: Poppins;
+}
+
+.mdc-data-table__header-cell {
+  font-weight: 500 !important;
+}
+
+.mat-paginator {
+  margin: 30px 0px;
+}
+
+.form-group-container .form-group {
+  padding: 0px 8px;
+  text-transform: capitalize;
+}
+
+.form-control:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: $light-primmary-color;
+  outline: 0;
+  box-shadow: $light-box-shadow;
+}
+
+.form-control.form-control-valid:focus {
+  border-color: $light-border-valid;
+  box-shadow: $light-box-shadow-valid;
+}
+
+.form-control.form-control-invalid:focus {
+  border-color: $light-border-invalid;
+  box-shadow: $light-box-shadow-invalid;
+}
+
+select option {
+  text-transform: capitalize;
+}
+
+.text-danger {
+  font-size: 14px;
+  color: $light-text-danger;
+  padding: 0.45rem 0rem;
+}
+
+.text-sucess {
+  font-size: 14px;
+  color: $light-text-sucess;
+  padding: 0.45rem 0rem;
+}
+
+.box-shadow {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+@media (min-width: 1366px) {
+  .container {
+    max-width: 1250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav {
+    flex-direction: column;
+  }
 }

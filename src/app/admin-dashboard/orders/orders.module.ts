@@ -12,12 +12,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomOrderComponent } from './custom-order/custom-order.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OrderRoutesComponent } from './order-routes/order-routes.component';
 
 @NgModule({
   declarations: [
     OrderHistoryComponent,
     OrderDetailsComponent,
     CustomOrderComponent,
+    OrderRoutesComponent,
   ],
   imports: [
     CommonModule,
