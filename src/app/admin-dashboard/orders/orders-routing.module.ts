@@ -27,10 +27,10 @@ const routes: Routes = [
         ],
       },
       { path: 'custom-order', component: CustomOrderComponent },
-      {
-        path: '**',
-        component: NotfoundComponent,
-      },
+      // {
+      //   path: '**',
+      //   component: NotfoundComponent,
+      // },
     ],
   },
 ];

@@ -146,7 +146,7 @@ export class HeaderComponent implements OnInit {
     });
     this.loadCartItems();
   }
-  // header.component.ts
+
   openLoginModal(event: Event): void {
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',

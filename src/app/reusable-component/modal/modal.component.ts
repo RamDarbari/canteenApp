@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { login } from 'src/data';
@@ -102,43 +103,35 @@ export class ModalComponent {
 
   onSubmit(data: any, addProduct: NgForm) {
     try {
-      const itemId = this.route.snapshot.queryParamMap.get('menu_id');
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      data.menu_id = itemId;
+      this.route.queryParams.pipe(take(1)).subscribe((params) => {
+        const itemId = params['categoryId'];
+        if (!itemId) {
+          console.error('Menu ID is missing in query parameters.');
+          return;
+        }
 
-      if (this.editedItem) {
-        data._id = this.editedItem._id;
-        this.http.updateItems(token, data._id, data).subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Updated Successfully');
-            // Update or replace the item in the 'menuItems' array
-            const updatedIndex = this.menuItems.findIndex(
-              (item) => item._id === data._id
-            );
-            if (updatedIndex !== -1) {
-              this.menuItems[updatedIndex] = data;
+        const token = localStorage.getItem('user')
+          ? JSON.parse(localStorage.getItem('user')).data.token
+          : '';
+        data.menu_id = itemId;
+        if (this.editedItem) {
+        } else {
+          this.http.addItem(data, token).subscribe((result) => {
+            if (result) {
+              this.toastr.success('Item Added Successfully');
+              this.menuItems.push(data);
+              this.modalService.dismissAll();
+            } else {
+              this.toastr.error('Failed to Add Item');
             }
-          } else {
-            this.toastr.error('Failed to Update Item');
-          }
-        });
-      } else {
-        this.http.addItem(data, token).subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Added Successfully');
-            // Add the new item to the 'menuItems' array
-            this.menuItems.push(data);
-          } else {
-            this.toastr.error('Failed to Add Item');
-          }
-        });
-      }
+          });
+        }
+      });
     } catch (error) {
       console.log(error);
     }
   }
+
   saveEditedItem() {
     if (this.editedItem) {
       const token = localStorage.getItem('user')

@@ -7,6 +7,7 @@ import {
 import { AdminService } from 'src/app/services/admin.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Subject, debounceTime } from 'rxjs';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 interface Employee {
   EmployeeId: number;
@@ -43,7 +44,10 @@ export class UserListComponent implements OnInit {
   limit: number = this.pageSize;
   private searchNameSubject = new Subject<string>();
 
-  constructor(private http: AdminService) {}
+  constructor(
+    private http: AdminService,
+    private offcanvasService: NgbOffcanvas
+  ) {}
 
   ngOnInit(): void {
     this.searchNameSubject.pipe(debounceTime(500)).subscribe(() => {
@@ -74,6 +78,7 @@ export class UserListComponent implements OnInit {
             console.log('balance updated', response);
             this.loadUserData();
             this.selectedEmployee = null; // Reset selectedEmployee
+            this.offcanvasService.dismiss();
           });
       }
     } catch (error) {
@@ -104,24 +109,9 @@ export class UserListComponent implements OnInit {
     this.limit = event.pageSize;
     this.loadUserData();
   }
-
-  // searchDebounced(): void {
-  //   const token = localStorage.getItem('user')
-  //     ? JSON.parse(localStorage.getItem('user')).data.token
-  //     : '';
-  //   this.http
-  //     .userList(token, 0, this.limit, this.searchName)
-  //     .pipe(debounceTime(1000))
-  //     .subscribe((response: any) => {
-  //       if (response && response.data) {
-  //         this.dataSource = response.data;
-  //         this.currentPage = 0;
-  //         this.loadUserData();
-  //       }
-  //     });
-  // }
-
-  openEnd(employee: Employee) {
+  openEnd(content: TemplateRef<any>, employee: Employee) {
+    console.log('Selected Employee:', employee); // Log the selected employee to check
     this.selectedEmployee = employee;
+    this.offcanvasService.open(content, { position: 'end' });
   }
 }

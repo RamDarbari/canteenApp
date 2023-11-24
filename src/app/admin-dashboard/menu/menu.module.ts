@@ -11,12 +11,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CdkTableModule } from '@angular/cdk/table';
 import { PagesModule } from 'src/app/pages/pages.module';
+import { MenuRoutesComponent } from './menu-routes/menu-routes.component';
 
 @NgModule({
   declarations: [
     MenuListComponent,
     AddProductComponent,
     MenuCatalogueComponent,
+    MenuRoutesComponent,
   ],
   imports: [
     CommonModule,

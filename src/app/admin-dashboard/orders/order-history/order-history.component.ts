@@ -4,6 +4,7 @@ import { OrderHistory, OrderItem } from 'src/data';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-order-history',
@@ -29,8 +30,10 @@ export class OrderHistoryComponent implements OnInit {
     'time',
     'actions',
   ];
+  formB: FormGroup;
+  formData: any[] = [];
 
-  constructor(private http: AdminService) {}
+  constructor(private http: AdminService, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchNameSubject.pipe(debounceTime(500)).subscribe(() => {
@@ -38,6 +41,11 @@ export class OrderHistoryComponent implements OnInit {
     });
 
     this.getOrderHistory();
+
+    this.formB = this.formBuilder.group({
+      field1: [''],
+      field2: [''],
+    });
   }
 
   searchDebounced() {

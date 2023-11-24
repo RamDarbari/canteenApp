@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
@@ -6,6 +7,8 @@ import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { OrderData, OrderDataItem } from 'src/data';
+import { ModalComponent } from '../modal/modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface MenuItem {
   _id: string;
@@ -48,6 +51,9 @@ export class MenuTabsComponent implements OnInit {
   @Input() todaymenu: boolean = false;
   @Input() custommenu: boolean = false;
   empId: string = '';
+  selectedCategoryId: string = '';
+  customMenu: boolean = true;
+  showSidebar: boolean = false;
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
     any[]
@@ -60,7 +66,10 @@ export class MenuTabsComponent implements OnInit {
     private _https: CommonServiceService,
     private menuService: SelectedmenusService,
     private cdr: ChangeDetectorRef,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +80,27 @@ export class MenuTabsComponent implements OnInit {
     this.menuService.selectedMenus$.subscribe((selectedMenus) => {
       this.selectedMenus = selectedMenus;
     });
+    if (this.submenu && this.submenu.length > 0) {
+      const initialCategory = this.submenu.find(
+        (meal) =>
+          meal.title.toLowerCase() === this.selectedCategory.toLowerCase()
+      );
+      if (initialCategory) {
+        this.selectedCategoryId = initialCategory._id;
+        this.updateQueryParams();
+      }
+    }
+    this.showSidebar = false;
   }
+
+  openSidebar() {
+    this.showSidebar = true;
+  }
+
+  closeSidebar() {
+    this.showSidebar = false;
+  }
+
   getTotalBalance(): number {
     let totalBalance = 0;
     if (this.cartItems) {
@@ -101,12 +130,19 @@ export class MenuTabsComponent implements OnInit {
     localStorage.setItem('selectedBillStatus', status); // Save selectedBillStatus to localStorage if needed
   }
 
-  // private loadBillStatus(): void {
-  //   const storedStatus = localStorage.getItem('selectedBillStatus');
-  //   if (storedStatus) {
-  //     this.selectedBillStatus = storedStatus; // Load selectedBillStatus from localStorage
-  //   }
-  // }
+  private loadBillStatus(): void {
+    const storedStatus = localStorage.getItem('selectedBillStatus');
+    if (storedStatus) {
+      this.selectedBillStatus = storedStatus; // Load selectedBillStatus from localStorage
+    }
+  }
+  private updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { categoryId: this.selectedCategoryId },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   getTotalPrice(): number {
     let totalPrice = 0;
@@ -120,7 +156,21 @@ export class MenuTabsComponent implements OnInit {
 
   updateSelectedCategory(category: string) {
     this.selectedCategory = category;
-    console.log('Selected Category:', this.selectedCategory);
+    const selectedCategory = this.submenu.find(
+      (meal) => meal.title.toLowerCase() === category.toLowerCase()
+    );
+    this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
+    this.updateQueryParams();
+  }
+
+  openAddItemModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'custom-modal',
+    });
+    modalRef.componentInstance.modalType = 'addItem-modal';
   }
 
   filterSubMenuList() {
@@ -351,7 +401,6 @@ export class MenuTabsComponent implements OnInit {
     }
   }
   updatePrice(index: number): void {
-    // Calculate the new price based on the initial price and quantity
     this.cartItems[index].price =
       this.cartItems[index].initialPrice * this.cartItems[index].quantity;
     this.saveCartItems();

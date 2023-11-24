@@ -104,7 +104,7 @@ export class AdminService {
 
   getOrderHistory(
     token: string,
-    page: number,
+    currentPage: number,
     searchName: string,
     pageSize: number
   ) {
@@ -113,7 +113,7 @@ export class AdminService {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        page: page.toString(),
+        currentPage: currentPage.toString(),
         search: searchName,
         limit: pageSize.toString(), // Add page size as a parameter
       },

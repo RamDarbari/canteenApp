@@ -17,10 +17,10 @@ const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-  {
-    path: '**',
-    component: NotfoundComponent,
-  },
+  // {
+  //   path: '**',
+  //   component: NotfoundComponent,
+  // },
 ];
 
 @NgModule({
