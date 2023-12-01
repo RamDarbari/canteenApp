@@ -57,24 +57,28 @@ export class CommonServiceService {
 
   placeOrder(orderData: OrderData, token: any) {
     const url = `${environment.apiUrl}/addOrder`;
+
     return this._http
       .post(url, orderData, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .pipe(
-        map((response: any) => {
-          return response;
-        }),
+        map((response: any) => response),
         catchError((error: any) => {
-          if (error.status === 400) {
-            this.toastr.error('Bad Request');
-            return throwError('Bad Request: Please check your input data.');
-          } else if (error.status === 401) {
-            this.toastr.error('Unauthorized: Please login and try again.');
-            return throwError('Unauthorized: Please login and try again.');
+          console.error('Error from backend:', error); // Log the error to the console for debugging
+
+          if (error.error && error.error.message) {
+            const errorMessage = error.error.message;
+            this.toastr.error(errorMessage);
+            return throwError(errorMessage);
+          } else if (error.error && typeof error.error === 'object') {
+            const backendError = JSON.stringify(error.error.error);
+            this.toastr.error(backendError);
+            return throwError(backendError);
           } else {
-            this.toastr.error('Server Error: Try after some time!');
-            return throwError('An error occurred while placing the order.');
+            const genericError = 'An error occurred.';
+            this.toastr.error(genericError);
+            return throwError(genericError);
           }
         })
       );

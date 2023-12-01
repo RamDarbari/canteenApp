@@ -8,6 +8,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Subject, debounceTime } from 'rxjs';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 interface Employee {
   EmployeeId: number;
@@ -42,11 +43,13 @@ export class UserListComponent implements OnInit {
   selectedEmployee: Employee | null = null;
   pageSizeOptions: number[] = [5, 10, 25, 100];
   limit: number = this.pageSize;
+  isLoading: boolean = false;
   private searchNameSubject = new Subject<string>();
 
   constructor(
     private http: AdminService,
-    private offcanvasService: NgbOffcanvas
+    private offcanvasService: NgbOffcanvas,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -66,21 +69,35 @@ export class UserListComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
 
-      if (this.selectedEmployee) {
-        const { EmployeeId, balance, wallet } = this.selectedEmployee;
-        const emp_id = EmployeeId;
-        const payment = parseFloat(wallet); // Convert wallet to a number
-        const bill = 0; // Convert balance to a number
+      if (!this.selectedEmployee || !this.selectedEmployee.wallet) {
+        this.toastr.error('Please enter a valid wallet amount.');
+        return;
+      }
 
-        this.http
-          .updateBalance(token, emp_id, payment, bill)
-          .subscribe((response) => {
+      const { EmployeeId, balance, wallet } = this.selectedEmployee;
+      const emp_id = EmployeeId;
+      const payment = parseFloat(wallet);
+      const bill = 0;
+
+      this.isLoading = true;
+
+      this.http
+        .updateBalance(token, emp_id, payment, bill)
+        .subscribe(
+          (response) => {
             console.log('balance updated', response);
             this.loadUserData();
-            this.selectedEmployee = null; // Reset selectedEmployee
+            this.selectedEmployee = null;
             this.offcanvasService.dismiss();
-          });
-      }
+          },
+          (error) => {
+            console.error('Error updating user', error);
+            this.toastr.error('Failed to update user balance.');
+          }
+        )
+        .add(() => {
+          this.isLoading = false;
+        });
     } catch (error) {
       console.log('Error updating user', error);
     }
@@ -93,7 +110,7 @@ export class UserListComponent implements OnInit {
     const startIndex = this.currentPage * this.limit + 1;
 
     this.http
-      .userList(token, startIndex, this.limit, this.searchName) // Pass 'limit' to the service function
+      .userList(token, startIndex, this.limit, this.searchName)
       .subscribe((response: any) => {
         console.log('res', response);
         if (response && response.data) {
@@ -109,9 +126,9 @@ export class UserListComponent implements OnInit {
     this.limit = event.pageSize;
     this.loadUserData();
   }
+
   openEnd(content: TemplateRef<any>, employee: Employee) {
-    console.log('Selected Employee:', employee); // Log the selected employee to check
-    this.selectedEmployee = employee;
+    this.selectedEmployee = { ...employee, wallet: '' }; // Initialize wallet to 0
     this.offcanvasService.open(content, { position: 'end' });
   }
 }

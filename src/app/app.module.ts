@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 // import { authReducer, fetchMealReducer } from './Store/reducers';
 import { ServiceWorkerModule } from '@angular/service-worker';
+// import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [AppComponent, NotfoundComponent],
@@ -25,6 +26,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       timeOut: 1000,
       positionClass: 'toast-top-left',
     }),
+    // NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

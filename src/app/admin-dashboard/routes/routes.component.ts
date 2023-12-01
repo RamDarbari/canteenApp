@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SidebarMenuService } from 'src/app/services/sidebar-menu.service';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -11,7 +12,7 @@ interface SideNavToggle {
   templateUrl: './routes.component.html',
   styleUrls: ['./routes.component.scss'],
 })
-export class RoutesComponent {
+export class RoutesComponent implements OnInit {
   menuData: any;
   headerfullwidth: boolean = false;
   mainFullwidth: boolean = false;
@@ -20,14 +21,30 @@ export class RoutesComponent {
   sideTitleNone: boolean = false;
   sideBottom: boolean = false;
   menuHide = false;
+  messages: string[] = [];
 
   constructor(
     public menuItems: SidebarMenuService,
     private router: Router,
-    public toaster: ToastrService
+    public toaster: ToastrService,
+    private socketService: SocketioService
   ) {
     this.menuData = this.menuItems.appSidebarmenu;
   }
+
+  ngOnInit() {
+    // Subscribe to socket events
+    this.socketService.on('message').subscribe((data: any) => {
+      console.log('Received a message from the server:', data);
+      this.messages.push(data); // Store the message
+    });
+
+    this.socketService.on('notification').subscribe((data: any) => {
+      console.log('Received a notification from the server:', data);
+      this.messages.push(data); // Store the notification
+    });
+  }
+
   reverseChange() {
     this.headerfullwidth = false;
     this.mainFullwidth = false;

@@ -114,7 +114,9 @@ export class ModalComponent {
           ? JSON.parse(localStorage.getItem('user')).data.token
           : '';
         data.menu_id = itemId;
+
         if (this.editedItem) {
+          // Handle edit logic if needed
         } else {
           this.http.addItem(data, token).subscribe((result) => {
             if (result) {

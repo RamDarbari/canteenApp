@@ -12,6 +12,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive w-100">
+              <app-loader *ngIf="isLoading"></app-loader>
               <table mat-table matSort [dataSource]="orderHistoryData" class="mat-elevation-z8">
                 <ng-container matColumnDef="_id">
                   <th mat-header-cell *matHeaderCellDef> Order Id</th>
@@ -41,7 +42,7 @@
                   <th mat-header-cell *matHeaderCellDef>Time</th>
                   <td mat-cell *matCellDef="let element"> {{element.time}} </td>
                 </ng-container>
-                <ng-container matColumnDef="actions">
+                <!-- <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>Action</th>
                   <td mat-cell *matCellDef="let element" style="min-width: 120px;">
                     <select name="more-action" id="form-control" class="form-control">
@@ -49,7 +50,7 @@
                       <option value="view-user">View </option>
                     </select>
                   </td>
-                </ng-container>
+                </ng-container> -->
                 <!-- Define the table header row -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <!-- Define the table rows -->
@@ -57,7 +58,7 @@
               </table>
               <!-- Paginator -->
               <div class="mat-paginator">
-                <mat-paginator [length]="totalItems" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"
+                <mat-paginator [length]="totalItems" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
                   [pageIndex]="currentPage" (page)="pageChanged($event)"></mat-paginator>
               </div>
             </div>

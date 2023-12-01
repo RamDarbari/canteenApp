@@ -9,8 +9,11 @@ export class SocketioService {
   private socket: Socket;
 
   constructor() {
-    // Connect to the server
-    this.socket = io('http://10.8.11.160:5000'); // Replace with your server URL
+    const empId = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
+      : null;
+    // Append empId to the connection URL
+    this.socket = io(`http://10.8.11.160:5000?empId=${empId}`);
   }
 
   public on(event: string): Observable<any> {
@@ -21,7 +24,6 @@ export class SocketioService {
     });
   }
 
-  // Add the emit method
   public emit(event: string, data?: any): void {
     this.socket.emit(event, data);
   }

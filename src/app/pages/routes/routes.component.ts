@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-routes',
@@ -6,6 +7,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./routes.component.scss'],
 })
 export class RoutesComponent {
-  isUser: boolean = true;
-  selectedItem: number = 1;
+  messages: string[] = [];
+  constructor(private socketService: SocketioService) {}
+  ngOnInit() {
+    // Subscribe to socket events
+    this.socketService.on('message').subscribe((data: any) => {
+      console.log('Received a message from the server:', data);
+      this.messages.push(data); // Store the message
+    });
+    this.socketService.on('notification').subscribe((data: any) => {
+      console.log('Received a notification from the server:', data);
+      this.messages.push(data); // Store the notification
+    });
+  }
 }

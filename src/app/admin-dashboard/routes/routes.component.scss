@@ -74,6 +74,20 @@
     }
   }
 
+  .dropdown-menu {
+    min-width: 15.375rem;
+    // padding: 0rem 0 1rem;
+    top: 100%;
+  }
+
+  .dropdown-toggle::after {
+    content: none;
+  }
+
+  .dropdown-item:active {
+    background-color: $light-primmary-color;
+  }
+
   &.headerFullWidth {
     left: 66px;
     width: calc(100% - 66px);

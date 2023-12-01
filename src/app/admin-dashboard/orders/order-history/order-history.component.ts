@@ -20,6 +20,7 @@ export class OrderHistoryComponent implements OnInit {
   private searchNameSubject = new Subject<string>();
   pageSizeOptions: number[] = [5, 10, 25, 100];
   limit: number = this.pageSize;
+  isLoading: boolean = false;
   displayedColumns: string[] = [
     '_id',
     'emp_id',
@@ -28,7 +29,7 @@ export class OrderHistoryComponent implements OnInit {
     'totalBalance',
     'date',
     'time',
-    'actions',
+    // 'actions',
   ];
   formB: FormGroup;
   formData: any[] = [];
@@ -53,17 +54,27 @@ export class OrderHistoryComponent implements OnInit {
   }
 
   getOrderHistory() {
+    this.isLoading = true;
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     const startIndex = this.currentPage * this.limit + 1;
     this.http
       .getOrderHistory(token, this.currentPage, this.searchName, this.limit)
-      .subscribe((response: any) => {
-        this.orderHistoryData = response.data as OrderHistory[];
-        this.totalItems = response.totalRecords * this.limit;
+      .subscribe(
+        (response: any) => {
+          this.orderHistoryData = response.data as OrderHistory[];
+          this.totalItems = response.totalRecords;
+        },
+        (error) => {
+          console.error('Error fetching order history:', error);
+        }
+      )
+      .add(() => {
+        this.isLoading = false;
       });
   }
+
   pageChanged(event: PageEvent) {
     this.currentPage = event.pageIndex;
     this.limit = event.pageSize;

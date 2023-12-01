@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
@@ -9,6 +15,8 @@ import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { OrderData, OrderDataItem } from 'src/data';
 import { ModalComponent } from '../modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+// import { NgxSpinnerService } from 'ngx-spinner';
 
 interface MenuItem {
   _id: string;
@@ -46,7 +54,7 @@ export class MenuTabsComponent implements OnInit {
   selectedMenus: any[] = [];
   cartItems: any[] = [];
   quantity: false;
-  selectedCategory: string = 'Breakfast';
+  selectedCategory: string = '';
   selectedBillStatus: string = '';
   @Input() todaymenu: boolean = false;
   @Input() custommenu: boolean = false;
@@ -54,11 +62,20 @@ export class MenuTabsComponent implements OnInit {
   selectedCategoryId: string = '';
   customMenu: boolean = true;
   showSidebar: boolean = false;
+  isBreakfastDisabled: boolean = false;
+  isLunchDisabled: boolean = false;
+  isSnacksDisabled: boolean = false;
+
+  // @ViewChild('todayMenuSpinner') todayMenuSpinner: any;
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
     any[]
   >([]);
   selectedMenus$ = this.selectedMenusSubject.asObservable();
+  private isCategoryDisabledSubject = new BehaviorSubject<{
+    [key: string]: boolean;
+  }>({});
+  isCategoryDisabled$ = this.isCategoryDisabledSubject.asObservable();
 
   constructor(
     private _http: AdminService,
@@ -75,11 +92,31 @@ export class MenuTabsComponent implements OnInit {
   ngOnInit(): void {
     this.filterSubMenuList();
     this.fetchSelectedMenus();
-    // this.filterMeals();
     this.loadCartItems();
+    this.updateMenuCategoryState();
+    if (this.cartItems && this.cartItems.length > 0) {
+      this.showSidebar = true;
+    } else {
+      this.showSidebar = false;
+    }
+
+    const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
+    this.selectedMenus = Object.keys(storedMenus).map((menuType) => ({
+      menuType,
+      subMenuItems: storedMenus[menuType],
+    }));
+
+    // if (this.selectedMenus && this.selectedMenus.length > 0) {
+    //   this.showSidebar = true;
+    // } else {
+    //   this.showSidebar = false;
+    // }
+
     this.menuService.selectedMenus$.subscribe((selectedMenus) => {
       this.selectedMenus = selectedMenus;
     });
+    const storedCategory = localStorage.getItem('selectedCategory');
+    this.selectedCategory = storedCategory || 'Breakfast';
     if (this.submenu && this.submenu.length > 0) {
       const initialCategory = this.submenu.find(
         (meal) =>
@@ -90,10 +127,10 @@ export class MenuTabsComponent implements OnInit {
         this.updateQueryParams();
       }
     }
-    this.showSidebar = false;
   }
 
   openSidebar() {
+    console.log('Opening sidebar'); // Add this line
     this.showSidebar = true;
   }
 
@@ -144,6 +181,18 @@ export class MenuTabsComponent implements OnInit {
     });
   }
 
+  private updateMenuCategoryState() {
+    const isCartItemsEmpty = !this.cartItems || this.cartItems.length === 0;
+
+    const disabledState = {
+      Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
+      Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
+      Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
+    };
+
+    this.isCategoryDisabledSubject.next(disabledState);
+  }
+
   getTotalPrice(): number {
     let totalPrice = 0;
     if (this.cartItems) {
@@ -156,10 +205,15 @@ export class MenuTabsComponent implements OnInit {
 
   updateSelectedCategory(category: string) {
     this.selectedCategory = category;
+
+    // Store the selected category in localStorage
+    localStorage.setItem('selectedCategory', category);
+
     const selectedCategory = this.submenu.find(
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
     this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
+    this.updateMenuCategoryState();
     this.updateQueryParams();
   }
 
@@ -185,7 +239,7 @@ export class MenuTabsComponent implements OnInit {
           this.toastr.error('No meals found');
         }
         this.fetchSelectedMenus();
-        this.loadCartItems();
+        // this.loadCartItems();
       });
     } catch (error) {
       console.error(error);
@@ -295,6 +349,7 @@ export class MenuTabsComponent implements OnInit {
 
   todayMenu() {
     try {
+      this.isLoading = true;
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
@@ -305,15 +360,31 @@ export class MenuTabsComponent implements OnInit {
         sub_menu_items: selectedMenus[menuType].map((item) => item.id),
       }))[0];
 
-      this._http.addTodayMenu(token, payload).subscribe((response) => {
-        console.log('Response from addTodayMenu API:', response);
+      this._http
+        .addTodayMenu(token, payload)
+        .subscribe(
+          (response) => {
+            console.log('Response from addTodayMenu API:', response);
+            localStorage.removeItem('selectedMenus');
+            this.selectedMenus = [];
+            this.toastr.success('Today menu added successfully!');
+            this.showSidebar = false;
+          },
+          (error) => {
+            console.error('Error adding today menu:', error);
 
-        // Remove selectedMenus from local storage after successful API call
-        localStorage.removeItem('selectedMenus');
-
-        // Clear the selectedMenus array in the component
-        this.selectedMenus = [];
-      });
+            // Extract and display the relevant error message
+            const errorMessage =
+              error.error && error.error.message
+                ? error.error.message
+                : 'An error occurred.';
+            this.toastr.error(errorMessage);
+          }
+        )
+        .add(() => {
+          // this.spinner.hide('todayMenuSpinner');
+          this.isLoading = false;
+        });
     } catch (error) {
       console.error('An unexpected error occurred:', error);
     }
@@ -327,6 +398,7 @@ export class MenuTabsComponent implements OnInit {
   confirmOrder() {
     try {
       const storedCartItems = localStorage.getItem('cartItems');
+
       if (storedCartItems) {
         const cartItems: OrderDataItem[] = JSON.parse(storedCartItems);
         const billStatus = this.selectedBillStatus;
@@ -355,21 +427,27 @@ export class MenuTabsComponent implements OnInit {
             ? JSON.parse(localStorage.getItem('user')).data.token
             : '';
 
-          this.isLoading = true;
+          this.isLoading = true; // Start the loader only if emp_id is provided
 
           this._https
             .placeOrder(orderPayload, token)
-            .subscribe((response) => {
-              console.log(response);
-              this.isLoading = false;
-              localStorage.removeItem('cartItems');
-              localStorage.removeItem('selectedBillStatus');
-              this.loadCartItems();
-              this.toastr.success('Order placed successfully!');
-              window.location.reload();
-            })
+            .subscribe(
+              (response) => {
+                console.log(response);
+                localStorage.removeItem('cartItems');
+                localStorage.removeItem('selectedBillStatus');
+                this.loadCartItems();
+                this.cartItems = [];
+                this.toastr.success('Order placed successfully!');
+                // window.location.reload();
+                this.showSidebar = false;
+              },
+              (error) => {
+                console.error('Error placing order:', error);
+              }
+            )
             .add(() => {
-              this.isLoading = false;
+              this.isLoading = false; // Stop the loader regardless of success or error
             });
         } else {
           console.log('No items in the cart.');
@@ -420,6 +498,7 @@ export class MenuTabsComponent implements OnInit {
       item_name: item_name,
       quantity: 1,
       price: price,
+      initialPrice: price,
       itemId: itemId,
     };
 
@@ -433,5 +512,6 @@ export class MenuTabsComponent implements OnInit {
     this.cartItems = existingItems;
     this.saveCartItems();
     this.toastr.success('Item added to cart successfully!');
+    this.updateMenuCategoryState();
   }
 }

@@ -1,5 +1,6 @@
 <section class="d-flex" *ngIf="todaymenu">
-  <div class="container">
+  <app-loader class="today-menu-loader" *ngIf="isLoading"></app-loader>
+  <div class="container" [ngClass]="{'full-width': !showSidebar}">
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
@@ -26,7 +27,8 @@
             </div>
             <div class="add-product">
               <div class="d-flex align-items-center">
-                <button (click)="openAddItemModal($event)">Add Item</button>
+                <button type="button" class="btn btn-outline-primary" (click)="openAddItemModal($event)">Add
+                  Item</button>
               </div>
             </div>
           </div>
@@ -52,7 +54,7 @@
                         *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                         <div class="card-items" *ngFor="let item of meal.items">
                           <div class="card border-0 shadow h-100"
-                            (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }])">
+                            (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }]); openSidebar()">
                             <div
                               class="card-body inner-body d-flex justify-content-center align-items-center text-center">
                               <div>
@@ -76,7 +78,7 @@
       </div>
     </div>
   </div>
-  <div class="today-Sidebar">
+  <div class="today-Sidebar" [ngClass]="{'sidebar-open': showSidebar}">
     <div class="sidebar">
       <div class="inner-sidebar">
         <div class="inner-sidebar-header d-flex align-items-center">
@@ -100,11 +102,11 @@
               </ul>
             </div>
           </div>
-          <div *ngIf="!selectedMenus || selectedMenus.length === 0">
-            <p>No menus selected.</p>
-          </div>
+          <!-- <div *ngIf="!selectedMenus || selectedMenus.length === 0">
+            <p>Please Select Any Item To Add In Today Menu</p>
+          </div> -->
           <div>
-            <button (click)="todayMenu()" class="btn btn-primary">
+            <button (click)="todayMenu()" class="btn btn-outline-primary">
               confirm
             </button>
           </div>
@@ -115,8 +117,8 @@
   <ng-content select=".todaymenu"></ng-content>
 </section>
 
-
 <section class="d-flex" *ngIf="custommenu">
+  <app-loader *ngIf="isLoading"></app-loader>
   <div class="container" [ngClass]="{'full-width': !showSidebar}">
     <div class="d-flex justify-content-between align-items-center mb-sm-4">
       <div class="mt-sm-4 d-flex flex-wrap align-items-center">
@@ -129,25 +131,27 @@
         </div>
       </div>
     </div>
+    <!-- <app-loader *ngIf="!isLoading"></app-loader> -->
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
-          <div class="menu-selection-card d-flex justify-content-start pt-3 ">
+          <div class="menu-selection-card d-flex justify-content-start pt-3">
             <div class="breakfast">
               <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
-                (click)="updateSelectedCategory('Breakfast')">
+                [disabled]="(isCategoryDisabled$ | async)['Breakfast']" (click)="updateSelectedCategory('Breakfast')">
                 Breakfast
               </button>
             </div>
             <div class="lunch">
               <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
-                (click)="updateSelectedCategory('Lunch')">
+                [disabled]="(isCategoryDisabled$ | async)['Lunch']" (click)="updateSelectedCategory('Lunch')">
                 Lunch
               </button>
             </div>
             <div class="snacks">
+
               <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
-                (click)="updateSelectedCategory('Snacks')">
+                [disabled]="(isCategoryDisabled$ | async)['Snacks']" (click)="updateSelectedCategory('Snacks')">
                 Snacks
               </button>
             </div>
@@ -172,7 +176,7 @@
                     </div>
                   </div>
                   <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
-                    <div *ngFor="let meal of submenu">
+                    <div style="padding: 0px 20px 0px 20px;" *ngFor="let meal of submenu">
                       <div class=" d-flex flex-wrap gap-3"
                         *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                         <div class="card-items" *ngFor="let item of meal.items">
@@ -185,9 +189,6 @@
                                 <p class="card-text text-muted">RS. {{ item.price }}</p>
                               </div>
                             </div>
-                          </div>
-                          <div class="d-flex justify-content-center" *ngIf="!item || meal.items.length === 0">
-                            <p>Please wait, the menu will be updated soon!</p>
                           </div>
                         </div>
                       </div>
@@ -204,11 +205,10 @@
       </div>
     </div>
   </div>
-  <div class="today-Sidebar" [ngClass]="{'sidebar-open': showSidebar}">
+  <div class="custom-Sidebar" [ngClass]="{'sidebar-open': showSidebar}">
     <div class="container">
       <div class="row">
         <div class="sidebar">
-          <button (click)="closeSidebar()">close</button>
           <div class="custom-offcanvas-content w-100">
             <div class="offcanvas-header">
               <h4 class="offcanvas-title">Order Details</h4>
@@ -237,7 +237,7 @@
                 </div>
               </div>
               <div class="text-end d-flex">
-                <input type="text" placeholder="Enter emp_id" [(ngModel)]="empId">
+                <input class="p-2" type="text" placeholder="Enter Employee Id" [(ngModel)]="empId">
                 <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
                   Confirm Order
                 </button>

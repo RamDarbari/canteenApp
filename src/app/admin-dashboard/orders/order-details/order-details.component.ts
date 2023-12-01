@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { PendingOrdersService } from 'src/app/services/pending-orders.service';
@@ -35,7 +36,8 @@ export class OrderDetailsComponent implements OnInit {
   displayedColumnsOrderRec: string[] = [];
   constructor(
     private https: AdminService,
-    private orderService: PendingOrdersService
+    private orderService: PendingOrdersService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +49,7 @@ export class OrderDetailsComponent implements OnInit {
     this.pendingOrderList();
     this.refreshInterval = setInterval(() => {
       this.pendingOrderList();
-    }, 50000 * 1000);
+    }, 5000 * 1000);
   }
 
   ngOnDestroy(): void {
@@ -97,9 +99,11 @@ export class OrderDetailsComponent implements OnInit {
           console.log(response, ';;;;;;;');
           this.orders = this.orders.filter((order) => order._id !== order_id);
           this.orderService.updateOrders(this.orders);
+          this.toastr.info('Order Status Has Been Updated');
         },
         (error) => {
           console.error(error);
+          this.toastr.error('Error updating order status. Please try again.');
         },
         () => {
           this.isLoading = false;
