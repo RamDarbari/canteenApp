@@ -7,8 +7,9 @@ import {
 import { AdminService } from 'src/app/services/admin.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Subject, debounceTime } from 'rxjs';
-import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ModalComponent } from 'src/app/reusable-component/modal/modal.component';
 
 interface Employee {
   EmployeeId: number;
@@ -33,7 +34,7 @@ export class UserListComponent implements OnInit {
     'email',
     'balance',
     'wallet',
-    'actions',
+    // 'actions',
   ];
   dataSource: Employee[] = [];
   totalItems: number;
@@ -49,7 +50,8 @@ export class UserListComponent implements OnInit {
   constructor(
     private http: AdminService,
     private offcanvasService: NgbOffcanvas,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -107,17 +109,30 @@ export class UserListComponent implements OnInit {
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
-    const startIndex = this.currentPage * this.limit + 1;
+
+    // Set isLoading to true to show the loader
+    this.isLoading = true;
+
+    const startIndex = this.currentPage;
 
     this.http
       .userList(token, startIndex, this.limit, this.searchName)
-      .subscribe((response: any) => {
-        console.log('res', response);
-        if (response && response.data) {
-          this.dataSource = response.data;
-          this.totalItems = response.totalPages * this.limit;
-          console.log('dataSource', this.dataSource);
+      .subscribe(
+        (response: any) => {
+          console.log('res', response);
+          if (response && response.data) {
+            this.dataSource = response.data;
+            this.totalItems = response.totalPages * this.limit;
+            console.log('dataSource', this.dataSource);
+          }
+        },
+        (error) => {
+          console.error('Error loading user data', error);
         }
+      )
+      .add(() => {
+        // Set isLoading to false to hide the loader, whether the request succeeds or fails
+        this.isLoading = false;
       });
   }
 
@@ -130,5 +145,15 @@ export class UserListComponent implements OnInit {
   openEnd(content: TemplateRef<any>, employee: Employee) {
     this.selectedEmployee = { ...employee, wallet: '' }; // Initialize wallet to 0
     this.offcanvasService.open(content, { position: 'end' });
+  }
+  openCustomOrderModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'custom-modal',
+    });
+
+    modalRef.componentInstance.modalType = 'add-user';
   }
 }

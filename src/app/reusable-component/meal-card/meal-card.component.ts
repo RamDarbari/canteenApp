@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
+import { ModalComponent } from '../modal/modal.component';
 
 interface MenuItem {
   id: string;
@@ -30,7 +32,8 @@ export class MealCardComponent implements OnInit {
   constructor(
     private _https: CommonServiceService,
     private toastr: ToastrService,
-    private http: AdminService
+    private http: AdminService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +49,7 @@ export class MealCardComponent implements OnInit {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
         } else {
-          this.toastr.error('No meals found');
+          // this.toastr.error('No meals found');
         }
       });
     } catch (error) {
@@ -77,12 +80,25 @@ export class MealCardComponent implements OnInit {
   //   }
   // }
 
+  openLoginModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'custom-modal',
+    });
+
+    // Pass the modalType to the opened modal
+    modalRef.componentInstance.modalType = 'login-modal';
+  }
+
   addItemToCart(item_name: string, price: number, itemId: string): void {
     const userJSON = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
 
     if (!userJSON) {
+      this.openLoginModal(event);
       this.toastr.error('You must be logged in to add items to the cart.');
       return;
     }

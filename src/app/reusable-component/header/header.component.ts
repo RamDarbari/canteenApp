@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   isLoading: boolean = false;
   hasWallet: boolean = false;
   userProfileInfo: any;
+  emptyCart: any;
 
   constructor(
     private modalService: NgbModal,
@@ -63,10 +64,12 @@ export class HeaderComponent implements OnInit {
       : '';
     return !!userJSON;
   }
+
   get hasCartItems(): boolean {
     const existingItems = localStorage.getItem('cartItems');
     return !!existingItems && JSON.parse(existingItems).length > 0;
   }
+
   get cartItemCount(): number {
     const existingItems = localStorage.getItem('cartItems');
     if (existingItems) {
@@ -75,6 +78,7 @@ export class HeaderComponent implements OnInit {
     }
     return 0;
   }
+
   get userProfileDetails() {
     const userDetails = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.empDetails
@@ -118,6 +122,9 @@ export class HeaderComponent implements OnInit {
       this.cartItems.forEach((item) => {
         item.initialPrice = item.price;
       });
+      this.emptyCart = false; // Set to false when cart has items
+    } else {
+      this.emptyCart = true; // Set to true when cart is empty
     }
   }
 
@@ -199,6 +206,7 @@ export class HeaderComponent implements OnInit {
               localStorage.removeItem('cartItems');
               this.offcanvasService.dismiss();
               this.loadCartItems();
+              this.cartItems = [];
               this.toastr.success('order placed succesfully');
             })
             .add(() => {
@@ -233,6 +241,7 @@ export class HeaderComponent implements OnInit {
       this.updatePrice(index);
     }
   }
+
   updatePrice(index: number): void {
     this.cartItems[index].price =
       this.cartItems[index].initialPrice * this.cartItems[index].quantity;

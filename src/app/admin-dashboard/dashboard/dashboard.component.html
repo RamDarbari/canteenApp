@@ -1,7 +1,7 @@
 <section>
   <div class="container">
     <app-loader *ngIf="isLoading"></app-loader>
-    <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-end">
+    <!-- <div class="mt-sm-4 d-flex flex-wrap align-items-center text-head justify-content-end">
       <div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -9,13 +9,14 @@
           </li>
         </ol>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-xl-6">
         <div class="row">
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body info-cards d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between"
+                [routerLink]="['/menu/menu-catalogue']" routerLinkActive="router-link-active">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Menus</span>
                   <h2>{{ totalDetailsCounts.today_menu_items }}</h2>
@@ -42,10 +43,11 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body info-cards d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between"
+                [routerLink]="['/order/order-details']" routerLinkActive="router-link-active">
                 <div class="menu">
-                  <span class="font-w500 fs-16 d-block mb-2">Total Revenue</span>
-                  <h2>{{totalDetailsCounts.total_revenue}}</h2>
+                  <span class="font-w500 fs-16 d-block mb-2">Pending Orders</span>
+                  <h2>{{totalDetailsCounts.pendingOrder}}</h2>
                 </div>
                 <div class="svg d-inline-block position-relative donut-chart-sale">
 
@@ -70,7 +72,8 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body info-cards d-flex align-items-center justify-content-between ">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between "
+                [routerLink]="['/order/order-history']" routerLinkActive="router-link-active">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Oders</span>
                   <h2>{{totalDetailsCounts.total_orders}}</h2>
@@ -97,7 +100,8 @@
           </div>
           <div class="col-xl-6 col-sm-6">
             <div class="card">
-              <div class="card-body info-cards d-flex align-items-center justify-content-between">
+              <div class="card-body info-cards d-flex align-items-center justify-content-between"
+                [routerLink]="['/admin/userList']" routerLinkActive="router-link-active">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Customers</span>
                   <h2>{{totalDetailsCounts.total_users}}</h2>
@@ -130,7 +134,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-6">
+      <!-- <div class="col-xl-6">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center border-0 flex-wrap pb-0">
             <div class="mb-sm-0 mb-2">
@@ -151,8 +155,10 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-xl-3 col-xxl-4">
+      </div> -->
+
+
+      <div class="col-xl-3 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
@@ -180,7 +186,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-9 col-xxl-8">
+      <div class="col-xl-9 col-xxl-12">
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
@@ -188,7 +194,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
                     <h2>
-                      RECENT ORDERS REQUESTED
+                      RECENT ORDER ITEMS REQUESTED
                     </h2>
                   </div>
                   <div>

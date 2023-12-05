@@ -59,8 +59,7 @@ export interface OrderItem {
 }
 
 export interface detailsCount {
-  total_revenue: number;
-  daily_revenue: number;
+  pendingOrder: number;
   total_orders: number;
   today_menu_items: number;
   total_users: number;

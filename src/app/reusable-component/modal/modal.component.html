@@ -93,3 +93,119 @@
     </div>
   </div>
 </section>
+
+<section *ngIf="modalType === 'custom-order'" class="modal-section">
+  <div class="container">
+    <div class="row">
+      <div class="add-product-container">
+        <div class="title d-flex w-100 justify-content-between align-items-center">
+          <p></p>
+          <button class="btn btn-danger" (click)="closeModal()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form #customOrderForm="ngForm" class="add-product-form"
+          (ngSubmit)="onSubmitCustomOrder(customOrderForm.value, customOrderForm)">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" id="item_name" name="item_name" class="form-control"
+                  [ngModel]="editedItem ? editedItem.item_name : ''"
+                  (ngModelChange)="editedItem ? editedItem.item_name = $event : null" required minlength="3"
+                  placeholder="Product Name">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="number" id="quantity" name="quantity" class="form-control" [ngModel]="1" disabled
+                  placeholder="Quantity">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="number" id="price" name="price" class="form-control"
+                  [ngModel]="editedItem ? editedItem.price : ''"
+                  (ngModelChange)="editedItem ? editedItem.price = $event : null" required min="1" placeholder="Price">
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!customOrderForm.valid">
+              {{ editedItem ? 'Update Product' : 'Add Product' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="modalType === 'add-user'" class="modal-section">
+  <div class="container">
+    <div class="row">
+      <div class="add-product-container">
+        <div class="title d-flex w-100 justify-content-between align-items-center">
+          <p></p>
+          <button class="btn btn-danger" (click)="closeModal()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form #addUserForm="ngForm" class="add-product-form"
+          (ngSubmit)="onSubmitCustomOrder(addUserForm.value, addUserForm)">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" id="employeeId" name="employeeId" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.EmployeeId : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.EmployeeId = $event : null" required minlength="3"
+                  placeholder="EmployeeId">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" id="FirstName" name="FirstName" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.FirstName : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.FirstName = $event : null" required minlength="3"
+                  placeholder="First Name">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" id="LastName" name="LastName" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.LastName : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.LastName = $event : null" required minlength="3"
+                  placeholder="Last Name">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" id="email" name="email" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.email : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.email = $event : null" required minlength="3"
+                  placeholder="Email">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="number" id="Balance" name="Balance" class="form-control" [ngModel]="0" disabled>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="number" id="Wallet" name="Wallet" class="form-control" [ngModel]="0" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <!-- <button type="submit" class="btn btn-outline-primary" [disabled]="!customOrderForm.valid">
+              {{ editedItem ? 'Update Product' : 'Add Product' }}
+            </button> -->
+            <button (click)="onSubmitEmployee(addUserForm.value, addUserForm)" class="btn btn-outline-primary">
+              add user
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

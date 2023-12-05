@@ -20,7 +20,7 @@ const routes: Routes = [
           { path: '', redirectTo: 'menu-catalogue', pathMatch: 'full' },
           // { path: 'menulist', component: MenuListComponent },
           { path: 'menu-catalogue', component: MenuCatalogueComponent },
-          { path: 'addProduct', component: AddProductComponent },
+          // { path: 'addProduct', component: AddProductComponent },
         ],
       },
     ],

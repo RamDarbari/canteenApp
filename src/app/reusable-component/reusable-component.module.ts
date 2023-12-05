@@ -12,6 +12,12 @@ import { TableComponent } from './table/table.component';
 import { LoaderComponent } from './loader/loader.component';
 import { MenuTabsComponent } from './menu-tabs/menu-tabs.component';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   declarations: [
@@ -32,6 +38,12 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     FormsModule,
     // AdminDashboardModule,
     ScrollToModule.forRoot(),
+    MatPaginatorModule,
+    MatTableModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    ClipboardModule,
   ],
   exports: [
     HeaderComponent,

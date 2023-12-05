@@ -15,6 +15,16 @@ interface MenuItem {
   price: number;
   quantity: number;
 }
+
+interface Employee {
+  EmployeeId: number;
+  FirstName: string;
+  LastName: string;
+  email: string;
+  role: string;
+  balance: string;
+  wallet: string;
+}
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -31,6 +41,7 @@ export class ModalComponent {
   @Input() modalType: string = 'default';
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
+  editedEmployee: Employee | null = null;
 
   constructor(
     private loginService: CommonServiceService,
@@ -153,6 +164,64 @@ export class ModalComponent {
             this.toastr.error('Failed to Update Item');
           }
         });
+    }
+  }
+
+  onSubmitCustomOrder(formData: any, form: any): void {
+    try {
+      this.modalService.dismissAll();
+      const cartItem = {
+        item_name: formData.item_name,
+        quantity: formData.quantity,
+        price: formData.price,
+      };
+      const existingItems = localStorage.getItem('cartItems');
+      let cartItems = [];
+      if (existingItems) {
+        cartItems = JSON.parse(existingItems);
+      }
+      cartItems.push(cartItem);
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      form.resetForm();
+    } catch (error) {
+      console.error('Error submitting custom order:', error);
+      this.toastr.error('Failed to submit custom order');
+    }
+  }
+
+  onSubmitEmployee(formData: any, form: NgForm): void {
+    try {
+      if (this.editedEmployee) {
+        const token = localStorage.getItem('user')
+          ? JSON.parse(localStorage.getItem('user')).data.token
+          : '';
+
+        this.http
+          .updateEmployee(token, this.editedEmployee.EmployeeId, formData)
+          .subscribe(
+            (result) => {
+              if (result) {
+                this.toastr.success('Employee added Successfully');
+                this.editedEmployee = null;
+                // this.modalService.dismissAll();
+                // this.loadEmployeeData();
+              } else {
+                this.toastr.error('Failed to Update Employee');
+              }
+            },
+            (error) => {
+              console.error('Error updating employee:', error);
+              this.toastr.error('Failed to Update Employee');
+            }
+          );
+      } else {
+        // this.loadEmployeeData();
+      }
+
+      form.resetForm();
+    } catch (error) {
+      console.error('Error submitting employee:', error);
+      this.toastr.error('Failed to submit employee');
     }
   }
 }

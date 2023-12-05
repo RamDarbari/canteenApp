@@ -65,13 +65,13 @@ export class AdminService {
       );
   }
 
-  userList(token: any, page: number, limit: number, search: string) {
+  userList(token: any, currentPage: number, limit: number, search: string) {
     return this._http.get(`${this.apiUrl}/admin/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        page: page.toString(),
+        currentPage: currentPage.toString(),
         limit: limit.toString(), // Add the limit parameter
         search: search,
       },
@@ -147,6 +147,22 @@ export class AdminService {
         payment,
         bill,
       },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  updateEmployee(
+    token: string,
+    emp_id: number,
+    updatedEmployee: any
+  ): Observable<any> {
+    return this._http.put(
+      `${this.apiUrl}/admin/updateEmployee/${emp_id}`,
+      updatedEmployee,
       {
         headers: {
           Authorization: `Bearer ${token}`,

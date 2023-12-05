@@ -27,6 +27,9 @@
           <div class="card-body p-0" *ngIf="meals && meals.length > 0 " style="min-height: 210px;">
             <div *ngFor="let meal of meals">
               <div class=" d-flex flex-wrap gap-3" *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+                <div *ngIf="!meal.items.length">
+                  <p class="card-text text-muted">Please wait, the menu will be updated soon!</p>
+                </div>
                 <div class="card-items" *ngFor="let item of meal.items">
                   <div class="card border-0 shadow h-100">
                     <div class="card-body inner-body d-flex justify-content-center align-items-center text-center"
@@ -37,9 +40,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-center" *ngIf="!item || meal.items.length === 0">
+                  <!-- <div class="d-flex justify-content-center" *ngIf="!item || meal.items.length === 0">
                     <p>Please wait, the menu will be updated soon!</p>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

@@ -92,6 +92,13 @@ section {
       width: 90%;
       border-bottom: 1px solid #8b8b8b;
 
+      .custom-order-div {
+        width: 69%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
       button {
         width: 100px;
         height: 50px;

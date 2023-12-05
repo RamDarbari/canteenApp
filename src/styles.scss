@@ -59,6 +59,10 @@ body {
   }
 }
 
+.btn-success:hover {
+  background-color: #198754;
+}
+
 .btn:hover {
   background-color: $light-primmary-color;
 }
@@ -80,6 +84,11 @@ a {
 
 .nav-item.dropdown > a:after {
   content: none !important; /* Remove the arrow */
+}
+
+.dropdown-item:hover {
+  color: #fff;
+  background-color: $light-primmary-color !important;
 }
 
 ul {
@@ -179,6 +188,7 @@ table tbody tr th td {
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
+  // cursor: pointer;
 }
 
 table thead tr th {
@@ -203,6 +213,7 @@ table thead tr th {
   text-align: center !important;
   font-weight: 300 !important;
   font-family: Poppins;
+  cursor: pointer;
 }
 
 .mdc-data-table__header-cell {
@@ -254,6 +265,10 @@ select option {
 
 .box-shadow {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.details-panel {
+  width: 700px !important;
 }
 
 @media (min-width: 1366px) {

@@ -131,29 +131,37 @@
         </div>
       </div>
     </div>
-    <!-- <app-loader *ngIf="!isLoading"></app-loader> -->
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
           <div class="menu-selection-card d-flex justify-content-start pt-3">
             <div class="breakfast">
               <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
-                [disabled]="(isCategoryDisabled$ | async)['Breakfast']" (click)="updateSelectedCategory('Breakfast')">
+                (click)="updateSelectedCategory('Breakfast')">
                 Breakfast
               </button>
             </div>
             <div class="lunch">
               <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
-                [disabled]="(isCategoryDisabled$ | async)['Lunch']" (click)="updateSelectedCategory('Lunch')">
+                (click)="updateSelectedCategory('Lunch')">
                 Lunch
               </button>
             </div>
             <div class="snacks">
-
               <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
-                [disabled]="(isCategoryDisabled$ | async)['Snacks']" (click)="updateSelectedCategory('Snacks')">
+                (click)="updateSelectedCategory('Snacks')">
                 Snacks
               </button>
+            </div>
+            <div class="custom-order-div">
+              <div>
+                <button (click)="openCustomOrderModal($event)" class="custom-buttom m-0" data-toggle="modal"
+                  data-target="#loginModal">
+                  <span class="material-symbols-rounded">
+                    add
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
           <div class="content">

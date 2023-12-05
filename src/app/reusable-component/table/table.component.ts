@@ -1,22 +1,22 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/services/admin.service';
-import { ModalComponent } from '../modal/modal.component';
+import { PageEvent } from '@angular/material/paginator';
+import { Subject, Subscription, debounceTime } from 'rxjs';
+import { Order, OrderHistory } from 'src/data';
+import { PendingOrdersService } from 'src/app/services/pending-orders.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
-interface MenuItem {
-  _id: string;
-  menu_id: string;
-  item_name: string;
-  price: number;
-  quantity: number;
+interface Employee {
+  EmployeeId: number;
+  FirstName: string;
+  LastName: string;
+  email: string;
+  role: string;
+  balance: string;
+  wallet: string;
 }
 
 @Component({
@@ -25,55 +25,129 @@ interface MenuItem {
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  editedItem: MenuItem | null = null;
-  addProductMessage: string;
-  menuItems: MenuItem[] = [];
+  @Input() orderHistory: boolean = false;
+  @Input() pendingOrder: boolean = false;
+  orderHistoryData: OrderHistory[] = [];
+  orders: Order[] = [];
+  pagedEmployeeData: Order[] = [];
+  totalItemsOrderHistory: number;
+  currentPageOrderHistory: number = 0;
+  pageSizeOrderHistory: number = 10;
+
+  totalItemsPendingOrder: number;
+  currentPagePendingOrder: number = 0;
+  pageSizePendingOrder: number = 10;
+
+  searchName: string = '';
+  private searchNameSubject = new Subject<string>();
+  private refreshInterval: any;
+  private orderSubscription: Subscription;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  limit: number = this.pageSizeOrderHistory; // Set default limit to the order history table
+  isLoading: boolean = false;
+  displayedColumns: string[] = [
+    'date',
+    '_id',
+    'emp_id',
+    'fullName',
+    'order_status',
+    'totalBalance',
+  ];
+  displayedColumnsPendingOrders: string[] = [
+    '_id',
+    'emp_id',
+    'totalBalance',
+    'date',
+    'itemName',
+    'price',
+    'actions',
+  ];
+  formB: FormGroup;
+  formData: any[] = [];
 
   constructor(
     private http: AdminService,
+    private formBuilder: FormBuilder,
+    private orderService: PendingOrdersService,
     private toastr: ToastrService,
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
-    private modalService: NgbModal
+    private clipboardService: ClipboardService,
+    private offcanvasService: NgbOffcanvas
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      if ('menu_id' in params) {
-        const menuId = params['menu_id'];
-        this.getproduct(menuId);
-      }
+    this.searchNameSubject.pipe(debounceTime(500)).subscribe(() => {
+      this.getOrderHistory();
     });
+    this.getOrderHistory();
+
+    this.formB = this.formBuilder.group({
+      field1: [''],
+      field2: [''],
+    });
+    this.orderSubscription = this.orderService.orders$.subscribe((orders) => {
+      this.orders = orders;
+      this.updatePagedData();
+    });
+    this.pendingOrderList();
+    this.refreshInterval = setInterval(() => {
+      this.pendingOrderList();
+    }, 50 * 1000);
   }
 
-  getproduct(menuId?: string) {
-    if (menuId) {
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      this.http.addminMenuList(token, menuId).subscribe((response: any) => {
-        if (response && response.data && response.data.items) {
-          this.menuItems = response.data.items;
+  ngOnDestroy(): void {
+    clearInterval(this.refreshInterval);
+    this.orderSubscription.unsubscribe();
+  }
+
+  searchDebounced() {
+    this.searchNameSubject.next('');
+  }
+
+  getOrderHistory() {
+    this.isLoading = true;
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+    const startIndex = this.currentPageOrderHistory * this.limit + 1;
+    this.http
+      .getOrderHistory(
+        token,
+        this.currentPageOrderHistory,
+        this.searchName,
+        this.limit
+      )
+      .subscribe(
+        (response: any) => {
+          this.orderHistoryData = response.data as OrderHistory[];
+          this.totalItemsOrderHistory = response.totalRecords;
+        },
+        (error) => {
+          console.error('Error fetching order history:', error);
         }
-        this.cdr.detectChanges();
+      )
+      .add(() => {
+        this.isLoading = false;
       });
-    }
   }
 
-  deleteProduct(itemId: string) {
+  pagesChangedOrderHistory(event: PageEvent) {
+    this.currentPageOrderHistory = event.pageIndex;
+    this.limit = event.pageSize;
+    this.getOrderHistory();
+  }
+
+  pendingOrderList() {
     try {
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
 
-      this.http.deleteItems(token, itemId).subscribe((response) => {
-        if (response) {
-          this.toastr.success('Item Deleted Successfully');
-          // Remove the deleted item from the 'menuItems' array
-          this.menuItems = this.menuItems.filter((item) => item._id !== itemId);
-          this.cdr.detectChanges();
-        } else {
-          console.error('Failed To Delete The Product');
+      console.log(token, 'jkjjjjjjj');
+
+      this.http.orderList(token).subscribe((response: any) => {
+        console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');
+        if (response && response.data && response.data.length > 0) {
+          this.orderService.setOrders(response.data); // Update orders using the service
         }
       });
     } catch (error) {
@@ -81,22 +155,61 @@ export class TableComponent implements OnInit {
     }
   }
 
-  cancelEdit() {
-    this.editedItem = null;
-  }
-  editProduct(menuItem: MenuItem) {
-    this.editedItem = { ...menuItem };
+  updatePagedData() {
+    const startIndex = this.currentPageOrderHistory * this.pageSizeOrderHistory;
+    this.pagedEmployeeData = this.orders.slice(
+      startIndex,
+      startIndex + this.pageSizeOrderHistory
+    );
   }
 
-  openAddItemModal(event: Event): void {
-    const modalRef = this.modalService.open(ModalComponent, {
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      windowClass: 'custom-modal',
-    });
+  pageChangedPendingOrder(event: PageEvent) {
+    this.currentPagePendingOrder = event.pageIndex;
+    this.updatePagedData();
+  }
 
-    // Pass the modalType to the opened modal
-    modalRef.componentInstance.modalType = 'addItem-modal';
+  changeOrderStatus(order_id: string, status: string) {
+    try {
+      this.isLoading = true; // Set loading to true when the request starts
+
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+
+      this.http.orderStatus(token, status, order_id).subscribe(
+        (response) => {
+          console.log(response, ';;;;;;;');
+          this.orders = this.orders.filter((order) => order._id !== order_id);
+          this.orderService.updateOrders(this.orders);
+          this.toastr.info('Order Status Has Been Updated');
+        },
+        (error) => {
+          console.error(error);
+          this.toastr.error('Error updating order status. Please try again.');
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  getItemNames(order: Order): string[] {
+    return order.order_rec.map((record) => record.item_name);
+  }
+
+  getQuantities(order: Order): number[] {
+    return order.order_rec.map((record) => record.quantity);
+  }
+
+  getPrices(order: Order): number[] {
+    return order.order_rec.map((record) => record.price);
+  }
+
+  copyOrderId(orderId: string): void {
+    this.clipboardService.copyFromContent(orderId);
+    this.toastr.success('Order ID copied to clipboard');
   }
 }

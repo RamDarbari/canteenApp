@@ -92,8 +92,8 @@
                 <img src="assets/close-circle-svgrepo-com (2) 1.png" alt="close button">
               </button>
             </div>
-            <div class="offcanvas-body">
-              <div *ngFor="let item of cartItems;let $index = index"
+            <div class="offcanvas-body" *ngIf="cartItems.length > 0; else emptyCart">
+              <div *ngFor="let item of cartItems; let $index = index"
                 class="d-flex justify-content-between align-items-center item-info-body">
                 <div class="item-name-info">
                   <p>{{ item.item_name }} </p>
@@ -119,6 +119,7 @@
                 <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
                   Confirm Order
                 </button>
+
                 <!-- <div ngbDropdown class="d-inline-block">
                   <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
                     Bill Status: {{ selectedBillStatus }}
@@ -130,6 +131,13 @@
                 </div> -->
               </div>
             </div>
+            <ng-template #emptyCart>
+              <div class="empty-cart-message text-center">
+                <p>
+                  No Items Found In The Cart
+                </p>
+              </div>
+            </ng-template>
           </div>
         </ng-template>
       </div>

@@ -60,7 +60,7 @@ export class MenuTabsComponent implements OnInit {
   @Input() custommenu: boolean = false;
   empId: string = '';
   selectedCategoryId: string = '';
-  customMenu: boolean = true;
+  // customMenu: boolean = true;
   showSidebar: boolean = false;
   isBreakfastDisabled: boolean = false;
   isLunchDisabled: boolean = false;
@@ -72,10 +72,6 @@ export class MenuTabsComponent implements OnInit {
     any[]
   >([]);
   selectedMenus$ = this.selectedMenusSubject.asObservable();
-  private isCategoryDisabledSubject = new BehaviorSubject<{
-    [key: string]: boolean;
-  }>({});
-  isCategoryDisabled$ = this.isCategoryDisabledSubject.asObservable();
 
   constructor(
     private _http: AdminService,
@@ -93,7 +89,7 @@ export class MenuTabsComponent implements OnInit {
     this.filterSubMenuList();
     this.fetchSelectedMenus();
     this.loadCartItems();
-    this.updateMenuCategoryState();
+    // this.updateMenuCategoryState();
     if (this.cartItems && this.cartItems.length > 0) {
       this.showSidebar = true;
     } else {
@@ -130,7 +126,7 @@ export class MenuTabsComponent implements OnInit {
   }
 
   openSidebar() {
-    console.log('Opening sidebar'); // Add this line
+    console.log('Opening sidebar');
     this.showSidebar = true;
   }
 
@@ -173,6 +169,7 @@ export class MenuTabsComponent implements OnInit {
       this.selectedBillStatus = storedStatus; // Load selectedBillStatus from localStorage
     }
   }
+
   private updateQueryParams() {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -181,17 +178,17 @@ export class MenuTabsComponent implements OnInit {
     });
   }
 
-  private updateMenuCategoryState() {
-    const isCartItemsEmpty = !this.cartItems || this.cartItems.length === 0;
+  // private updateMenuCategoryState() {
+  //   const isCartItemsEmpty = !this.cartItems || this.cartItems.length === 0;
 
-    const disabledState = {
-      Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
-      Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
-      Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
-    };
+  //   const disabledState = {
+  //     Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
+  //     Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
+  //     Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
+  //   };
 
-    this.isCategoryDisabledSubject.next(disabledState);
-  }
+  //   this.isCategoryDisabledSubject.next(disabledState);
+  // }
 
   getTotalPrice(): number {
     let totalPrice = 0;
@@ -213,7 +210,7 @@ export class MenuTabsComponent implements OnInit {
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
     this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
-    this.updateMenuCategoryState();
+    // this.updateMenuCategoryState();
     this.updateQueryParams();
   }
 
@@ -478,6 +475,7 @@ export class MenuTabsComponent implements OnInit {
       this.updatePrice(index);
     }
   }
+
   updatePrice(index: number): void {
     this.cartItems[index].price =
       this.cartItems[index].initialPrice * this.cartItems[index].quantity;
@@ -512,6 +510,17 @@ export class MenuTabsComponent implements OnInit {
     this.cartItems = existingItems;
     this.saveCartItems();
     this.toastr.success('Item added to cart successfully!');
-    this.updateMenuCategoryState();
+    // this.updateMenuCategoryState();
+  }
+
+  openCustomOrderModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'custom-modal',
+    });
+
+    modalRef.componentInstance.modalType = 'custom-order';
   }
 }

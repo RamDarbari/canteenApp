@@ -9,8 +9,7 @@ import { detailsCount } from 'src/data';
 })
 export class DashboardComponent implements OnInit {
   totalDetailsCounts: detailsCount = {
-    total_revenue: 0,
-    daily_revenue: 0,
+    pendingOrder: 0,
     total_orders: 0,
     today_menu_items: 0,
     total_users: 0,
