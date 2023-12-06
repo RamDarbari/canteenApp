@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { UserData } from './../../../data';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -16,21 +17,12 @@ interface MenuItem {
   quantity: number;
 }
 
-interface Employee {
-  EmployeeId: number;
-  FirstName: string;
-  LastName: string;
-  email: string;
-  role: string;
-  balance: string;
-  wallet: string;
-}
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit {
   loginData: login = {
     emp_id: null,
     otp: '',
@@ -39,9 +31,13 @@ export class ModalComponent {
   otpVerified: boolean = false;
   @Input() additem: string = 'addItem';
   @Input() modalType: string = 'default';
+  @Output() userAdded = new EventEmitter<void>();
+  @Output() itemDeleted = new EventEmitter<void>();
+  @Output() itemAdded = new EventEmitter<void>();
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
-  editedEmployee: Employee | null = null;
+  editedEmployee: UserData | null = null;
+  form: FormGroup;
 
   constructor(
     private loginService: CommonServiceService,
@@ -49,8 +45,27 @@ export class ModalComponent {
     private toastr: ToastrService,
     private router: Router,
     private http: AdminService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private fb: FormBuilder // private toastr: ToastrService
+  ) {
+    this.form = this.fb.group({
+      item_name: ['', Validators.required],
+      price: [0, Validators.required],
+      // Add other form controls as needed
+    });
+  }
+
+  ngOnInit(): void {
+    // If editing, populate the form with the existing data
+    if (this.modalType === 'addItem-modal' && this.editedItem) {
+      this.form.patchValue({
+        item_name: this.editedItem.item_name,
+        price: this.editedItem.price,
+        // Add other fields as needed
+      });
+    }
+  }
+
   sendOTP() {
     try {
       this.isLoading = true;
@@ -114,26 +129,31 @@ export class ModalComponent {
 
   onSubmit(data: any, addProduct: NgForm) {
     try {
-      this.route.queryParams.pipe(take(1)).subscribe((params) => {
-        const itemId = params['categoryId'];
-        if (!itemId) {
-          console.error('Menu ID is missing in query parameters.');
+      this.route.queryParams.subscribe((params) => {
+        const categoryId = params['categoryId'];
+        if (!categoryId) {
+          console.error('categoryId is missing in query parameters.');
           return;
         }
 
         const token = localStorage.getItem('user')
           ? JSON.parse(localStorage.getItem('user')).data.token
           : '';
-        data.menu_id = itemId;
+
+        data.menu_id = categoryId;
 
         if (this.editedItem) {
-          // Handle edit logic if needed
+          this.editedItem.item_name = data.item_name;
+          this.editedItem.price = data.price;
+          this.saveEditedItem();
+          this.modalService.dismissAll();
         } else {
           this.http.addItem(data, token).subscribe((result) => {
             if (result) {
               this.toastr.success('Item Added Successfully');
               this.menuItems.push(data);
               this.modalService.dismissAll();
+              this.itemAdded.emit();
             } else {
               this.toastr.error('Failed to Add Item');
             }
@@ -141,29 +161,89 @@ export class ModalComponent {
         }
       });
     } catch (error) {
-      console.log(error);
+      console.error('Error submitting form:', error);
+      this.toastr.error('Failed to submit form');
+    }
+  }
+
+  onDelete(itemId: string) {
+    try {
+      this.route.queryParams.subscribe((params) => {
+        const categoryId = params['categoryId'];
+        if (!categoryId) {
+          console.error('categoryId is missing in query parameters.');
+          return;
+        }
+
+        const token = localStorage.getItem('user')
+          ? JSON.parse(localStorage.getItem('user')).data.token
+          : '';
+
+        this.http.deleteItems(token, itemId).subscribe(
+          (result) => {
+            if (result) {
+              this.toastr.success('Item Deleted Successfully');
+              this.itemDeleted.emit();
+              this.modalService.dismissAll();
+            } else {
+              this.toastr.error('Failed to Delete Item');
+            }
+          },
+          (error) => {
+            console.error('Error deleting item:', error);
+            this.toastr.error('Failed to delete item');
+          }
+        );
+      });
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      this.toastr.error('Failed to delete item');
     }
   }
 
   saveEditedItem() {
     if (this.editedItem) {
-      const token = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.token
-        : '';
-      const itemId = this.editedItem._id;
+      this.route.queryParams.subscribe((params) => {
+        const categoryId = params['categoryId'];
 
-      this.http
-        .updateItems(token, itemId, this.editedItem)
-        .subscribe((result) => {
-          if (result) {
-            this.toastr.success('Item Updated Successfully');
-            this.editedItem = null;
-            // this.getproduct();
-            // this.cdr.detectChanges();
-          } else {
-            this.toastr.error('Failed to Update Item');
-          }
+        if (!categoryId) {
+          console.error('categoryId is missing in query parameters.');
+          return;
+        }
+
+        const token = localStorage.getItem('user')
+          ? JSON.parse(localStorage.getItem('user')).data.token
+          : '';
+        const itemId = this.editedItem._id;
+        this.form.patchValue({
+          item_name: this.editedItem.item_name,
+          price: this.editedItem.price,
         });
+        const updatedItem = {
+          _id: itemId,
+          menu_id: categoryId,
+          item_name: this.form.value.item_name,
+          price: this.form.value.price,
+        };
+
+        this.http.updateItems(token, itemId, updatedItem).subscribe(
+          (result) => {
+            if (result) {
+              this.toastr.success('Item Updated Successfully');
+              this.editedItem = null;
+              // this.getproduct();
+              // this.cdr.detectChanges();
+              this.modalService.dismissAll();
+            } else {
+              this.toastr.error('Failed to Update Item');
+            }
+          },
+          (error) => {
+            console.error('Error updating item:', error);
+            this.toastr.error('Failed to update item');
+          }
+        );
+      });
     }
   }
 
@@ -190,35 +270,33 @@ export class ModalComponent {
   }
 
   onSubmitEmployee(formData: any, form: NgForm): void {
+    console.log('onSubmitEmployee function called with data:', formData);
     try {
-      if (this.editedEmployee) {
-        const token = localStorage.getItem('user')
-          ? JSON.parse(localStorage.getItem('user')).data.token
-          : '';
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
 
-        this.http
-          .updateEmployee(token, this.editedEmployee.EmployeeId, formData)
-          .subscribe(
-            (result) => {
-              if (result) {
-                this.toastr.success('Employee added Successfully');
-                this.editedEmployee = null;
-                // this.modalService.dismissAll();
-                // this.loadEmployeeData();
-              } else {
-                this.toastr.error('Failed to Update Employee');
-              }
-            },
-            (error) => {
-              console.error('Error updating employee:', error);
-              this.toastr.error('Failed to Update Employee');
-            }
-          );
-      } else {
-        // this.loadEmployeeData();
-      }
+      const employeeData = {
+        emp_id: formData.emp_id,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        role: formData.role,
+      };
 
-      form.resetForm();
+      this.http.updateEmployee(token, employeeData).subscribe(
+        (response) => {
+          console.log('Employee creation successful', response);
+          // Additional logic if needed
+          this.toastr.success('Employee Created Successfully');
+          this.userAdded.emit();
+          this.modalService.dismissAll();
+        },
+        (error) => {
+          console.error('Error creating employee:', error);
+          this.toastr.error('Failed to create employee');
+        }
+      );
     } catch (error) {
       console.error('Error submitting employee:', error);
       this.toastr.error('Failed to submit employee');

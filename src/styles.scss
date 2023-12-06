@@ -77,6 +77,10 @@ a {
 .nav-link {
   color: inherit;
 }
+.nav-link:hover,
+.nav-link:focus {
+  color: $light-primmary-color;
+}
 
 .nav-link.active {
   color: $light-primmary-color !important;
@@ -130,6 +134,15 @@ ul {
   background-color: $light-white-color;
   border-color: $light-primmary-color;
   color: $light-primmary-color;
+}
+.btn-check:checked + .btn,
+:not(.btn-check) + .btn:active,
+.btn:first-child:active,
+.btn.active,
+.btn.show {
+  color: white;
+  background-color: $light-primmary-color;
+  border-color: $light-primmary-color;
 }
 
 .btn:disabled,
@@ -268,7 +281,7 @@ select option {
 }
 
 .details-panel {
-  width: 700px !important;
+  width: 50% !important;
 }
 
 @media (min-width: 1366px) {
@@ -281,4 +294,17 @@ select option {
   .nav {
     flex-direction: column;
   }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in-out {
+  animation: fadeInOut 0.5s ease-in-out;
 }

@@ -62,6 +62,7 @@ section {
     position: relative;
     bottom: 12px;
     // padding-left: 25px;
+    padding-top: 25px;
     overflow: hidden;
     transition: width 0.5s ease-in-out;
   }
@@ -81,6 +82,7 @@ section {
 
   .sidebar-open {
     width: 100%;
+    margin-left: 20px;
   }
 
   // Styling for the tabs
@@ -348,64 +350,12 @@ section {
   }
 }
 
-@media only screen and (max-width: 768px) {
-  section {
-    .container {
-      width: 100%;
-    }
+.edit-field {
+  position: absolute;
+  right: -4px;
+  top: -7px;
 
-    .tabs {
-      .menu-selection-card {
-        button {
-          width: 80px;
-          font-size: 14px;
-        }
-      }
-
-      .meal-info {
-        width: 100%;
-
-        .card-title {
-          font-size: 24px;
-        }
-      }
-    }
-
-    .today-Sidebar {
-      min-height: auto;
-      bottom: 0;
-    }
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  section {
-    .tabs {
-      .menu-selection-card {
-        button {
-          width: 60px;
-          font-size: 12px;
-        }
-      }
-
-      .meal-info {
-        .card-title {
-          font-size: 20px;
-        }
-      }
-    }
-
-    .today-Sidebar {
-      min-height: auto;
-      bottom: 0;
-
-      .inner-sidebar {
-        .inner-sidebar-header {
-          h5 {
-            font-size: 18px;
-          }
-        }
-      }
-    }
+  span {
+    cursor: pointer;
   }
 }

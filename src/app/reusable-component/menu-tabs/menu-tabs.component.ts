@@ -1,8 +1,10 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -65,13 +67,17 @@ export class MenuTabsComponent implements OnInit {
   isBreakfastDisabled: boolean = false;
   isLunchDisabled: boolean = false;
   isSnacksDisabled: boolean = false;
-
-  // @ViewChild('todayMenuSpinner') todayMenuSpinner: any;
+  @Output() itemDeleted = new EventEmitter<void>();
+  @Output() itemAdded = new EventEmitter<void>();
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
     any[]
   >([]);
   selectedMenus$ = this.selectedMenusSubject.asObservable();
+  private isCategoryDisabledSubject = new BehaviorSubject<{
+    [key: string]: boolean;
+  }>({});
+  isCategoryDisabled$ = this.isCategoryDisabledSubject.asObservable();
 
   constructor(
     private _http: AdminService,
@@ -89,30 +95,17 @@ export class MenuTabsComponent implements OnInit {
     this.filterSubMenuList();
     this.fetchSelectedMenus();
     this.loadCartItems();
-    // this.updateMenuCategoryState();
-    if (this.cartItems && this.cartItems.length > 0) {
-      this.showSidebar = true;
-    } else {
-      this.showSidebar = false;
-    }
-
     const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
     this.selectedMenus = Object.keys(storedMenus).map((menuType) => ({
       menuType,
       subMenuItems: storedMenus[menuType],
     }));
-
-    // if (this.selectedMenus && this.selectedMenus.length > 0) {
-    //   this.showSidebar = true;
-    // } else {
-    //   this.showSidebar = false;
-    // }
-
     this.menuService.selectedMenus$.subscribe((selectedMenus) => {
       this.selectedMenus = selectedMenus;
     });
     const storedCategory = localStorage.getItem('selectedCategory');
     this.selectedCategory = storedCategory || 'Breakfast';
+
     if (this.submenu && this.submenu.length > 0) {
       const initialCategory = this.submenu.find(
         (meal) =>
@@ -123,17 +116,28 @@ export class MenuTabsComponent implements OnInit {
         this.updateQueryParams();
       }
     }
+    const sidebarState = localStorage.getItem('sidebarState');
+
+    if (sidebarState === 'open') {
+      this.showSidebar = true;
+    }
+    this.itemDeleted.subscribe(() => {
+      this.filterSubMenuList();
+    });
+    this.itemAdded.subscribe(() => {
+      this.filterSubMenuList();
+    });
   }
 
   openSidebar() {
-    console.log('Opening sidebar');
     this.showSidebar = true;
+    localStorage.setItem('sidebarState', 'open');
   }
 
   closeSidebar() {
     this.showSidebar = false;
+    localStorage.setItem('sidebarState', 'closed');
   }
-
   getTotalBalance(): number {
     let totalBalance = 0;
     if (this.cartItems) {
@@ -178,18 +182,18 @@ export class MenuTabsComponent implements OnInit {
     });
   }
 
-  // private updateMenuCategoryState() {
-  //   const isCartItemsEmpty = !this.cartItems || this.cartItems.length === 0;
+  private updateMenuCategoryState() {
+    const isCartItemsEmpty =
+      !this.selectedMenus || this.selectedMenus.length === 0;
 
-  //   const disabledState = {
-  //     Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
-  //     Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
-  //     Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
-  //   };
+    const disabledState = {
+      Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
+      Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
+      Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
+    };
 
-  //   this.isCategoryDisabledSubject.next(disabledState);
-  // }
-
+    this.isCategoryDisabledSubject.next(disabledState);
+  }
   getTotalPrice(): number {
     let totalPrice = 0;
     if (this.cartItems) {
@@ -210,18 +214,8 @@ export class MenuTabsComponent implements OnInit {
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
     this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
-    // this.updateMenuCategoryState();
+    this.updateMenuCategoryState();
     this.updateQueryParams();
-  }
-
-  openAddItemModal(event: Event): void {
-    const modalRef = this.modalService.open(ModalComponent, {
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      windowClass: 'custom-modal',
-    });
-    modalRef.componentInstance.modalType = 'addItem-modal';
   }
 
   filterSubMenuList() {
@@ -261,14 +255,19 @@ export class MenuTabsComponent implements OnInit {
       subMenuItems.forEach((subMenuItem) => {
         const { id, menuName, itemName } = subMenuItem;
 
-        if (!storedMenus[menuType].some((item) => item.id === id)) {
+        const itemExists = storedMenus[menuType].some((item) => item.id === id);
+
+        if (itemExists) {
+          this.toastr.error(`${itemName} is already existed in the menu.`);
+        } else {
           storedMenus[menuType].push({ id, menuName, itemName });
         }
       });
 
       localStorage.setItem('selectedMenus', JSON.stringify(storedMenus));
-      this.menuService.updateSelectedMenus(this.selectedMenus);
+      this.menuService.updateSelectedMenus(storedMenus);
       this.fetchSelectedMenus();
+      this.updateMenuCategoryState();
       console.log('Menu added to localStorage:', storedMenus);
     } catch (error) {
       console.error(error);
@@ -522,5 +521,37 @@ export class MenuTabsComponent implements OnInit {
     });
 
     modalRef.componentInstance.modalType = 'custom-order';
+  }
+
+  openEditModal(item: any): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'addItem-modal',
+    });
+
+    // Pass the item data to the modal for editing
+    modalRef.componentInstance.modalType = 'addItem-modal';
+    modalRef.componentInstance.editedItem = item;
+    modalRef.componentInstance.itemDeleted.subscribe(() => {
+      this.itemDeleted.emit();
+    });
+  }
+  openAddItemModal(event: Event): void {
+    const modalRef = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'addItem-modal',
+    });
+    modalRef.componentInstance.modalType = 'addItem-modal';
+    modalRef.componentInstance.itemAdded.subscribe(() => {
+      this.itemAdded.emit();
+    });
+  }
+
+  isAllButtonsDisabled(): boolean {
+    return this.selectedMenus.length === 0;
   }
 }

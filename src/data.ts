@@ -65,15 +65,17 @@ export interface detailsCount {
   total_users: number;
 }
 
-// menu-item.interface.ts
-
-// menu-item.interface.ts
-
-// menu-item.interface.ts
-
 export interface MenuItem {
   id: string;
   menuName: string;
   // menu_id: string;
   subMenuItems: { id: string; menuName: string; itemName: string }[];
+}
+
+export interface UserData {
+  emp_id: number;
+  first_name: string;
+  last_name: string;
+  role: string;
+  email: string;
 }

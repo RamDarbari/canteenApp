@@ -3,6 +3,8 @@ import {
   OnInit,
   ChangeDetectorRef,
   TemplateRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -46,6 +48,7 @@ export class UserListComponent implements OnInit {
   limit: number = this.pageSize;
   isLoading: boolean = false;
   private searchNameSubject = new Subject<string>();
+  @Output() userAdded = new EventEmitter<void>();
 
   constructor(
     private http: AdminService,
@@ -59,6 +62,10 @@ export class UserListComponent implements OnInit {
       this.loadUserData();
     });
     this.loadUserData();
+
+    this.userAdded.subscribe(() => {
+      this.loadUserData();
+    });
   }
 
   searchDebounced() {
@@ -91,6 +98,7 @@ export class UserListComponent implements OnInit {
             this.loadUserData();
             this.selectedEmployee = null;
             this.offcanvasService.dismiss();
+            this.toastr.success('Balance Updated Successfully');
           },
           (error) => {
             console.error('Error updating user', error);
@@ -143,9 +151,13 @@ export class UserListComponent implements OnInit {
   }
 
   openEnd(content: TemplateRef<any>, employee: Employee) {
-    this.selectedEmployee = { ...employee, wallet: '' }; // Initialize wallet to 0
-    this.offcanvasService.open(content, { position: 'end' });
+    this.selectedEmployee = { ...employee, wallet: '' };
+    this.offcanvasService.open(content, {
+      position: 'end',
+      panelClass: 'details-panel',
+    });
   }
+
   openCustomOrderModal(event: Event): void {
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',
@@ -155,5 +167,8 @@ export class UserListComponent implements OnInit {
     });
 
     modalRef.componentInstance.modalType = 'add-user';
+    modalRef.componentInstance.userAdded.subscribe(() => {
+      this.userAdded.emit();
+    });
   }
 }

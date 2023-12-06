@@ -4,13 +4,12 @@
       <div class="col-12">
         <div class="card ">
           <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
-            <button (click)="openCustomOrderModal($event)">
-              <span class="material-symbols-rounded">
-                add
-              </span>
+            <button (click)="openCustomOrderModal($event)" class="btn btn-outline-primary">
+              Add User
             </button>
             <div class="searchBar">
-              <input type="text" placeholder="Search users..." [(ngModel)]="searchName" (keydown)="searchDebounced()">
+              <input type="text" class="bg-transparent" placeholder="Search users..." [(ngModel)]="searchName"
+                (keydown)="searchDebounced()">
               <label for="search-icon"><i class="fa fa-search" aria-hidden="true"></i></label>
             </div>
           </div>
@@ -74,47 +73,47 @@
       </div>
     </div>
   </div>
+  <div class="sidebar">
+    <ng-template #content let-offcanvas>
+      <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Employee Details</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+      </div>
+      <div class="offcanvas-body">
+        <form>
+          <div class="mb-3">
+            <label for="employeeId" class="form-label">Employee Id:</label>
+            <input type="text" class="form-control" id="employeeId" [(ngModel)]="selectedEmployee.EmployeeId" disabled
+              name="employeeId">
+          </div>
+          <div class="mb-3">
+            <label for="firstName" class="form-label">First Name:</label>
+            <input type="text" class="form-control" id="firstName" [(ngModel)]="selectedEmployee.FirstName" disabled
+              name="firstName">
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" [(ngModel)]="selectedEmployee.LastName" disabled
+              name="lastName">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="text" class="form-control" id="email" [(ngModel)]="selectedEmployee.email" disabled
+              name="email">
+          </div>
+          <div class="mb-3">
+            <label for="balance" class="form-label">Balance:</label>
+            <input type="text" class="form-control" id="balance" [(ngModel)]="selectedEmployee.balance" disabled
+              name="balance">
+          </div>
+          <div class="mb-3">
+            <label for="wallet" class="form-label">Wallet:</label>
+            <input type="text" class="form-control" id="wallet" [(ngModel)]="selectedEmployee.wallet" name="wallet">
+          </div>
+          <button type="button" class="btn btn-outline-primary" (click)="updateEmployee()"
+            *ngIf="selectedEmployee">Update</button>
+        </form>
+      </div>
+    </ng-template>
+  </div>
 </section>
-
-<div class="sidebar">
-  <ng-template #content let-offcanvas>
-    <div class="offcanvas-header">
-      <h4 class="offcanvas-title">Employee Details</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
-    </div>
-    <div class="offcanvas-body">
-      <form>
-        <div class="mb-3">
-          <label for="employeeId" class="form-label">Employee Id:</label>
-          <input type="text" class="form-control" id="employeeId" [(ngModel)]="selectedEmployee.EmployeeId" disabled
-            name="employeeId">
-        </div>
-        <div class="mb-3">
-          <label for="firstName" class="form-label">First Name:</label>
-          <input type="text" class="form-control" id="firstName" [(ngModel)]="selectedEmployee.FirstName" disabled
-            name="firstName">
-        </div>
-        <div class="mb-3">
-          <label for="lastName" class="form-label">Last Name:</label>
-          <input type="text" class="form-control" id="lastName" [(ngModel)]="selectedEmployee.LastName" disabled
-            name="lastName">
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email:</label>
-          <input type="text" class="form-control" id="email" [(ngModel)]="selectedEmployee.email" disabled name="email">
-        </div>
-        <div class="mb-3">
-          <label for="balance" class="form-label">Balance:</label>
-          <input type="text" class="form-control" id="balance" [(ngModel)]="selectedEmployee.balance" disabled
-            name="balance">
-        </div>
-        <div class="mb-3">
-          <label for="wallet" class="form-label">Wallet:</label>
-          <input type="text" class="form-control" id="wallet" [(ngModel)]="selectedEmployee.wallet" name="wallet">
-        </div>
-        <button type="button" class="btn btn-outline-primary" (click)="updateEmployee()"
-          *ngIf="selectedEmployee">Update</button>
-      </form>
-    </div>
-  </ng-template>
-</div>

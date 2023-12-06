@@ -19,7 +19,7 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'menu-catalogue', pathMatch: 'full' },
           // { path: 'menulist', component: MenuListComponent },
-          { path: 'menu-catalogue', component: MenuCatalogueComponent },
+          // { path: 'menu-catalogue', component: MenuCatalogueComponent },
           // { path: 'addProduct', component: AddProductComponent },
         ],
       },

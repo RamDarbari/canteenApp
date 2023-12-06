@@ -34,7 +34,7 @@ export class SidebarMenuService {
     {
       route_name: 'menu',
       route_icon_name: 'restaurant_menu',
-      route_loc: '/menu',
+      route_loc: '/admin/menu-catalogue',
       route_icon_class: 'material-symbols-rounded',
     },
   ];

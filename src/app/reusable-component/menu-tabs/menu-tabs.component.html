@@ -1,6 +1,17 @@
 <section class="d-flex" *ngIf="todaymenu">
   <app-loader class="today-menu-loader" *ngIf="isLoading"></app-loader>
-  <div class="container" [ngClass]="{'full-width': !showSidebar}">
+  <div class="container" [ngClass]="{'full-width': showSidebar}">
+    <div class="d-flex justify-content-between align-items-center mb-sm-4">
+      <div class="mt-sm-4 d-flex flex-wrap align-items-center">
+        <div>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a>Today's Menu</a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
@@ -8,19 +19,19 @@
             <div class="menu-selection-card d-flex justify-content-start pt-3 ">
               <div class="breakfast">
                 <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
-                  (click)="updateSelectedCategory('Breakfast')">
+                  [disabled]="(isCategoryDisabled$ | async)['Breakfast']" (click)="updateSelectedCategory('Breakfast')">
                   Breakfast
                 </button>
               </div>
               <div class="lunch">
                 <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
-                  (click)="updateSelectedCategory('Lunch')">
+                  [disabled]="(isCategoryDisabled$ | async)['Lunch']" (click)="updateSelectedCategory('Lunch')">
                   Lunch
                 </button>
               </div>
               <div class="snacks">
                 <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
-                  (click)="updateSelectedCategory('Snacks')">
+                  [disabled]="(isCategoryDisabled$ | async)['Snacks']" (click)="updateSelectedCategory('Snacks')">
                   Snacks
                 </button>
               </div>
@@ -55,6 +66,11 @@
                         <div class="card-items" *ngFor="let item of meal.items">
                           <div class="card border-0 shadow h-100"
                             (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }]); openSidebar()">
+                            <div class="edit-field" (click)="openEditModal(item); $event.stopPropagation();">
+                              <span class="material-symbols-rounded">
+                                edit
+                              </span>
+                            </div>
                             <div
                               class="card-body inner-body d-flex justify-content-center align-items-center text-center">
                               <div>
@@ -78,48 +94,52 @@
       </div>
     </div>
   </div>
-  <div class="today-Sidebar" [ngClass]="{'sidebar-open': showSidebar}">
-    <div class="sidebar">
-      <div class="inner-sidebar">
-        <div class="inner-sidebar-header d-flex align-items-center">
-          <h5 id="offcanvasRightLabel">Selected Menus</h5>
-        </div>
-        <div class="inner-sidebar-body">
-          <div *ngIf="selectedMenus && selectedMenus.length > 0">
-            <div *ngFor="let menu of selectedMenus">
-              <ul>
-                <li *ngFor="let subMenuItem of menu.subMenuItems; let i = index">
-                  <span>
-                    {{ subMenuItem.menuName }}
-                  </span>
-                  <span>
-                    {{ subMenuItem.itemName }}
-                  </span>
-                  <span class="delete-items">
-                    <i (click)="deleteItem(menu.menuType, i)" class="fa fa-trash" aria-hidden="true"></i>
-                  </span>
-                </li>
-              </ul>
+  <div class="today-Sidebar" [ngClass]="{'sidebar-open': showSidebar}" *ngIf="selectedMenus.length > 0">
+    <div class="container">
+      <div class="row">
+        <div class="sidebar">
+          <div class="inner-sidebar">
+            <div class="inner-sidebar-header d-flex align-items-center">
+              <h5 id="offcanvasRightLabel">Selected Menus</h5>
             </div>
-          </div>
-          <!-- <div *ngIf="!selectedMenus || selectedMenus.length === 0">
-            <p>Please Select Any Item To Add In Today Menu</p>
-          </div> -->
-          <div>
-            <button (click)="todayMenu()" class="btn btn-outline-primary">
-              confirm
-            </button>
+            <div class="inner-sidebar-body">
+              <div *ngIf="selectedMenus">
+                <div *ngFor=" let menu of selectedMenus">
+                  <ul>
+                    <li *ngFor="let subMenuItem of menu.subMenuItems; let i = index">
+                      <span>
+                        {{ subMenuItem.menuName }}
+                      </span>
+                      <span>
+                        {{ subMenuItem.itemName }}
+                      </span>
+                      <span class="delete-items">
+                        <i (click)="deleteItem(menu.menuType, i)" class="fa fa-trash" aria-hidden="true"></i>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <button (click)="todayMenu()" class="btn btn-outline-primary">
+                    confirm
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
   <ng-content select=".todaymenu"></ng-content>
 </section>
 
 <section class="d-flex" *ngIf="custommenu">
   <app-loader *ngIf="isLoading"></app-loader>
-  <div class="container" [ngClass]="{'full-width': !showSidebar}">
+  <div class="container" [ngClass]="{'full-width': showSidebar}">
     <div class="d-flex justify-content-between align-items-center mb-sm-4">
       <div class="mt-sm-4 d-flex flex-wrap align-items-center">
         <div>
@@ -213,7 +233,7 @@
       </div>
     </div>
   </div>
-  <div class="custom-Sidebar" [ngClass]="{'sidebar-open': showSidebar}">
+  <div class="custom-Sidebar" [ngClass]="{'sidebar-open': showSidebar}" *ngIf="cartItems.length > 0">
     <div class="container">
       <div class="row">
         <div class="sidebar">
@@ -245,11 +265,11 @@
                 </div>
               </div>
               <div class="text-end d-flex">
-                <input class="p-2" type="text" placeholder="Enter Employee Id" [(ngModel)]="empId">
-                <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
+                <input class="p-2 w-50" type="text" placeholder="Enter Employee Id" [(ngModel)]="empId">
+                <button (click)="confirmOrder()" class="confirm-button w-50" [disabled]="!hasCartItems">
                   Confirm Order
                 </button>
-                <div ngbDropdown class="d-inline-block">
+                <!-- <div ngbDropdown class="d-inline-block">
                   <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
                     Bill Status: {{ selectedBillStatus }}
                   </button>
@@ -257,7 +277,7 @@
                     <button (click)="setBillStatus('paid')" ngbDropdownItem>Paid</button>
                     <button (click)="setBillStatus('unpaid')" ngbDropdownItem>Unpaid</button>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

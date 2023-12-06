@@ -66,6 +66,8 @@ header {
           font-weight: 600;
           line-height: 27px;
           outline: #9122e8;
+          display: flex;
+          align-items: center;
         }
         button {
           width: 140px;
@@ -272,20 +274,24 @@ header {
 
 .empty-cart-message {
   padding: 20px;
-  background-color: #f8d7da; /* Light red background color, you can adjust as needed */
-  border: 1px solid #f5c6cb; /* Border color */
-  border-radius: 5px; /* Border radius for rounded corners */
-  margin: 10px; /* Margin to create space around the message */
-  color: #721c24; /* Text color */
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin: 10px;
+  color: #721c24;
 }
 
 .empty-cart-message p {
-  margin: 0; /* Remove default margin for the paragraph */
-  font-size: 16px; /* Adjust font size as needed */
+  margin: 0;
+  font-size: 16px;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.custom-dropdown::after {
+  display: none; /* Hide the arrow */
 }

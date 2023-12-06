@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError, throwError } from 'rxjs';
-import { OrderDataItem } from 'src/data';
+import { OrderDataItem, UserData } from 'src/data';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,8 +20,8 @@ export class AdminService {
 
   addminMenuList(token: string, menuId?: string): Observable<any> {
     const apiUrl = menuId
-      ? `http://10.8.11.160:5000/admin/listSubMenu?menu_id=${menuId}`
-      : 'http://10.8.11.160:5000/admin/listSubMenu';
+      ? `${this.apiUrl}/admin/listSubMenu?menu_id=${menuId}`
+      : `${this.apiUrl}/admin/listSubMenu`;
 
     // Create the headers object and set the Authorization header
     const headers = new HttpHeaders({
@@ -51,18 +51,11 @@ export class AdminService {
   }
 
   updateItems(token: string, id: string, updatedData: any) {
-    return this._http
-      .put(`${this.apiUrl}/admin/updateSubmenu`, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .pipe(
-        catchError((error) => {
-          this.toastr.error('Error during updating items');
-          return throwError(error);
-        })
-      );
+    return this._http.put(`${this.apiUrl}/admin/updateSubmenu`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   userList(token: any, currentPage: number, limit: number, search: string) {
@@ -155,19 +148,11 @@ export class AdminService {
     );
   }
 
-  updateEmployee(
-    token: string,
-    emp_id: number,
-    updatedEmployee: any
-  ): Observable<any> {
-    return this._http.put(
-      `${this.apiUrl}/admin/updateEmployee/${emp_id}`,
-      updatedEmployee,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  updateEmployee(token: string, employeeData: UserData) {
+    return this._http.post(`${this.apiUrl}/admin/createUser`, employeeData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }

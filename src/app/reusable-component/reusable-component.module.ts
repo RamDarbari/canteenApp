@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ClipboardModule } from 'ngx-clipboard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ClipboardModule } from 'ngx-clipboard';
     RouterModule,
     NgbModule,
     ReactiveFormsModule,
+    // BrowserAnimationsModule,
     FormsModule,
     // AdminDashboardModule,
     ScrollToModule.forRoot(),

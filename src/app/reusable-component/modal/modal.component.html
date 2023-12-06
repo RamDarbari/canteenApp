@@ -67,9 +67,7 @@
                   [ngModel]="editedItem ? editedItem.item_name : ''"
                   (ngModelChange)="editedItem ? editedItem.item_name = $event : null" required minlength="3"
                   placeholder="Product Name">
-                <div *ngIf="addProduct.controls['item_name'].errors?.['minlength']" class="text-danger">
-                  Product Name must be at least 3 characters long.
-                </div>
+
               </div>
             </div>
             <div class="col-md-12">
@@ -77,16 +75,16 @@
                 <input type="number" id="price" name="price" class="form-control"
                   [ngModel]="editedItem ? editedItem.price : ''"
                   (ngModelChange)="editedItem ? editedItem.price = $event : null" required min="1" placeholder="Price">
-                <div *ngIf="addProduct.controls['price'].errors?.['min']" class="text-danger">
-                  Price must be a positive number.
-                </div>
+
               </div>
             </div>
           </div>
-          <div class="text-center">
+          <div class="text-center d-flex justify-content-between">
             <button type="submit" class="btn btn-outline-primary" [disabled]="!addProduct.valid">
               {{ editedItem ? 'Update Product' : 'Add Product' }}
             </button>
+            <button type="button" class="button-danger" *ngIf="editedItem"
+              (click)="onDelete(editedItem._id)">Delete</button>
           </div>
         </form>
       </div>
@@ -155,25 +153,25 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <input type="text" id="employeeId" name="employeeId" class="form-control"
-                  [ngModel]="editedEmployee ? editedEmployee.EmployeeId : ''"
-                  (ngModelChange)="editedEmployee ? editedEmployee.EmployeeId = $event : null" required minlength="3"
+                <input type="number" id="emp_id" name="emp_id" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.emp_id : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.emp_id = $event : null" required minlength="3"
                   placeholder="EmployeeId">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <input type="text" id="FirstName" name="FirstName" class="form-control"
-                  [ngModel]="editedEmployee ? editedEmployee.FirstName : ''"
-                  (ngModelChange)="editedEmployee ? editedEmployee.FirstName = $event : null" required minlength="3"
+                <input type="text" id="first_name" name="first_name" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.first_name : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.first_name = $event : null" required minlength="3"
                   placeholder="First Name">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <input type="text" id="LastName" name="LastName" class="form-control"
-                  [ngModel]="editedEmployee ? editedEmployee.LastName : ''"
-                  (ngModelChange)="editedEmployee ? editedEmployee.LastName = $event : null" required minlength="3"
+                <input type="text" id="last_name" name="last_name" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.last_name : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.last_name = $event : null" required minlength="3"
                   placeholder="Last Name">
               </div>
             </div>
@@ -187,12 +185,10 @@
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <input type="number" id="Balance" name="Balance" class="form-control" [ngModel]="0" disabled>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <input type="number" id="Wallet" name="Wallet" class="form-control" [ngModel]="0" disabled>
+                <input type="text" id="role" name="role" class="form-control"
+                  [ngModel]="editedEmployee ? editedEmployee.role : ''"
+                  (ngModelChange)="editedEmployee ? editedEmployee.role = $event : null" required minlength="3"
+                  placeholder="Role">
               </div>
             </div>
           </div>
@@ -201,7 +197,7 @@
               {{ editedItem ? 'Update Product' : 'Add Product' }}
             </button> -->
             <button (click)="onSubmitEmployee(addUserForm.value, addUserForm)" class="btn btn-outline-primary">
-              add user
+              Add User
             </button>
           </div>
         </form>

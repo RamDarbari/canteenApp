@@ -91,7 +91,7 @@ export class TableComponent implements OnInit {
     this.pendingOrderList();
     this.refreshInterval = setInterval(() => {
       this.pendingOrderList();
-    }, 50 * 1000);
+    }, 10 * 1000);
   }
 
   ngOnDestroy(): void {
@@ -142,7 +142,7 @@ export class TableComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
 
-      console.log(token, 'jkjjjjjjj');
+      // console.log(token, 'jkjjjjjjj');
 
       this.http.orderList(token).subscribe((response: any) => {
         console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');

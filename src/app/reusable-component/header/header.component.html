@@ -19,28 +19,28 @@
             </button>
           </div>
           <div class="login d-flex justify-content-end">
-            <div class="dropdown" *ngIf="hasToken">
+            <div class="dropdown custom-dropdown" *ngIf="hasToken">
               <button class="btn btn-secondary rounded-pill btn btn-primary rounded-pill dropdown-toggle profile-button"
                 type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <span>
-                  {{userProfileDetails.FirstName}}
+                <span class="material-symbols-rounded">
+                  person
                 </span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                  <a class="dropdown-item "><span>
+                      {{userProfileDetails.FirstName}} {{userProfileDetails.LastName}}
+                    </span></a>
+                </li>
+                <li>
+                  <a class="dropdown-item disabled-link">Pending Balance: {{ userProfileInfo?.balance | currency:'INR'
+                    }}</a>
+                </li>
                 <li *ngIf="isAdmin">
                   <a class="dropdown-item" [routerLink]="['/admin/dashboard']"
                     routerLinkActive="router-link-active">Admin
                     Panel</a>
                 </li>
-                <!-- <li>
-                    <a class="dropdown-item disabled-link">Wallet Balance:{{wallet | currency:'INR' }}</a>
-                  </li> -->
-                <li>
-                  <a class="dropdown-item disabled-link">Pending Balance: {{ userProfileInfo?.balance | currency:'INR'
-                    }}</a>
-                </li>
-
-
                 <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
               </ul>
             </div>
