@@ -135,6 +135,7 @@ export class HeaderComponent implements OnInit {
         totalPrice += item.price;
       });
     }
+
     return totalPrice;
   }
 
