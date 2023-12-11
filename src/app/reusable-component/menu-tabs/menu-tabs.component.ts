@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  NgZone,
   OnInit,
   Output,
   ViewChild,
@@ -62,13 +63,13 @@ export class MenuTabsComponent implements OnInit {
   @Input() custommenu: boolean = false;
   empId: string = '';
   selectedCategoryId: string = '';
-  // customMenu: boolean = true;
   showSidebar: boolean = false;
   isBreakfastDisabled: boolean = false;
   isLunchDisabled: boolean = false;
   isSnacksDisabled: boolean = false;
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
+  displayedColumns: string[] = ['item_name', 'price', 'quantity'];
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
     any[]
@@ -88,7 +89,8 @@ export class MenuTabsComponent implements OnInit {
     private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -96,28 +98,11 @@ export class MenuTabsComponent implements OnInit {
     this.fetchSelectedMenus();
     this.loadCartItems();
     const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
-    this.selectedMenus = Object.keys(storedMenus).map((menuType) => ({
-      menuType,
-      subMenuItems: storedMenus[menuType],
-    }));
-    this.menuService.selectedMenus$.subscribe((selectedMenus) => {
-      this.selectedMenus = selectedMenus;
-    });
+    this.selectedMenus = storedMenus;
+
     const storedCategory = localStorage.getItem('selectedCategory');
     this.selectedCategory = storedCategory || 'Breakfast';
-
-    if (this.submenu && this.submenu.length > 0) {
-      const initialCategory = this.submenu.find(
-        (meal) =>
-          meal.title.toLowerCase() === this.selectedCategory.toLowerCase()
-      );
-      if (initialCategory) {
-        this.selectedCategoryId = initialCategory._id;
-        this.updateQueryParams();
-      }
-    }
     const sidebarState = localStorage.getItem('sidebarState');
-
     if (sidebarState === 'open') {
       this.showSidebar = true;
     }
@@ -126,6 +111,11 @@ export class MenuTabsComponent implements OnInit {
     });
     this.itemAdded.subscribe(() => {
       this.filterSubMenuList();
+    });
+    this.updateMenuCategoryState();
+    this.cartService.cartItems$.subscribe((cartItems) => {
+      this.cartItems = cartItems;
+      // Add any additional logic to update the sidebar UI
     });
   }
 
@@ -160,7 +150,7 @@ export class MenuTabsComponent implements OnInit {
 
   private loadCartItems(): void {
     this.cartItems = this.cartService.getCartItems();
-    this.selectedMenus = this.cartItems; // Update selectedMenus as well
+    this.selectedMenus = this.cartItems;
   }
 
   private saveBillStatus(status: string): void {
@@ -177,14 +167,13 @@ export class MenuTabsComponent implements OnInit {
   private updateQueryParams() {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { categoryId: this.selectedCategoryId },
+      queryParams: {}, // Clear the queryParams object to avoid storing category ID
       queryParamsHandling: 'merge',
     });
   }
 
   private updateMenuCategoryState() {
-    const isCartItemsEmpty =
-      !this.selectedMenus || this.selectedMenus.length === 0;
+    const isCartItemsEmpty = Object.keys(this.selectedMenus).length === 0;
 
     const disabledState = {
       Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
@@ -194,6 +183,7 @@ export class MenuTabsComponent implements OnInit {
 
     this.isCategoryDisabledSubject.next(disabledState);
   }
+
   getTotalPrice(): number {
     let totalPrice = 0;
     if (this.cartItems) {
@@ -255,16 +245,28 @@ export class MenuTabsComponent implements OnInit {
       subMenuItems.forEach((subMenuItem) => {
         const { id, menuName, itemName } = subMenuItem;
 
-        const itemExists = storedMenus[menuType].some((item) => item.id === id);
+        const itemExistsInSelectedMenus = this.selectedMenus.some((menu) =>
+          menu.subMenuItems.some((item) => item.id === id)
+        );
 
-        if (itemExists) {
-          this.toastr.error(`${itemName} is already existed in the menu.`);
+        if (itemExistsInSelectedMenus) {
+          this.toastr.error(`${itemName} is already in the selected menus.`);
         } else {
-          storedMenus[menuType].push({ id, menuName, itemName });
+          const itemExistsInStoredMenus = storedMenus[menuType].some(
+            (item) => item.id === id
+          );
+
+          if (itemExistsInStoredMenus) {
+            this.toastr.warning(`${itemName} is already existed in the menu.`);
+          } else {
+            storedMenus[menuType].push({ id, menuName, itemName });
+            this.toastr.success(`${itemName} added to the menu successfully!`);
+          }
         }
       });
 
       localStorage.setItem('selectedMenus', JSON.stringify(storedMenus));
+      this.selectedMenus = storedMenus;
       this.menuService.updateSelectedMenus(storedMenus);
       this.fetchSelectedMenus();
       this.updateMenuCategoryState();
@@ -508,8 +510,14 @@ export class MenuTabsComponent implements OnInit {
     existingItems.push(cartItem);
     this.cartItems = existingItems;
     this.saveCartItems();
+    this.cartService.updateCartItems(existingItems);
     this.toastr.success('Item added to cart successfully!');
-    // this.updateMenuCategoryState();
+
+    // Run inside NgZone to trigger change detection
+    this.ngZone.run(() => {
+      // Optionally, you can call detectChanges here, but it might not be necessary
+      // this.cdr.detectChanges();
+    });
   }
 
   openCustomOrderModal(event: Event): void {
@@ -545,13 +553,27 @@ export class MenuTabsComponent implements OnInit {
       size: 'lg',
       windowClass: 'addItem-modal',
     });
+
     modalRef.componentInstance.modalType = 'addItem-modal';
-    modalRef.componentInstance.itemAdded.subscribe(() => {
-      this.itemAdded.emit();
+    modalRef.componentInstance.itemAdded.subscribe((addedItem) => {
+      if (this.isItemInCart(addedItem)) {
+        this.toastr.error('Item with the same name is already in the cart.');
+      } else {
+        this.cartItems.push(addedItem);
+        this.saveCartItems();
+        this.toastr.success('Item added to cart successfully!');
+        this.itemAdded.emit();
+      }
     });
   }
 
+  isItemInCart(item: any): boolean {
+    return this.cartItems.some(
+      (cartItem) => cartItem.item_name === item.item_name
+    );
+  }
+
   isAllButtonsDisabled(): boolean {
-    return this.selectedMenus.length === 0;
+    return Object.keys(this.selectedMenus).length > 0;
   }
 }

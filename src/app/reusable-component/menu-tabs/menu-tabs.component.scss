@@ -1,3 +1,4 @@
+@import "../../../theme_var.scss";
 section {
   // General styling for headings and paragraphs
   h1,
@@ -78,6 +79,7 @@ section {
     padding-top: 25px;
     overflow: hidden;
     transition: width 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar-open {
@@ -85,10 +87,11 @@ section {
     margin-left: 20px;
   }
 
-  // Styling for the tabs
   .tabs {
     background-color: #fff;
     position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Add this line for box shadow
+
     .menu-selection-card {
       margin-left: 20px;
       width: 90%;
@@ -286,14 +289,14 @@ section {
       margin-bottom: 10px;
 
       p {
-        margin: 0 auto;
+        // margin: 0 auto;
         font-family: Poppins;
         font-size: 15px;
         font-weight: 400;
       }
 
       button {
-        background: transparent;
+        // background: transparent;
         border: 1px;
 
         i {
@@ -305,7 +308,7 @@ section {
 
       .item-name-info {
         margin-left: 25px;
-        width: 100px;
+        width: 70px;
       }
 
       .quantity-button {
@@ -357,5 +360,45 @@ section {
 
   span {
     cursor: pointer;
+    font-size: 19px;
+  }
+}
+
+.item-head {
+  p {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    margin: 1px;
+  }
+}
+
+.quantity-button {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  background-color: $light-primmary-color;
+  color: #fff;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  &:hover {
+    background-color: $light-secondary-color;
+  }
+}
+
+.quantity-input {
+  width: 40px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  &:disabled {
+    background-color: #eee;
   }
 }

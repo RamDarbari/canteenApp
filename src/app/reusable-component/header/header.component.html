@@ -25,13 +25,16 @@
                 <span class="material-symbols-rounded">
                   person
                 </span>
+                <span>
+                  {{userProfileDetails.FirstName}}
+                </span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li>
+                <!-- <li>
                   <a class="dropdown-item "><span>
                       {{userProfileDetails.FirstName}} {{userProfileDetails.LastName}}
                     </span></a>
-                </li>
+                </li> -->
                 <li>
                   <a class="dropdown-item disabled-link">Pending Balance: {{ userProfileInfo?.balance | currency:'INR'
                     }}</a>

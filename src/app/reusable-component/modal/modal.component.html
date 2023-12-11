@@ -67,7 +67,6 @@
                   [ngModel]="editedItem ? editedItem.item_name : ''"
                   (ngModelChange)="editedItem ? editedItem.item_name = $event : null" required minlength="3"
                   placeholder="Product Name">
-
               </div>
             </div>
             <div class="col-md-12">
@@ -75,7 +74,16 @@
                 <input type="number" id="price" name="price" class="form-control"
                   [ngModel]="editedItem ? editedItem.price : ''"
                   (ngModelChange)="editedItem ? editedItem.price = $event : null" required min="1" placeholder="Price">
-
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <!-- <label for="menuTitle">Menu Title</label> -->
+                <select id="menuTitle" name="menuTitle" class="form-control" [(ngModel)]="selectedMenuTitle"
+                  (change)="onMenuTitleChange()" aria-label="Default select example">
+                  <option value="1" selected disabled>Select Menu Title</option>
+                  <option *ngFor="let menu of menuItems" [value]="menu._id">{{ menu.title }}</option>
+                </select>
               </div>
             </div>
           </div>

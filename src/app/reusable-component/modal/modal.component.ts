@@ -1,11 +1,19 @@
 import { UserData } from './../../../data';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
+import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { login } from 'src/data';
 
@@ -15,6 +23,7 @@ interface MenuItem {
   item_name: string;
   price: number;
   quantity: number;
+  title: string;
 }
 
 @Component({
@@ -34,6 +43,7 @@ export class ModalComponent implements OnInit {
   @Output() userAdded = new EventEmitter<void>();
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
+  selectedMenuTitle: string | null = null;
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
   editedEmployee: UserData | null = null;
@@ -46,24 +56,24 @@ export class ModalComponent implements OnInit {
     private router: Router,
     private http: AdminService,
     private route: ActivatedRoute,
-    private fb: FormBuilder // private toastr: ToastrService
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private cartService: CartService
   ) {
     this.form = this.fb.group({
       item_name: ['', Validators.required],
       price: [0, Validators.required],
-      // Add other form controls as needed
     });
   }
 
   ngOnInit(): void {
-    // If editing, populate the form with the existing data
     if (this.modalType === 'addItem-modal' && this.editedItem) {
       this.form.patchValue({
         item_name: this.editedItem.item_name,
         price: this.editedItem.price,
-        // Add other fields as needed
       });
     }
+    this.menuList();
   }
 
   sendOTP() {
@@ -127,39 +137,73 @@ export class ModalComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  onSubmit(data: any, addProduct: NgForm) {
+  onMenuTitleChange() {
+    const selectedMenu = this.menuItems.find(
+      (menu) => menu._id === this.selectedMenuTitle
+    );
+
+    if (selectedMenu) {
+      this.form.patchValue({
+        item_name: selectedMenu.item_name,
+        price: selectedMenu.price,
+      });
+
+      this.cdr.detectChanges();
+    }
+  }
+
+  menuList() {
     try {
-      this.route.queryParams.subscribe((params) => {
-        const categoryId = params['categoryId'];
-        if (!categoryId) {
-          console.error('categoryId is missing in query parameters.');
-          return;
-        }
-
-        const token = localStorage.getItem('user')
-          ? JSON.parse(localStorage.getItem('user')).data.token
-          : '';
-
-        data.menu_id = categoryId;
-
-        if (this.editedItem) {
-          this.editedItem.item_name = data.item_name;
-          this.editedItem.price = data.price;
-          this.saveEditedItem();
-          this.modalService.dismissAll();
-        } else {
-          this.http.addItem(data, token).subscribe((result) => {
-            if (result) {
-              this.toastr.success('Item Added Successfully');
-              this.menuItems.push(data);
-              this.modalService.dismissAll();
-              this.itemAdded.emit();
-            } else {
-              this.toastr.error('Failed to Add Item');
-            }
-          });
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http.listmenu(token).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.menuItems = response.data;
+          console.log(this.menuItems, 'vvvvvhvhvhvvhvhvhvhvhvhvh');
         }
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  onSubmit(data: any, addProduct: NgForm) {
+    try {
+      // Remove the query param check and use the selected menu directly
+      const selectedMenu = this.menuItems.find(
+        (menu) => menu._id === this.selectedMenuTitle
+      );
+
+      if (!selectedMenu) {
+        console.error('Select The Menu');
+        this.toastr.error('Select The Menu');
+        return;
+      }
+
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+
+      data.menu_id = selectedMenu._id;
+
+      if (this.editedItem) {
+        this.editedItem.item_name = data.item_name;
+        this.editedItem.price = data.price;
+        this.saveEditedItem();
+      } else {
+        this.http.addItem(data, token).subscribe((result) => {
+          if (result) {
+            this.toastr.success('Item Added Successfully');
+            this.menuItems.push(data);
+            this.modalService.dismissAll();
+            this.itemAdded.emit();
+          } else {
+            this.toastr.error('Failed to Add Item');
+          }
+        });
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       this.toastr.error('Failed to submit form');
@@ -168,33 +212,35 @@ export class ModalComponent implements OnInit {
 
   onDelete(itemId: string) {
     try {
-      this.route.queryParams.subscribe((params) => {
-        const categoryId = params['categoryId'];
-        if (!categoryId) {
-          console.error('categoryId is missing in query parameters.');
-          return;
-        }
+      const selectedMenu = this.menuItems.find(
+        (menu) => menu._id === this.selectedMenuTitle
+      );
 
-        const token = localStorage.getItem('user')
-          ? JSON.parse(localStorage.getItem('user')).data.token
-          : '';
+      if (!selectedMenu) {
+        console.error('Select The Menu');
+        this.toastr.error('Select The Menu');
+        return;
+      }
 
-        this.http.deleteItems(token, itemId).subscribe(
-          (result) => {
-            if (result) {
-              this.toastr.success('Item Deleted Successfully');
-              this.itemDeleted.emit();
-              this.modalService.dismissAll();
-            } else {
-              this.toastr.error('Failed to Delete Item');
-            }
-          },
-          (error) => {
-            console.error('Error deleting item:', error);
-            this.toastr.error('Failed to delete item');
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+
+      this.http.deleteItems(token, itemId).subscribe(
+        (result) => {
+          if (result) {
+            this.toastr.success('Item Deleted Successfully');
+            this.itemDeleted.emit();
+            this.modalService.dismissAll();
+          } else {
+            this.toastr.error('Failed to Delete Item');
           }
-        );
-      });
+        },
+        (error) => {
+          console.error('Error deleting item:', error);
+          this.toastr.error('Failed to delete item');
+        }
+      );
     } catch (error) {
       console.error('Error deleting item:', error);
       this.toastr.error('Failed to delete item');
@@ -203,11 +249,13 @@ export class ModalComponent implements OnInit {
 
   saveEditedItem() {
     if (this.editedItem) {
-      this.route.queryParams.subscribe((params) => {
-        const categoryId = params['categoryId'];
+      try {
+        const selectedMenu = this.menuItems.find(
+          (menu) => menu._id === this.selectedMenuTitle
+        );
 
-        if (!categoryId) {
-          console.error('categoryId is missing in query parameters.');
+        if (!selectedMenu) {
+          console.error('Selected menu is not valid.');
           return;
         }
 
@@ -215,13 +263,15 @@ export class ModalComponent implements OnInit {
           ? JSON.parse(localStorage.getItem('user')).data.token
           : '';
         const itemId = this.editedItem._id;
+
         this.form.patchValue({
           item_name: this.editedItem.item_name,
           price: this.editedItem.price,
         });
+
         const updatedItem = {
           _id: itemId,
-          menu_id: categoryId,
+          menu_id: selectedMenu._id, // Use the _id from the selected menu
           item_name: this.form.value.item_name,
           price: this.form.value.price,
         };
@@ -231,8 +281,6 @@ export class ModalComponent implements OnInit {
             if (result) {
               this.toastr.success('Item Updated Successfully');
               this.editedItem = null;
-              // this.getproduct();
-              // this.cdr.detectChanges();
               this.modalService.dismissAll();
             } else {
               this.toastr.error('Failed to Update Item');
@@ -243,26 +291,38 @@ export class ModalComponent implements OnInit {
             this.toastr.error('Failed to update item');
           }
         );
-      });
+      } catch (error) {
+        console.error('Error updating item:', error);
+        this.toastr.error('Failed to update item');
+      }
     }
   }
 
   onSubmitCustomOrder(formData: any, form: any): void {
     try {
       this.modalService.dismissAll();
+
+      const initialPrice = formData.price;
       const cartItem = {
         item_name: formData.item_name,
-        quantity: formData.quantity,
+        quantity: 1,
         price: formData.price,
+        initialPrice: initialPrice,
       };
+
       const existingItems = localStorage.getItem('cartItems');
       let cartItems = [];
+
       if (existingItems) {
         cartItems = JSON.parse(existingItems);
       }
+
       cartItems.push(cartItem);
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      // localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      this.cartService.updateCartItems(cartItems);
       form.resetForm();
+      this.toastr.success(` ${formData.item_name} added to your order`);
+      this.modalService.dismissAll();
     } catch (error) {
       console.error('Error submitting custom order:', error);
       this.toastr.error('Failed to submit custom order');

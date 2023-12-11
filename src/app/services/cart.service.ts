@@ -13,7 +13,6 @@ export class CartService {
   private localStorageKey = 'cartItems';
 
   constructor() {
-    // Load cart items from local storage on service initialization
     const storedItems = localStorage.getItem(this.localStorageKey);
     if (storedItems) {
       this.cartItemsSubject.next(JSON.parse(storedItems));
@@ -26,7 +25,6 @@ export class CartService {
 
   updateCartItems(items: any[]): void {
     this.cartItemsSubject.next(items);
-    // Save cart items to local storage whenever it's updated
     this.saveToLocalStorage(items);
   }
 
