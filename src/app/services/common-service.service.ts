@@ -19,7 +19,7 @@ export class CommonServiceService {
   ) {}
 
   requestOTP(emp_id: number): Observable<any> {
-    const url = `${environment.apiUrl}/login`;
+    const url = `${environment.apiUrl}/auth/login`;
     const data = { emp_id };
 
     return this._http.post(url, data).pipe(
@@ -31,7 +31,7 @@ export class CommonServiceService {
   }
 
   verifyOTP(loginData: login, token: any): Observable<any> {
-    const url = `${environment.apiUrl}/verifyOTP`;
+    const url = `${environment.apiUrl}/auth/verifyOTP`;
 
     return this._http.post(url, loginData).pipe(
       catchError((error) => {
@@ -41,17 +41,8 @@ export class CommonServiceService {
     );
   }
 
-  getCurrentUser(): any {
-    const user = localStorage.getItem('user');
-
-    if (user) {
-      return JSON.parse(user);
-    } else {
-      return null;
-    }
-  }
   menuList(): Observable<any> {
-    const url = `${environment.apiUrl}/listTodayMenu`;
+    const url = `${environment.apiUrl}/menu/menu-list`;
     return this._http.get(url);
   }
 

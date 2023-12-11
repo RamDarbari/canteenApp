@@ -29,10 +29,10 @@
                   Lunch
                 </button>
               </div>
-              <div class="snacks">
-                <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
-                  [disabled]="(isCategoryDisabled$ | async)['Snacks']" (click)="updateSelectedCategory('Snacks')">
-                  Snacks
+              <div class="snack">
+                <button [ngClass]="{'active-button': selectedCategory === 'Snack'}"
+                  [disabled]="(isCategoryDisabled$ | async)['Snack']" (click)="updateSelectedCategory('Snack')">
+                  Snack
                 </button>
               </div>
             </div>
@@ -168,8 +168,8 @@
               </button>
             </div>
             <div class="snacks">
-              <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
-                (click)="updateSelectedCategory('Snacks')">
+              <button [ngClass]="{'active-button': selectedCategory === 'Snack'}"
+                (click)="updateSelectedCategory('Snack')">
                 Snacks
               </button>
             </div>

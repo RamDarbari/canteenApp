@@ -10,7 +10,7 @@ export class SocketioService {
 
   constructor() {
     const empId = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails.EmployeeId
       : null;
     // Append empId to the connection URL
     this.socket = io(`http://10.8.11.160:5000?empId=${empId}`);

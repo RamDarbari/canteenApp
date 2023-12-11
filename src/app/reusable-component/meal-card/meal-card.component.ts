@@ -7,11 +7,30 @@ import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { ModalComponent } from '../modal/modal.component';
 import { Router } from '@angular/router';
 
-interface MenuItem {
-  id: string;
-  menuName: string;
+interface Item {
   itemName: string;
+  price: number;
+  quantity: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+interface Meal {
+  _id: string;
+  type: string;
+  Item: Item[]; // Change this line to use the Item interface
+  date: string[];
+  time: string;
+  __v: number;
+}
+
+interface MealCategory {
+  title: string;
+  time: string;
+  items: Meal[]; // Change this line to use the Meal interface
+}
+
 @Component({
   selector: 'app-meal-card',
   templateUrl: './meal-card.component.html',
@@ -22,10 +41,10 @@ export class MealCardComponent implements OnInit {
   @Input() displayNormalMealCard: boolean = false;
   @Input() displayAddItemToCartCard: boolean = false;
   @Input() displayTotalItems: boolean = false;
-  @Output() selectedItemChange: EventEmitter<MenuItem[]> = new EventEmitter<
-    MenuItem[]
+  @Output() selectedItemChange: EventEmitter<Meal[]> = new EventEmitter<
+    Meal[]
   >();
-  meals: any[] = [];
+  meals: MealCategory[] = [];
   submenu: any[] = [];
   items: any[] = [];
   totalMeals: any[] = [];
@@ -33,7 +52,7 @@ export class MealCardComponent implements OnInit {
   constructor(
     private _https: CommonServiceService,
     private toastr: ToastrService,
-    private http: AdminService,
+    // private http: AdminService,
     private modalService: NgbModal,
     private router: Router
   ) {}
@@ -48,10 +67,20 @@ export class MealCardComponent implements OnInit {
   filterMeals() {
     try {
       this._https.menuList().subscribe((response) => {
-        if (response.data && response.data.length > 0) {
-          this.meals = response.data;
+        if (response.statusCode === 200 && response.success) {
+          const data = response.data;
+
+          this.meals = [
+            {
+              title: 'Breakfast',
+              time: '8:00 AM - 9:00 AM',
+              items: data.Breakfast,
+            },
+            { title: 'Lunch', time: '12:00 PM - 1:00 PM', items: data.Lunch },
+            { title: 'Snack', time: '4:00 PM - 5:00 PM', items: data.Snack },
+          ];
         } else {
-          // this.toastr.error('No meals found');
+          this.toastr.error('Failed to fetch menu. Please try again later.');
         }
       });
     } catch (error) {
@@ -96,7 +125,7 @@ export class MealCardComponent implements OnInit {
 
   addItemToCart(item_name: string, price: number, itemId: string): void {
     const userJSON = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails
       : null;
 
     if (!userJSON) {

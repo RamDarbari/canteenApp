@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
 
   getUserRole(): string {
     const userRole = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.role
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails.role
       : '';
     return userRole;
   }
@@ -81,21 +81,21 @@ export class HeaderComponent implements OnInit {
 
   get userProfileDetails() {
     const userDetails = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails
       : '';
     return userDetails;
   }
 
   get wallet() {
     const userWalletBalance = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.wallet
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails.wallet
       : '';
     return userWalletBalance;
   }
 
   get totalBalance() {
     const pendingBalance = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.balance
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails.balance
       : '';
     return pendingBalance;
   }
@@ -257,7 +257,7 @@ export class HeaderComponent implements OnInit {
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     const emp_id = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
+      ? JSON.parse(localStorage.getItem('user')).data.empdetails.EmployeeId
       : '';
     try {
       if (token && emp_id) {

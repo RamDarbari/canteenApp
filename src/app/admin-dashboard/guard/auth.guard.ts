@@ -2,7 +2,7 @@ import { CanActivateFn } from '@angular/router';
 import { Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const userRole = JSON.parse(localStorage.getItem('user'))?.data.empDetails
+  const userRole = JSON.parse(localStorage.getItem('user'))?.data.empdetails
     .role;
 
   if (userRole === 'admin') {

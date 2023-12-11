@@ -107,29 +107,33 @@ export class ModalComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.emp_id
         : null;
       this.isLoading = true;
+
       this.loginService
         .verifyOTP(this.loginData, emp_id)
         .subscribe((response) => {
-          if (response.success) {
+          if (response.statusCode === 200) {
             this.isLoading = false;
             localStorage.setItem('user', JSON.stringify(response));
-            const userRole = response.data.empDetails.role;
+
+            const userRole = response.data.empdetails.role;
+
             if (userRole === 'admin') {
               this.toastr.success('Admin Login Successful');
               this.router.navigate(['/admin']);
-              this.modalService.dismissAll();
             } else {
-              this.modalService.dismissAll();
               this.toastr.success('Login Successful');
             }
+            // this.toastr.success('Login Successful');
+            this.modalService.dismissAll();
+          } else {
+            this.toastr.error('Failed to verify OTP');
           }
-        })
-        .add(() => {
-          this.isLoading = false;
         });
     } catch (error) {
       console.error('Error verifying OTP:', error);
       this.toastr.error('Failed to verify OTP');
+    } finally {
+      this.isLoading = false;
     }
   }
 

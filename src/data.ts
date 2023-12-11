@@ -58,11 +58,35 @@ export interface OrderItem {
   _id: string;
 }
 
-export interface detailsCount {
+// Create an interface for detailsCount
+export interface DetailsCount {
   pendingOrder: number;
   total_orders: number;
   today_menu_items: number;
   total_users: number;
+  daily_revenue?: number; // Add the optional property based on your new API response
+  monthly_revenue?: number; // Add the optional property based on your new API response
+}
+
+// Create an interface for MenuRevenue
+export interface MenuRevenue {
+  title: string;
+  total_revenue: number;
+  count_orders: number;
+}
+
+// Create an interface for MostOrderItem
+export interface MostOrderItem {
+  item_name: string;
+  price: number;
+  count: number;
+}
+
+// Create an interface for RecentPendingOrder
+export interface RecentPendingOrder {
+  item_name: string;
+  quantity: number;
+  totalPrice: number;
 }
 
 export interface MenuItem {

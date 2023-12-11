@@ -178,7 +178,7 @@ export class MenuTabsComponent implements OnInit {
     const disabledState = {
       Breakfast: this.selectedCategory !== 'Breakfast' && !isCartItemsEmpty,
       Lunch: this.selectedCategory !== 'Lunch' && !isCartItemsEmpty,
-      Snacks: this.selectedCategory !== 'Snacks' && !isCartItemsEmpty,
+      Snack: this.selectedCategory !== 'Snack' && !isCartItemsEmpty,
     };
 
     this.isCategoryDisabledSubject.next(disabledState);
