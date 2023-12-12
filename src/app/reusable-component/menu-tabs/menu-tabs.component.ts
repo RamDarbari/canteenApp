@@ -271,6 +271,7 @@ export class MenuTabsComponent implements OnInit {
       this.fetchSelectedMenus();
       this.updateMenuCategoryState();
       console.log('Menu added to localStorage:', storedMenus);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error(error);
       this.toastr.error(
@@ -287,11 +288,12 @@ export class MenuTabsComponent implements OnInit {
         menuType,
         subMenuItems: storedMenus[menuType],
       }));
-      // this.cdr.detectChanges();
+      this.updateMenuCategoryState();
       console.log(
         'Fetched selectedMenus from localStorage:',
         this.selectedMenus
       );
+      this.cdr.detectChanges();
     } catch (error) {
       console.error(
         'An unexpected error occurred while fetching selectedMenus:',
@@ -329,6 +331,7 @@ export class MenuTabsComponent implements OnInit {
           'from menu with Type',
           menuType
         );
+        this.updateMenuCategoryState();
       } else {
         console.log(
           'Unable to delete item at index',
@@ -367,6 +370,7 @@ export class MenuTabsComponent implements OnInit {
             this.selectedMenus = [];
             this.toastr.success('Today menu added successfully!');
             this.showSidebar = false;
+            this.updateMenuCategoryState();
           },
           (error) => {
             console.error('Error adding today menu:', error);
@@ -512,12 +516,6 @@ export class MenuTabsComponent implements OnInit {
     this.saveCartItems();
     this.cartService.updateCartItems(existingItems);
     this.toastr.success('Item added to cart successfully!');
-
-    // Run inside NgZone to trigger change detection
-    this.ngZone.run(() => {
-      // Optionally, you can call detectChanges here, but it might not be necessary
-      // this.cdr.detectChanges();
-    });
   }
 
   openCustomOrderModal(event: Event): void {
@@ -546,6 +544,7 @@ export class MenuTabsComponent implements OnInit {
       this.itemDeleted.emit();
     });
   }
+
   openAddItemModal(event: Event): void {
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',
@@ -556,14 +555,14 @@ export class MenuTabsComponent implements OnInit {
 
     modalRef.componentInstance.modalType = 'addItem-modal';
     modalRef.componentInstance.itemAdded.subscribe((addedItem) => {
-      if (this.isItemInCart(addedItem)) {
-        this.toastr.error('Item with the same name is already in the cart.');
-      } else {
-        this.cartItems.push(addedItem);
-        this.saveCartItems();
-        this.toastr.success('Item added to cart successfully!');
-        this.itemAdded.emit();
-      }
+      // if (this.isItemInCart(addedItem)) {
+      //   this.toastr.error('Item with the same name is already in the cart.');
+      // } else {
+      //   this.saveCartItems();
+      //   this.toastr.success('Item added to cart successfully!');
+      // }
+      this.cartItems.push(addedItem);
+      this.itemAdded.emit();
     });
   }
 

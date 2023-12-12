@@ -78,10 +78,9 @@
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <!-- <label for="menuTitle">Menu Title</label> -->
                 <select id="menuTitle" name="menuTitle" class="form-control" [(ngModel)]="selectedMenuTitle"
                   (change)="onMenuTitleChange()" aria-label="Default select example">
-                  <option value="1" selected disabled>Select Menu Title</option>
+                  <option value="1" disabled>Select Menu Title</option>
                   <option *ngFor="let menu of menuItems" [value]="menu._id">{{ menu.title }}</option>
                 </select>
               </div>
@@ -157,14 +156,14 @@
           </button>
         </div>
         <form #addUserForm="ngForm" class="add-product-form"
-          (ngSubmit)="onSubmitCustomOrder(addUserForm.value, addUserForm)">
+          (ngSubmit)="onSubmitEmployee(addUserForm.value, addUserForm)" novalidate>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <input type="number" id="emp_id" name="emp_id" class="form-control"
                   [ngModel]="editedEmployee ? editedEmployee.emp_id : ''"
                   (ngModelChange)="editedEmployee ? editedEmployee.emp_id = $event : null" required minlength="3"
-                  placeholder="EmployeeId">
+                  placeholder="EmployeeId" ngModel name="emp_id" #empId="ngModel">
               </div>
             </div>
             <div class="col-md-12">
@@ -172,7 +171,7 @@
                 <input type="text" id="first_name" name="first_name" class="form-control"
                   [ngModel]="editedEmployee ? editedEmployee.first_name : ''"
                   (ngModelChange)="editedEmployee ? editedEmployee.first_name = $event : null" required minlength="3"
-                  placeholder="First Name">
+                  placeholder="First Name" ngModel name="first_name" #firstName="ngModel">
               </div>
             </div>
             <div class="col-md-12">
@@ -180,7 +179,7 @@
                 <input type="text" id="last_name" name="last_name" class="form-control"
                   [ngModel]="editedEmployee ? editedEmployee.last_name : ''"
                   (ngModelChange)="editedEmployee ? editedEmployee.last_name = $event : null" required minlength="3"
-                  placeholder="Last Name">
+                  placeholder="Last Name" ngModel name="last_name" #lastName="ngModel">
               </div>
             </div>
             <div class="col-md-12">
@@ -188,23 +187,21 @@
                 <input type="text" id="email" name="email" class="form-control"
                   [ngModel]="editedEmployee ? editedEmployee.email : ''"
                   (ngModelChange)="editedEmployee ? editedEmployee.email = $event : null" required minlength="3"
-                  placeholder="Email">
+                  placeholder="Email" ngModel name="email" #email="ngModel">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <input type="text" id="role" name="role" class="form-control"
-                  [ngModel]="editedEmployee ? editedEmployee.role : ''"
-                  (ngModelChange)="editedEmployee ? editedEmployee.role = $event : null" required minlength="3"
-                  placeholder="Role">
+                <select id="role" name="role" class="form-control" required ngModel name="role" #role="ngModel">
+                  <option value="" disabled>Select Role</option>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
             </div>
           </div>
           <div class="text-center">
-            <!-- <button type="submit" class="btn btn-outline-primary" [disabled]="!customOrderForm.valid">
-              {{ editedItem ? 'Update Product' : 'Add Product' }}
-            </button> -->
-            <button (click)="onSubmitEmployee(addUserForm.value, addUserForm)" class="btn btn-outline-primary">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="addUserForm.invalid">
               Add User
             </button>
           </div>

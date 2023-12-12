@@ -72,10 +72,22 @@ export class AdminService {
     });
   }
 
-  orderList(token: string) {
+  orderList(
+    token: string,
+    currentPage: number,
+    totalRecords: number,
+    totalPages: number,
+    limit: number
+  ) {
     return this._http.get(`${this.apiUrl}/admin/pendingOrderList`, {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        currentPage: currentPage.toString(),
+        totalRecords: totalRecords.toString(),
+        totalPages: totalPages.toString(),
+        limit: limit.toString(),
       },
     });
   }

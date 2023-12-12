@@ -56,18 +56,18 @@ export class DashboardComponent implements OnInit {
       (response: any) => {
         console.log('count', response);
         if (response && response.data) {
-          this.totalDetailsCounts = response.data;
+          this.totalDetailsCounts = response.data[0];
           const menuRevenueData = response.data.menu_revenue;
-          this.barChartLabels = menuRevenueData.map((menu) => menu.title);
-          this.barChartData[0].data = menuRevenueData.map(
-            (menu) => menu.total_revenue
-          );
-          this.barChartData[1].data = menuRevenueData.map(
-            (menu) => menu.count_orders
-          );
-          this.mostOrderItems = response.data.mostOrderItem;
+          // this.barChartLabels = menuRevenueData.map((menu) => menu.title);
+          // this.barChartData[0].data = menuRevenueData.map(
+          //   (menu) => menu.total_revenue
+          // );
+          // this.barChartData[1].data = menuRevenueData.map(
+          //   (menu) => menu.count_orders
+          // );
+          this.mostOrderItems = response.data[0].mostOrderItem;
           console.log(this.mostOrderItems, 'llllllllllllllllllllllllllll');
-          this.recentOrderItems = response.data.recent_pending_orders;
+          this.recentOrderItems = response.data[0].recent_pending_orders;
           console.log(this.recentOrderItems, 'oooooooooooooooooooooooooooo');
         }
       },

@@ -44,6 +44,7 @@ export class TableComponent implements OnInit {
   private orderSubscription: Subscription;
   pageSizeOptions: number[] = [5, 10, 25, 100];
   limit: number = this.pageSizeOrderHistory; // Set default limit to the order history table
+  isLoadingOrderHistory: boolean = false;
   isLoading: boolean = false;
   displayedColumns: string[] = [
     'date',
@@ -56,6 +57,7 @@ export class TableComponent implements OnInit {
   displayedColumnsPendingOrders: string[] = [
     '_id',
     'emp_id',
+    'fullName',
     'totalBalance',
     'date',
     'itemName',
@@ -91,7 +93,7 @@ export class TableComponent implements OnInit {
     this.pendingOrderList();
     this.refreshInterval = setInterval(() => {
       this.pendingOrderList();
-    }, 10 * 1000);
+    }, 30 * 1000);
   }
 
   ngOnDestroy(): void {
@@ -104,7 +106,7 @@ export class TableComponent implements OnInit {
   }
 
   getOrderHistory() {
-    this.isLoading = true;
+    this.isLoadingOrderHistory = true;
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
@@ -120,13 +122,14 @@ export class TableComponent implements OnInit {
         (response: any) => {
           this.orderHistoryData = response.data as OrderHistory[];
           this.totalItemsOrderHistory = response.totalRecords;
+          console.log(response);
         },
         (error) => {
           console.error('Error fetching order history:', error);
         }
       )
       .add(() => {
-        this.isLoading = false;
+        this.isLoadingOrderHistory = false;
       });
   }
 
@@ -141,15 +144,20 @@ export class TableComponent implements OnInit {
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
+      const currentPage = this.currentPagePendingOrder + 0;
+      const totalRecords = this.totalItemsPendingOrder || 0;
+      const totalPages = Math.ceil(totalRecords / this.pageSizePendingOrder);
+      const limit = this.pageSizePendingOrder;
 
-      // console.log(token, 'jkjjjjjjj');
-
-      this.http.orderList(token).subscribe((response: any) => {
-        console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');
-        if (response && response.data && response.data.length > 0) {
-          this.orderService.setOrders(response.data); // Update orders using the service
-        }
-      });
+      this.http
+        .orderList(token, currentPage, totalRecords, totalPages, limit)
+        .subscribe((response: any) => {
+          console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');
+          if (response && response.data && response.data.length > 0) {
+            this.orderService.setOrders(response.data);
+          }
+          this.totalItemsPendingOrder = response.totalRecords;
+        });
     } catch (error) {
       console.log(error);
     }
@@ -162,10 +170,10 @@ export class TableComponent implements OnInit {
       startIndex + this.pageSizeOrderHistory
     );
   }
-
   pageChangedPendingOrder(event: PageEvent) {
+    console.log('Page changed:', event);
     this.currentPagePendingOrder = event.pageIndex;
-    this.updatePagedData();
+    this.pendingOrderList();
   }
 
   changeOrderStatus(order_id: string, status: string) {

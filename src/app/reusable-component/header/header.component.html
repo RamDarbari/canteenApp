@@ -1,5 +1,4 @@
 <header id="user" *ngIf="showUserSection">
-  <app-loader *ngIf="isLoading"></app-loader>
   <div class="container">
     <div class="row justify-content-center" id="user">
       <div class="upper-header d-flex">
@@ -95,44 +94,59 @@
                 <img src="assets/close-circle-svgrepo-com (2) 1.png" alt="close button">
               </button>
             </div>
-            <div class="offcanvas-body" *ngIf="cartItems.length > 0; else emptyCart">
-              <div *ngFor="let item of cartItems; let $index = index"
+            <div class="offcanvas-body">
+              <app-loader *ngIf="isLoading"></app-loader>
+              <div class=" d-flex justify-content-between align-items-center item-info-body item-head">
+                <p>Item Name</p>
+                <p>Item Quantity</p>
+                <p>Item Price</p>
+                <p></p>
+              </div>
+              <div *ngFor="let item of cartItems;let $index = index"
                 class="d-flex justify-content-between align-items-center item-info-body">
                 <div class="item-name-info">
-                  <p>{{ item.item_name }} </p>
+                  <p>{{ item.item_name | titlecase }} </p>
                 </div>
                 <div class="d-flex quantity-button align-items-center">
-                  <p> Qty.</p>
-                  <button (click)="decreaseQuantity($index)">-</button>
-                  <input class="text-center" [(ngModel)]="cartItems[$index].quantity" [disabled]="!quantity"
-                    type="number" min="1">
-                  <button (click)="increaseQuantity($index)">+</button>
+                  <button class="quantity-btn" (click)="decreaseQuantity($index)">-</button>
+                  <input class="quantity-input text-center" [(ngModel)]="cartItems[$index].quantity"
+                    [disabled]="!quantity" type="number" min="1">
+                  <button class="quantity-btn" (click)="increaseQuantity($index)">+</button>
                 </div>
-                <div>
-                  <p style="width: 85px;"> {{ item.price | currency:'INR' }}</p>
+                <div style="width: 70px;">
+                  <p> {{ item.price | currency:'INR' }}</p>
                 </div>
-                <button (click)="deleteItem($index)" class=""><i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button (click)="deleteItem($index)" class="me-1"><i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
               </div>
               <div class="d-flex justify-content-end align-items-center item-info-body">
-                <div class="item-name-info" style="width: 41%;">
+                <div class="item-name-info" style="width: 38%;">
                   <p> Total: {{ getTotalBalance() | currency:'INR' }}</p>
                 </div>
               </div>
-              <div class="text-end d-flex">
-                <button (click)="confirmOrder()" class="confirm-button" [disabled]="!hasCartItems">
-                  Confirm Order
-                </button>
-
-                <!-- <div ngbDropdown class="d-inline-block">
-                  <button type="button" class="cancel-button" id="dropdownBasic1" ngbDropdownToggle>
-                    Bill Status: {{ selectedBillStatus }}
+              <div class="text-end d-flex flex-column pt-3">
+                <div class="pt-2 d-grid">
+                  <button (click)="confirmOrder()" class="btn btn-outline-primary" [disabled]="!hasCartItems">
+                    Confirm Order
                   </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button (click)="setBillStatus('paid')" ngbDropdownItem>Paid</button>
-                    <button (click)="setBillStatus('unpaid')" ngbDropdownItem>Unpaid</button>
-                  </div>
-                </div> -->
+                </div>
               </div>
+              <!-- <table mat-table matSort [dataSource]="cartItems" class="mat-elevation-z8">
+                <ng-container matColumnDef="item_name">
+                  <th mat-header-cell *matHeaderCellDef>Item Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.item_name }}</td>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef>Price</th>
+                  <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+                </ng-container>
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                  <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table> -->
             </div>
             <ng-template #emptyCart>
               <div class="empty-cart-message text-center">

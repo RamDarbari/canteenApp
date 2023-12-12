@@ -14,7 +14,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive w-100">
-              <app-loader *ngIf="isLoading"></app-loader>
+              <app-loader *ngIf="isLoadingOrderHistory"></app-loader>
               <table mat-table matSort [dataSource]="orderHistoryData" class="mat-elevation-z8">
                 <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
                   <th mat-header-cell *matHeaderCellDef> Order Id</th>
@@ -96,7 +96,10 @@
                   <th mat-header-cell *matHeaderCellDef> Employee ID </th>
                   <td mat-cell *matCellDef="let element"> {{element.emp_id}} </td>
                 </ng-container>
-
+                <ng-container matColumnDef="fullName">
+                  <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                </ng-container>
                 <ng-container matColumnDef="itemName">
                   <th mat-header-cell *matHeaderCellDef>Item Info</th>
                   <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
@@ -172,7 +175,9 @@
               <div class="mat-paginator">
                 <mat-paginator [length]="totalItemsPendingOrder" [pageSizeOptions]="[5, 10, 25, 100]"
                   [pageSize]="pageSizePendingOrder" [pageIndex]="currentPagePendingOrder"
-                  (page)="pageChangedPendingOrder($event)"></mat-paginator>
+                  (page)="pageChangedPendingOrder($event)">
+                </mat-paginator>
+
               </div>
             </div>
           </div>

@@ -171,4 +171,13 @@ export class UserListComponent implements OnInit {
       this.userAdded.emit();
     });
   }
+
+  onWalletInput(event: any): void {
+    const inputValue = event.target.value.replace(/\D/g, ''); // Remove non-digit characters
+    const maxLength = 5;
+
+    if (inputValue.length > maxLength) {
+      this.selectedEmployee.wallet = inputValue.slice(0, maxLength);
+    }
+  }
 }

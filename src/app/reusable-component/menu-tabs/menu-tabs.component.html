@@ -103,6 +103,12 @@
               <h5 id="offcanvasRightLabel">Selected Menus</h5>
             </div>
             <div class="inner-sidebar-body">
+              <div class=" d-flex justify-content-between align-items-center item-info-body today-menu-head">
+                <p>Item Category</p>
+                <p>Item Name</p>
+                <!-- <p></p> -->
+                <p></p>
+              </div>
               <div *ngIf="selectedMenus">
                 <div *ngFor=" let menu of selectedMenus">
                   <ul>
@@ -121,9 +127,9 @@
                 </div>
               </div>
               <div>
-                <div>
-                  <button (click)="todayMenu()" class="btn btn-outline-primary">
-                    confirm
+                <div class="w-100">
+                  <button (click)="todayMenu()" class="btn btn-outline-primary w-100">
+                    Confirm
                   </button>
                 </div>
               </div>
@@ -173,7 +179,7 @@
                 Snacks
               </button>
             </div>
-            <div class="custom-order-div">
+            <!-- <div class="custom-order-div">
               <div>
                 <button (click)="openCustomOrderModal($event)" class="custom-buttom m-0" data-toggle="modal"
                   data-target="#loginModal">
@@ -182,7 +188,7 @@
                   </span>
                 </button>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="content">
             <div class="row w-100">
@@ -259,13 +265,14 @@
                     [disabled]="!quantity" type="number" min="1">
                   <button class="quantity-btn" (click)="increaseQuantity($index)">+</button>
                 </div>
-                <div>
+                <div style="width: 70px;">
                   <p> {{ item.price | currency:'INR' }}</p>
                 </div>
-                <button (click)="deleteItems($index)" class=""><i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button (click)="deleteItems($index)" class="me-1"><i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
               </div>
               <div class="d-flex justify-content-end align-items-center item-info-body">
-                <div class="item-name-info" style="width: 41%;">
+                <div class="item-name-info" style="width: 39%;">
                   <p> Total: {{ getTotalBalance() | currency:'INR' }}</p>
                 </div>
               </div>
@@ -300,7 +307,6 @@
         </div>
       </div>
     </div>
-
   </div>
   <ng-content select=".custommenu"></ng-content>
 </section>

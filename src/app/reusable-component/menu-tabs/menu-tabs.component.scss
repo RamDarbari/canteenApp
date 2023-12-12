@@ -310,18 +310,6 @@ section {
         margin-left: 25px;
         width: 70px;
       }
-
-      .quantity-button {
-        input {
-          width: 32px;
-          border: 1px;
-          border-radius: 5px;
-          background-color: #e3e6e8;
-          color: #404040;
-          cursor: text;
-          outline: #404040;
-        }
-      }
     }
 
     .text-end {
@@ -372,6 +360,19 @@ section {
     font-weight: 600 !important;
     cursor: pointer;
     margin: 1px;
+    // width: 33.333333333333%;
+  }
+}
+
+.today-menu-head {
+  p {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    margin: 1px;
+    width: 33.333333333333%;
   }
 }
 
@@ -392,7 +393,7 @@ section {
 }
 
 .quantity-input {
-  width: 40px;
+  width: 45px;
   margin: 0 10px;
   padding: 5px;
   text-align: center;

@@ -43,7 +43,7 @@ export class ModalComponent implements OnInit {
   @Output() userAdded = new EventEmitter<void>();
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
-  selectedMenuTitle: string | null = null;
+  selectedMenuTitle: string = '1';
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
   editedEmployee: UserData | null = null;
@@ -171,7 +171,6 @@ export class ModalComponent implements OnInit {
 
   onSubmit(data: any, addProduct: NgForm) {
     try {
-      // Remove the query param check and use the selected menu directly
       const selectedMenu = this.menuItems.find(
         (menu) => menu._id === this.selectedMenuTitle
       );
