@@ -302,11 +302,12 @@ export class ModalComponent implements OnInit {
       this.modalService.dismissAll();
 
       const initialPrice = formData.price;
-      const cartItem = {
+      const newItem = {
         item_name: formData.item_name,
         quantity: 1,
         price: formData.price,
         initialPrice: initialPrice,
+        item_type: 'custom',
       };
 
       const existingItems = localStorage.getItem('cartItems');
@@ -314,10 +315,24 @@ export class ModalComponent implements OnInit {
 
       if (existingItems) {
         cartItems = JSON.parse(existingItems);
+
+        const existingItemIndex = cartItems.findIndex(
+          (item) => item.item_name === newItem.item_name
+        );
+
+        if (existingItemIndex !== -1) {
+          // If exists, update the quantity instead of adding a new item
+          cartItems[existingItemIndex].quantity += 1;
+          this.toastr.warning(
+            `Item '${newItem.item_name}' already in the cart. Quantity updated.`
+          );
+          // Exit the function early to avoid showing the success toast
+          return;
+        }
       }
 
-      cartItems.push(cartItem);
-      // localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      // If not exists or no existing items, add the new item
+      cartItems.push(newItem);
       this.cartService.updateCartItems(cartItems);
       form.resetForm();
       this.toastr.success(` ${formData.item_name} added to your order`);

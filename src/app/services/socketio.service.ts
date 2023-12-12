@@ -13,7 +13,7 @@ export class SocketioService {
       ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
       : null;
     // Append empId to the connection URL
-    this.socket = io(`http://10.8.11.160:5000?empId=${empId}`);
+    this.socket = io(`http://localhost:5000?empId=${empId}`);
   }
 
   public on(event: string): Observable<any> {
