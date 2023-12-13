@@ -7,6 +7,9 @@ export interface OrderDataItem {
   itemId: string;
   quantity: string;
   bill_status?: string;
+  item_name: string;
+  item_type: string;
+  price: string;
 }
 
 export interface OrderData {

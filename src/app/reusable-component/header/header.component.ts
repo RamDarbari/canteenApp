@@ -186,6 +186,9 @@ export class HeaderComponent implements OnInit {
             return {
               itemId: item.itemId,
               quantity: item.quantity ? item.quantity.toString() : '0',
+              item_name: item.item_name,
+              item_type: item.item_type,
+              price: item.price,
             };
           });
 

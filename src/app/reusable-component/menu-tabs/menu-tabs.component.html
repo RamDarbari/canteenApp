@@ -151,7 +151,7 @@
         <div>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a>Custom Menu</a>
+              <a>Custom Order</a>
             </li>
           </ol>
         </div>
@@ -162,21 +162,27 @@
         <div class="tabs w-100">
           <div class="menu-selection-card d-flex justify-content-start pt-3">
             <div class="breakfast">
-              <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
+              <button [ngClass]="{'active-button': selectedCategory1 === 'Breakfast'}"
                 (click)="updateSelectedCategory('Breakfast')">
                 Breakfast
               </button>
             </div>
             <div class="lunch">
-              <button [ngClass]="{'active-button': selectedCategory === 'Lunch'}"
+              <button [ngClass]="{'active-button': selectedCategory1 === 'Lunch'}"
                 (click)="updateSelectedCategory('Lunch')">
                 Lunch
               </button>
             </div>
             <div class="snacks">
-              <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
+              <button [ngClass]="{'active-button': selectedCategory1 === 'Snacks'}"
                 (click)="updateSelectedCategory('Snacks')">
                 Snacks
+              </button>
+            </div>
+            <div class="snacks">
+              <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
+                (click)="updateSelectedCategory('custom')">
+                Custom
               </button>
             </div>
             <div class="custom-order-div">
@@ -211,7 +217,7 @@
                   </div>
                   <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
                     <div style="padding: 0px 20px 0px 20px;" *ngFor="let meal of submenu">
-                      <div class=" d-flex flex-wrap gap-3"
+                      <div class=" d-flex flex-wrap gap-3 justify-content-center"
                         *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
                         <div class="card-items" *ngFor="let item of meal.items">
                           <div class="card border-0 shadow h-100">

@@ -58,6 +58,7 @@ export class MenuTabsComponent implements OnInit {
   cartItems: any[] = [];
   quantity: false;
   selectedCategory: string = '';
+  selectedCategory1: string = '';
   selectedBillStatus: string = '';
   @Input() todaymenu: boolean = false;
   @Input() custommenu: boolean = false;
@@ -69,6 +70,7 @@ export class MenuTabsComponent implements OnInit {
   isSnacksDisabled: boolean = false;
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
+  @Output() listSub = new EventEmitter<void>();
   displayedColumns: string[] = ['item_name', 'price', 'quantity'];
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
@@ -89,8 +91,7 @@ export class MenuTabsComponent implements OnInit {
     private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal,
-    private ngZone: NgZone
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +100,6 @@ export class MenuTabsComponent implements OnInit {
     this.loadCartItems();
     const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
     this.selectedMenus = storedMenus;
-
     const storedCategory = localStorage.getItem('selectedCategory');
     this.selectedCategory = storedCategory || 'Breakfast';
     const sidebarState = localStorage.getItem('sidebarState');
@@ -112,10 +112,13 @@ export class MenuTabsComponent implements OnInit {
     this.itemAdded.subscribe(() => {
       this.filterSubMenuList();
     });
+    this.listSub.subscribe(() => {
+      this.filterSubMenuList();
+      localStorage.setItem('sidebarState', 'open');
+    });
     this.updateMenuCategoryState();
     this.cartService.cartItems$.subscribe((cartItems) => {
       this.cartItems = cartItems;
-      // Add any additional logic to update the sidebar UI
     });
   }
 
@@ -128,6 +131,7 @@ export class MenuTabsComponent implements OnInit {
     this.showSidebar = false;
     localStorage.setItem('sidebarState', 'closed');
   }
+
   getTotalBalance(): number {
     let totalBalance = 0;
     if (this.cartItems) {
@@ -393,8 +397,8 @@ export class MenuTabsComponent implements OnInit {
   }
 
   setBillStatus(status: string) {
-    this.selectedBillStatus = status; // Update the selectedBillStatus
-    this.saveBillStatus(status); // Optionally save it to localStorage
+    this.selectedBillStatus = status;
+    this.saveBillStatus(status);
   }
 
   confirmOrder() {
@@ -408,7 +412,7 @@ export class MenuTabsComponent implements OnInit {
         if (cartItems && cartItems.length > 0) {
           // Check if emp_id is provided
           if (!this.empId) {
-            this.toastr.error('Please add employee id.');
+            this.toastr.error('Please add an employee id.');
             return;
           }
 
@@ -416,6 +420,9 @@ export class MenuTabsComponent implements OnInit {
             return {
               itemId: item.itemId,
               quantity: item.quantity ? item.quantity.toString() : '0',
+              item_name: item.item_name,
+              item_type: item.item_type,
+              price: item.price,
             };
           });
 
@@ -429,7 +436,7 @@ export class MenuTabsComponent implements OnInit {
             ? JSON.parse(localStorage.getItem('user')).data.token
             : '';
 
-          this.isLoading = true; // Start the loader only if emp_id is provided
+          this.isLoading = true;
 
           this._https
             .placeOrder(orderPayload, token)
@@ -441,7 +448,8 @@ export class MenuTabsComponent implements OnInit {
                 this.loadCartItems();
                 this.cartItems = [];
                 this.toastr.success('Order placed successfully!');
-                // window.location.reload();
+                // localStorage.setItem('sidebarState', 'closed');
+                window.location.reload();
                 this.showSidebar = false;
               },
               (error) => {
@@ -449,7 +457,7 @@ export class MenuTabsComponent implements OnInit {
               }
             )
             .add(() => {
-              this.isLoading = false; // Stop the loader regardless of success or error
+              this.isLoading = false;
             });
         } else {
           console.log('No items in the cart.');
@@ -527,6 +535,9 @@ export class MenuTabsComponent implements OnInit {
     });
 
     modalRef.componentInstance.modalType = 'custom-order';
+    modalRef.componentInstance.listSub.subscribe(() => {
+      this.listSub.emit();
+    });
   }
 
   openEditModal(item: any): void {

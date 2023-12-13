@@ -35,7 +35,7 @@ export class AdminService {
     });
   }
 
-  addItem(data: OrderDataItem, token: any) {
+  addItem(data: any, token: any) {
     return this._http.post(`${this.apiUrl}/admin/addSubMenu`, data, {
       headers: { Authorization: `Bearer ${token}` },
     });

@@ -43,6 +43,7 @@ export class ModalComponent implements OnInit {
   @Output() userAdded = new EventEmitter<void>();
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
+  @Output() listSub = new EventEmitter<void>();
   selectedMenuTitle: string = '1';
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
@@ -308,6 +309,7 @@ export class ModalComponent implements OnInit {
         price: formData.price,
         initialPrice: initialPrice,
         item_type: 'custom',
+        menu_id: '6579a8e25c1fd82c679abce3',
       };
 
       const existingItems = localStorage.getItem('cartItems');
@@ -321,12 +323,10 @@ export class ModalComponent implements OnInit {
         );
 
         if (existingItemIndex !== -1) {
-          // If exists, update the quantity instead of adding a new item
           cartItems[existingItemIndex].quantity += 1;
           this.toastr.warning(
             `Item '${newItem.item_name}' already in the cart. Quantity updated.`
           );
-          // Exit the function early to avoid showing the success toast
           return;
         }
       }
@@ -334,9 +334,24 @@ export class ModalComponent implements OnInit {
       // If not exists or no existing items, add the new item
       cartItems.push(newItem);
       this.cartService.updateCartItems(cartItems);
-      form.resetForm();
-      this.toastr.success(` ${formData.item_name} added to your order`);
-      this.modalService.dismissAll();
+
+      // Send the form data to your API
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http.addItem(newItem, token).subscribe(
+        (response) => {
+          console.log('API response:', response);
+          this.toastr.success(`${formData.item_name} added to your order`);
+          form.resetForm();
+          this.modalService.dismissAll();
+          this.listSub.emit();
+        },
+        (error) => {
+          console.error('Error adding custom order to API:', error);
+          this.toastr.error('Failed to add custom order. Please try again.');
+        }
+      );
     } catch (error) {
       console.error('Error submitting custom order:', error);
       this.toastr.error('Failed to submit custom order');
