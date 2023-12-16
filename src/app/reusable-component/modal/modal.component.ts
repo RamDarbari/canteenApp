@@ -44,6 +44,7 @@ export class ModalComponent implements OnInit {
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
   @Output() listSub = new EventEmitter<void>();
+  @Input() selectedCategory: string;
   selectedMenuTitle: string = '1';
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
@@ -68,12 +69,25 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Check if the modal is used for editing
     if (this.modalType === 'addItem-modal' && this.editedItem) {
+      // Set the selectedMenuTitle based on the category of the edited item
+      const editedItemCategory = this.menuItems.find(
+        (menu) => menu._id === this.editedItem.menu_id
+      );
+      if (editedItemCategory) {
+        this.selectedMenuTitle = editedItemCategory._id;
+      }
+
       this.form.patchValue({
         item_name: this.editedItem.item_name,
         price: this.editedItem.price,
       });
+    } else {
+      // Clear the selectedMenuTitle if adding a new item
+      this.selectedMenuTitle = '';
     }
+
     this.menuList();
   }
 

@@ -33,19 +33,20 @@ export class TableComponent implements OnInit {
   totalItemsOrderHistory: number;
   currentPageOrderHistory: number = 0;
   pageSizeOrderHistory: number = 10;
-
+  pageSizeOptionsOrderHistory: number[] = [5, 10, 25, 100];
   totalItemsPendingOrder: number;
   currentPagePendingOrder: number = 0;
   pageSizePendingOrder: number = 10;
-
+  pageSizeOptionsPendingOrder: number[] = [5, 10, 25, 100];
   searchName: string = '';
   private searchNameSubject = new Subject<string>();
   private refreshInterval: any;
   private orderSubscription: Subscription;
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  limit: number = this.pageSizeOrderHistory; // Set default limit to the order history table
+  limit: number = this.pageSizeOrderHistory;
   isLoadingOrderHistory: boolean = false;
   isLoading: boolean = false;
+
   displayedColumns: string[] = [
     'date',
     '_id',
@@ -135,7 +136,7 @@ export class TableComponent implements OnInit {
 
   pagesChangedOrderHistory(event: PageEvent) {
     this.currentPageOrderHistory = event.pageIndex;
-    this.limit = event.pageSize;
+    this.limit = event.pageSize; // Set the limit to the new page size
     this.getOrderHistory();
   }
 
@@ -163,17 +164,19 @@ export class TableComponent implements OnInit {
     }
   }
 
+  pageChangedPendingOrder(event: PageEvent) {
+    console.log('Page changed:', event);
+    this.currentPagePendingOrder = event.pageIndex;
+    this.pageSizePendingOrder = event.pageSize;
+    this.pendingOrderList();
+  }
+
   updatePagedData() {
     const startIndex = this.currentPageOrderHistory * this.pageSizeOrderHistory;
     this.pagedEmployeeData = this.orders.slice(
       startIndex,
       startIndex + this.pageSizeOrderHistory
     );
-  }
-  pageChangedPendingOrder(event: PageEvent) {
-    console.log('Page changed:', event);
-    this.currentPagePendingOrder = event.pageIndex;
-    this.pendingOrderList();
   }
 
   changeOrderStatus(order_id: string, status: string) {

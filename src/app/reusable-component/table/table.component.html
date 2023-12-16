@@ -59,9 +59,11 @@
               </table>
               <!-- Paginator -->
               <div class="mat-paginator">
-                <mat-paginator [length]="totalItemsOrderHistory" [pageSizeOptions]="pageSizeOptions"
-                  [pageSize]="pageSizeOrderHistory" [pageIndex]="currentPageOrderHistory"
-                  (page)="pagesChangedOrderHistory($event)"></mat-paginator>
+                <div class="mat-paginator">
+                  <mat-paginator [length]="totalItemsOrderHistory" [pageSizeOptions]="pageSizeOptionsOrderHistory"
+                    [pageSize]="pageSizeOrderHistory" [pageIndex]="currentPageOrderHistory"
+                    (page)="pagesChangedOrderHistory($event)"></mat-paginator>
+                </div>
               </div>
             </div>
           </div>
@@ -173,11 +175,9 @@
               </table>
               <!-- Paginator -->
               <div class="mat-paginator">
-                <mat-paginator [length]="totalItemsPendingOrder" [pageSizeOptions]="[5, 10, 25, 100]"
+                <mat-paginator [length]="totalItemsPendingOrder" [pageSizeOptions]="pageSizeOptionsPendingOrder"
                   [pageSize]="pageSizePendingOrder" [pageIndex]="currentPagePendingOrder"
-                  (page)="pageChangedPendingOrder($event)">
-                </mat-paginator>
-
+                  (page)="pageChangedPendingOrder($event)"></mat-paginator>
               </div>
             </div>
           </div>

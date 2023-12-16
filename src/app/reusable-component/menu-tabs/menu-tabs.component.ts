@@ -6,18 +6,19 @@ import {
   NgZone,
   OnInit,
   Output,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { OrderData, OrderDataItem } from 'src/data';
 import { ModalComponent } from '../modal/modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 // import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -81,6 +82,7 @@ export class MenuTabsComponent implements OnInit {
     [key: string]: boolean;
   }>({});
   isCategoryDisabled$ = this.isCategoryDisabledSubject.asObservable();
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private _http: AdminService,
@@ -91,7 +93,9 @@ export class MenuTabsComponent implements OnInit {
     private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private zone: NgZone,
+    private offcanvasService: NgbOffcanvas
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +124,21 @@ export class MenuTabsComponent implements OnInit {
     this.cartService.cartItems$.subscribe((cartItems) => {
       this.cartItems = cartItems;
     });
+
+    this.cartService.cartItems$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((cartItems) => {
+        this.zone.run(() => {
+          this.cartItems = cartItems as any[]; // Explicitly define the type
+          this.updateMenuCategoryState();
+        });
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe to prevent memory leaks
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   openSidebar() {
@@ -401,13 +420,26 @@ export class MenuTabsComponent implements OnInit {
     this.saveBillStatus(status);
   }
 
+  openEnd(content: TemplateRef<any>) {
+    this.offcanvasService.open(content, { position: 'end' });
+  }
+
+  openNoBackdrop(content: TemplateRef<any>) {
+    this.offcanvasService.open(content, { backdrop: false });
+  }
+
   confirmOrder() {
     try {
       const storedCartItems = localStorage.getItem('cartItems');
 
       if (storedCartItems) {
-        const cartItems: OrderDataItem[] = JSON.parse(storedCartItems);
+        const cartItems = this.cartService.getCartItems();
         const billStatus = this.selectedBillStatus;
+
+        if (!cartItems || cartItems.length === 0) {
+          console.log('No items in the cart.');
+          return;
+        }
 
         if (cartItems && cartItems.length > 0) {
           // Check if emp_id is provided
@@ -416,15 +448,13 @@ export class MenuTabsComponent implements OnInit {
             return;
           }
 
-          const orderItems: OrderDataItem[] = cartItems.map((item) => {
-            return {
-              itemId: item.itemId,
-              quantity: item.quantity ? item.quantity.toString() : '0',
-              item_name: item.item_name,
-              item_type: item.item_type,
-              price: item.price,
-            };
-          });
+          const orderItems: OrderDataItem[] = cartItems.map((item) => ({
+            itemId: item.itemId,
+            quantity: item.quantity ? item.quantity.toString() : '0',
+            item_name: item.item_name,
+            item_type: item.item_type,
+            price: item.price,
+          }));
 
           const orderPayload: OrderData = {
             bill_status: 'unpaid',
@@ -448,9 +478,12 @@ export class MenuTabsComponent implements OnInit {
                 this.loadCartItems();
                 this.cartItems = [];
                 this.toastr.success('Order placed successfully!');
+                this.offcanvasService.dismiss();
+                this.updateMenuCategoryState();
+                this.cartService.updateCartItems([]);
+
+                // Set sidebarState to 'closed'
                 // localStorage.setItem('sidebarState', 'closed');
-                window.location.reload();
-                this.showSidebar = false;
               },
               (error) => {
                 console.error('Error placing order:', error);
@@ -548,9 +581,10 @@ export class MenuTabsComponent implements OnInit {
       windowClass: 'addItem-modal',
     });
 
-    // Pass the item data to the modal for editing
+    // Pass the item data and selected category to the modal for editing
     modalRef.componentInstance.modalType = 'addItem-modal';
     modalRef.componentInstance.editedItem = item;
+    modalRef.componentInstance.selectedCategory = this.selectedCategory; // Pass the selected category
     modalRef.componentInstance.itemDeleted.subscribe(() => {
       this.itemDeleted.emit();
     });
@@ -586,4 +620,9 @@ export class MenuTabsComponent implements OnInit {
   isAllButtonsDisabled(): boolean {
     return Object.keys(this.selectedMenus).length > 0;
   }
+}
+function takeUntil(
+  ngUnsubscribe: Subject<void>
+): import('rxjs').OperatorFunction<any[], unknown> {
+  throw new Error('Function not implemented.');
 }

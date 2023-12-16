@@ -35,6 +35,12 @@
                   Snacks
                 </button>
               </div>
+              <div class="Custom">
+                <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
+                  (click)="updateSelectedCategory('custom')">
+                  Custom
+                </button>
+              </div>
             </div>
             <div class="add-product">
               <div class="d-flex align-items-center">
@@ -66,17 +72,17 @@
                         <div class="card-items" *ngFor="let item of meal.items">
                           <div class="card border-0 shadow h-100"
                             (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }]); openSidebar()">
-                            <div class="edit-field" (click)="openEditModal(item); $event.stopPropagation();">
-                              <span class="material-symbols-rounded">
-                                edit
-                              </span>
-                            </div>
                             <div
                               class="card-body inner-body d-flex justify-content-center align-items-center text-center">
                               <div>
                                 <h6 class="card-subtitle mb-2">{{ item.item_name | titlecase }}</h6>
                                 <p class="card-text text-muted">RS. {{ item.price }}</p>
                               </div>
+                            </div>
+                            <div class="edit-field" (click)="openEditModal(item); $event.stopPropagation();">
+                              <span class="material-symbols-rounded">
+                                edit
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -179,7 +185,7 @@
                 Snacks
               </button>
             </div>
-            <div class="snacks">
+            <div class="Custom">
               <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
                 (click)="updateSelectedCategory('custom')">
                 Custom
@@ -189,9 +195,7 @@
               <div>
                 <button (click)="openCustomOrderModal($event)" class="custom-buttom m-0" data-toggle="modal"
                   data-target="#loginModal">
-                  <span class="material-symbols-rounded">
-                    add
-                  </span>
+                  <span>Add Item</span>
                 </button>
               </div>
             </div>
