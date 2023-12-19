@@ -584,7 +584,15 @@ export class MenuTabsComponent implements OnInit {
     // Pass the item data and selected category to the modal for editing
     modalRef.componentInstance.modalType = 'addItem-modal';
     modalRef.componentInstance.editedItem = item;
-    modalRef.componentInstance.selectedCategory = this.selectedCategory; // Pass the selected category
+    modalRef.componentInstance.selectedCategory = this.selectedCategory;
+
+    // Add the selected category to the URL query parameters
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { selectedCategory: this.selectedCategory },
+      queryParamsHandling: 'merge',
+    });
+
     modalRef.componentInstance.itemDeleted.subscribe(() => {
       this.itemDeleted.emit();
     });

@@ -45,7 +45,7 @@ export class ModalComponent implements OnInit {
   @Output() itemAdded = new EventEmitter<void>();
   @Output() listSub = new EventEmitter<void>();
   @Input() selectedCategory: string;
-  selectedMenuTitle: string = '1';
+  selectedMenuTitle: string = '';
   menuItems: MenuItem[] = [];
   editedItem: MenuItem | null = null;
   editedEmployee: UserData | null = null;
@@ -89,6 +89,38 @@ export class ModalComponent implements OnInit {
     }
 
     this.menuList();
+
+    this.route.queryParams.subscribe((queryParams) => {
+      this.selectedCategory = queryParams['selectedCategory'] || '';
+      this.selectedMenuTitle = queryParams['selectedMenuTitle'] || ''; // Add this line
+
+      // Use the selected category and menu title as needed in your modal component
+      console.log('Selected Category:', this.selectedCategory);
+      console.log('Selected Menu Title:', this.selectedMenuTitle);
+      // Update your modal component logic here...
+    });
+  }
+
+  private updateQueryParams() {
+    // Update the query parameters based on the selected category and menu title
+    const queryParams = {
+      selectedCategory: this.selectedCategory,
+      selectedMenuTitle: this.selectedMenuTitle,
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  private clearQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      queryParamsHandling: 'merge',
+    });
   }
 
   sendOTP() {
@@ -150,6 +182,21 @@ export class ModalComponent implements OnInit {
 
   closeModal() {
     this.modalService.dismissAll();
+    this.selectedCategory = ''; // Optional: If needed, reset the selected category as well
+    this.selectedMenuTitle = '';
+
+    // Manually clear the query parameters without merging
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true, // Add this option to replace the current URL in the history
+    });
+
+    // Log the current state of query parameters
+    console.log(
+      'Query Parameters after closing modal:',
+      this.route.snapshot.queryParams
+    );
   }
 
   onMenuTitleChange() {
@@ -159,12 +206,12 @@ export class ModalComponent implements OnInit {
 
     if (selectedMenu) {
       this.form.patchValue({
+        title: selectedMenu.title,
         item_name: selectedMenu.item_name,
         price: selectedMenu.price,
       });
-
-      this.cdr.detectChanges();
     }
+    this.updateQueryParams();
   }
 
   menuList() {
@@ -173,9 +220,21 @@ export class ModalComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
       this.http.listmenu(token).subscribe((response: any) => {
-        console.log(response);
         if (response) {
           this.menuItems = response.data;
+
+          // Filter menuItems based on the selectedCategory
+          if (this.selectedCategory) {
+            this.menuItems = this.menuItems.filter(
+              (menu) => menu.title === this.selectedCategory
+            );
+          }
+
+          // Select the first menu item if none is selected
+          if (!this.selectedMenuTitle && this.menuItems.length > 0) {
+            this.selectedMenuTitle = this.menuItems[0]._id;
+          }
+
           console.log(this.menuItems, 'vvvvvhvhvhvvhvhvhvhvhvhvh');
         }
       });
