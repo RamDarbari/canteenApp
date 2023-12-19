@@ -197,15 +197,15 @@ export class TableComponent implements OnInit {
   }
 
   getItemNames(order: Order): string[] {
-    return order.order_rec.map((record) => record.item_name);
+    return order.orderRecords.map((record) => record.item_name);
   }
 
   getQuantities(order: Order): number[] {
-    return order.order_rec.map((record) => record.quantity);
+    return order.orderRecords.map((record) => record.quantity);
   }
 
   getPrices(order: Order): number[] {
-    return order.order_rec.map((record) => record.price);
+    return order.orderRecords.map((record) => record.price);
   }
 
   copyOrderId(orderId: string): void {

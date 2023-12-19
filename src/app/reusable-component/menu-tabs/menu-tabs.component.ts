@@ -417,7 +417,7 @@ export class MenuTabsComponent implements OnInit {
 
           const orderPayload: OrderData = {
             bill_status: 'unpaid',
-            order_rec: orderItems,
+            orderRecords: orderItems,
             emp_id: this.empId,
           };
 

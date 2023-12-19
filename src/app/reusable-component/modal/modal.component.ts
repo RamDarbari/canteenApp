@@ -235,6 +235,8 @@ export class ModalComponent implements OnInit {
           if (result) {
             this.toastr.success('Item Deleted Successfully');
             this.itemDeleted.emit();
+            console.log(this.itemDeleted, 'hhhhhhhhh');
+
             this.modalService.dismissAll();
           } else {
             this.toastr.error('Failed to Delete Item');

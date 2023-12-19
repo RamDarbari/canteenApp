@@ -91,26 +91,6 @@ export class MealCardComponent implements OnInit {
     }
   }
 
-  // filterSubMenuList() {
-  //   try {
-  //     const token = localStorage.getItem('user')
-  //       ? JSON.parse(localStorage.getItem('user')).data.token
-  //       : '';
-  //     this.http.addminMenuList(token).subscribe((response) => {
-  //       if (response.data && response.data.length > 0) {
-  //         this.submenu = response.data;
-  //       } else {
-  //         this.toastr.error('No meals found');
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //     this.toastr.error(
-  //       'An unexpected error occurred. Please try again later.'
-  //     );
-  //   }
-  // }
-
   openLoginModal(event: Event): void {
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',
@@ -137,64 +117,52 @@ export class MealCardComponent implements OnInit {
     // Check if the user has the "admin" role
     if (userJSON.role === 'admin') {
       this.toastr.error(
-        'Admins are restricted from ordering items from User panel'
+        'Admins are restricted from ordering items from the User panel'
       );
       this.router.navigate(['/custom-order']);
       return;
     }
 
-    const cartItem = {
-      item_name: item_name,
-      quantity: 1,
-      price: price,
-      itemId: itemId,
+    const menuType = this.selectedCategory.toLowerCase();
+    const orderRecords = JSON.parse(localStorage.getItem('cartItems')) || {};
+
+    // Check if menuType already exists in orderRecords
+    if (!orderRecords[menuType]) {
+      // If not, create an array for it
+      orderRecords[menuType] = [];
+    }
+
+    console.log('Existing orderRecords:', orderRecords);
+
+    // Check if the item already exists in the orderRecords for the current menuType
+    const existingItem = orderRecords[menuType].find(
+      (record) => record.itemId === itemId
+    );
+
+    if (existingItem) {
+      // If the item already exists, update the quantity
+      existingItem.quantity += 1;
+      console.log('Item already exists. Updated quantity:', existingItem);
+    } else {
+      // If the item does not exist, add a new record
+      orderRecords[menuType].push({
+        itemId: itemId,
+        quantity: 1,
+      });
+      console.log('Added new item:', orderRecords[menuType]);
+    }
+
+    const orderData = {
+      menuType: menuType,
+      orderRecords: orderRecords[menuType],
     };
 
-    const existingItems = localStorage.getItem('cartItems');
-    let cartItems = [];
+    console.log('Final orderData:', orderData);
 
-    if (existingItems) {
-      cartItems = JSON.parse(existingItems);
-      if (cartItems.some((item) => item.item_name === item_name)) {
-        this.toastr.error('Item with the same name is already in the cart.');
-        return;
-      }
-    }
-    cartItems.push(cartItem);
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem('cartItems', JSON.stringify(orderData));
+
     this.toastr.success('Item added to cart successfully!');
   }
-
-  // addTodayMenu(
-  //   menuType: string,
-  //   subMenuItems: { id: string; menuName: string; itemName: string }[]
-  // ) {
-  //   try {
-  //     const storedMenus =
-  //       JSON.parse(localStorage.getItem('selectedMenus')) || {};
-
-  //     if (!storedMenus[menuType]) {
-  //       storedMenus[menuType] = [];
-  //     }
-
-  //     subMenuItems.forEach((subMenuItem) => {
-  //       const { id, menuName, itemName } = subMenuItem;
-
-  //       if (!storedMenus[menuType].some((item) => item.id === id)) {
-  //         storedMenus[menuType].push({ id, menuName, itemName });
-  //       }
-  //     });
-
-  //     localStorage.setItem('selectedMenus', JSON.stringify(storedMenus));
-
-  //     console.log('Menu added to localStorage:', storedMenus);
-  //   } catch (error) {
-  //     console.error(error);
-  //     this.toastr.error(
-  //       'An unexpected error occurred. Please try again later.'
-  //     );
-  //   }
-  // }
 
   isMealCardEnabled(time: string): boolean {
     const mealTime = new Date();

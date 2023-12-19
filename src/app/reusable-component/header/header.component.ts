@@ -192,7 +192,7 @@ export class HeaderComponent implements OnInit {
 
           const orderPayload: OrderData = {
             bill_status: 'unpaid',
-            order_rec: orderItems,
+            orderRecords: orderItems,
             emp_id: '3673',
           };
           const token = localStorage.getItem('user')

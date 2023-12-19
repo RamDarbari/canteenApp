@@ -10,7 +10,7 @@ export interface OrderDataItem {
 }
 
 export interface OrderData {
-  order_rec: OrderDataItem[];
+  orderRecords: OrderDataItem[];
   bill_status: string;
   emp_id: string;
 }
@@ -21,7 +21,7 @@ export interface Order {
   menu_id: string;
   order_status: string;
   bill_status: string;
-  order_rec: OrderRecord[];
+  orderRecords: OrderRecord[];
   totalBalance: number;
   date: string;
   time: string;

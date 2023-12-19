@@ -47,7 +47,7 @@ export class CommonServiceService {
   }
 
   placeOrder(orderData: OrderData, token: any) {
-    const url = `${environment.apiUrl}/addOrder`;
+    const url = `${environment.apiUrl}/order/add-order`;
 
     return this._http
       .post(url, orderData, {
