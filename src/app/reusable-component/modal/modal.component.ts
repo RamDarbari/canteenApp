@@ -92,11 +92,11 @@ export class ModalComponent implements OnInit {
 
     this.route.queryParams.subscribe((queryParams) => {
       this.selectedCategory = queryParams['selectedCategory'] || '';
-      this.selectedMenuTitle = queryParams['selectedMenuTitle'] || ''; // Add this line
+      // this.selectedMenuTitle = queryParams['selectedMenuTitle'] || ''; // Add this line
 
       // Use the selected category and menu title as needed in your modal component
       console.log('Selected Category:', this.selectedCategory);
-      console.log('Selected Menu Title:', this.selectedMenuTitle);
+      // console.log('Selected Menu Title:', this.selectedMenuTitle);
       // Update your modal component logic here...
     });
   }
@@ -105,7 +105,7 @@ export class ModalComponent implements OnInit {
     // Update the query parameters based on the selected category and menu title
     const queryParams = {
       selectedCategory: this.selectedCategory,
-      selectedMenuTitle: this.selectedMenuTitle,
+      // selectedMenuTitle: this.selectedMenuTitle,
     };
 
     this.router.navigate([], {
@@ -182,21 +182,14 @@ export class ModalComponent implements OnInit {
 
   closeModal() {
     this.modalService.dismissAll();
-    this.selectedCategory = ''; // Optional: If needed, reset the selected category as well
+    this.selectedCategory = '';
     this.selectedMenuTitle = '';
 
-    // Manually clear the query parameters without merging
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {},
-      replaceUrl: true, // Add this option to replace the current URL in the history
+      replaceUrl: true,
     });
-
-    // Log the current state of query parameters
-    console.log(
-      'Query Parameters after closing modal:',
-      this.route.snapshot.queryParams
-    );
   }
 
   onMenuTitleChange() {
@@ -272,6 +265,14 @@ export class ModalComponent implements OnInit {
             this.menuItems.push(data);
             this.modalService.dismissAll();
             this.itemAdded.emit();
+            this.selectedCategory = '';
+            this.selectedMenuTitle = '';
+
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {},
+              replaceUrl: true,
+            });
           } else {
             this.toastr.error('Failed to Add Item');
           }
@@ -361,7 +362,13 @@ export class ModalComponent implements OnInit {
           },
           (error) => {
             console.error('Error updating item:', error);
-            this.toastr.error('Failed to update item');
+
+            // Check if the error has a message property
+            if (error && error.error && error.error.message) {
+              this.toastr.error(error.error.message); // Display the error message using Toastr
+            } else {
+              this.toastr.error('Failed to update item');
+            }
           }
         );
       } catch (error) {

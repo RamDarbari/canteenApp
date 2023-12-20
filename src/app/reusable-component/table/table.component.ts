@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from 'src/app/services/admin.service';
@@ -7,7 +13,12 @@ import { Subject, Subscription, debounceTime } from 'rxjs';
 import { Order, OrderHistory } from 'src/data';
 import { PendingOrdersService } from 'src/app/services/pending-orders.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModal,
+  NgbModalRef,
+  NgbOffcanvas,
+} from '@ng-bootstrap/ng-bootstrap';
+import { saveAs } from 'file-saver';
 
 interface Employee {
   EmployeeId: number;
@@ -46,7 +57,9 @@ export class TableComponent implements OnInit {
   limit: number = this.pageSizeOrderHistory;
   isLoadingOrderHistory: boolean = false;
   isLoading: boolean = false;
-
+  @ViewChild('dateRangeModal') dateRangeModal: TemplateRef<any>;
+  download: string = '';
+  dateInterval: string = '';
   displayedColumns: string[] = [
     'date',
     '_id',
@@ -67,6 +80,9 @@ export class TableComponent implements OnInit {
   ];
   formB: FormGroup;
   formData: any[] = [];
+  private modalRef: NgbModalRef;
+  startDate: string = '';
+  endDate: string = '';
 
   constructor(
     private http: AdminService,
@@ -74,7 +90,8 @@ export class TableComponent implements OnInit {
     private orderService: PendingOrdersService,
     private toastr: ToastrService,
     private clipboardService: ClipboardService,
-    private offcanvasService: NgbOffcanvas
+    private offcanvasService: NgbOffcanvas,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -84,9 +101,10 @@ export class TableComponent implements OnInit {
     this.getOrderHistory();
 
     this.formB = this.formBuilder.group({
-      field1: [''],
-      field2: [''],
+      startDate: [null], // Initialize with null or a default date
+      endDate: [null], // Initialize with null or a default date
     });
+
     this.orderSubscription = this.orderService.orders$.subscribe((orders) => {
       this.orders = orders;
       this.updatePagedData();
@@ -106,6 +124,13 @@ export class TableComponent implements OnInit {
     this.searchNameSubject.next('');
   }
 
+  onSelectChange(event: any): void {
+    const selectedValue = event.target.value;
+    console.log('Selected value:', selectedValue);
+    this.searchName = selectedValue;
+    this.getOrderHistory();
+  }
+
   getOrderHistory() {
     this.isLoadingOrderHistory = true;
     const token = localStorage.getItem('user')
@@ -117,7 +142,9 @@ export class TableComponent implements OnInit {
         token,
         this.currentPageOrderHistory,
         this.searchName,
-        this.limit
+        this.limit,
+        this.download,
+        this.dateInterval
       )
       .subscribe(
         (response: any) => {
@@ -132,6 +159,88 @@ export class TableComponent implements OnInit {
       .add(() => {
         this.isLoadingOrderHistory = false;
       });
+  }
+
+  openDateRangeModal() {
+    // Open the date range modal
+    this.modalRef = this.modalService.open(this.dateRangeModal, {
+      centered: true,
+    });
+  }
+
+  onDateRangeSubmit() {
+    // Close the modal
+    this.modalRef.close();
+
+    // Get the form values and format them
+    const formattedStartDate = this.formatDate(this.startDate);
+    const formattedEndDate = this.formatDate(this.endDate);
+
+    // Log or perform actions with the formatted dates
+    console.log('Formatted Start Date:', formattedStartDate);
+    console.log('Formatted End Date:', formattedEndDate);
+
+    // Call the function to fetch data with the formatted date range
+    this.getOrderHistoryWithDateRange(formattedStartDate, formattedEndDate);
+  }
+
+  formatDate(date: string): string {
+    // Assuming the input date is in the format "YYYY-MM-DD"
+    const parts = date.split('-');
+    const formattedDate = `${parts[1]}-${parts[2]}-${parts[0]}`;
+    return formattedDate;
+  }
+
+  getOrderHistoryWithDateRange(startDate: string, endDate: string) {
+    try {
+      this.isLoadingOrderHistory = true;
+
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      const dateInterval = `${startDate} to ${endDate}`;
+
+      this.http
+        .getOrderHistory(
+          token,
+          this.currentPageOrderHistory,
+          this.searchName,
+          this.pageSizeOrderHistory,
+          'excel',
+          dateInterval
+        )
+        .subscribe(
+          (response: any) => {
+            // Call the function to download the Excel file
+            this.downloadExcel(response, `OrderHistory_${dateInterval}`);
+          },
+          (error) => {
+            console.error('Error fetching order history:', error);
+          }
+        )
+        .add(() => {
+          this.isLoadingOrderHistory = false;
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  downloadExcel(data: any, filename: string) {
+    try {
+      // Assuming the data received is in the correct format for Excel (adjust as needed)
+      const jsonData = JSON.stringify(data);
+
+      // Create a Blob from the data
+      const blob = new Blob([jsonData], {
+        type: 'application/json',
+      });
+
+      // Trigger a file download using FileSaver.js
+      saveAs(blob, `${filename}.json`);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
   }
 
   pagesChangedOrderHistory(event: PageEvent) {

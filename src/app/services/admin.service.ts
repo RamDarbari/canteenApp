@@ -112,7 +112,9 @@ export class AdminService {
     token: string,
     currentPage: number,
     searchName: string,
-    pageSize: number
+    pageSize: number,
+    download: string,
+    dateInterval: string
   ) {
     return this._http.get(`${this.apiUrl}/admin/listorder`, {
       headers: {
@@ -121,7 +123,9 @@ export class AdminService {
       params: {
         currentPage: currentPage.toString(),
         search: searchName,
-        limit: pageSize.toString(), // Add page size as a parameter
+        limit: pageSize.toString(),
+        download: download,
+        dateInterval: dateInterval,
       },
     });
   }

@@ -145,6 +145,12 @@ ul {
   border-color: $light-primmary-color;
 }
 
+.btn:focus-visible {
+  color: white;
+  background-color: $light-primmary-color;
+  border-color: $light-primmary-color;
+}
+
 .btn:disabled,
 .btn.disabled,
 fieldset:disabled .btn {

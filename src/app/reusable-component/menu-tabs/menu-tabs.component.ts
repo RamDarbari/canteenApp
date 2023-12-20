@@ -18,7 +18,11 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { OrderData, OrderDataItem } from 'src/data';
 import { ModalComponent } from '../modal/modal.component';
-import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbModal,
+  NgbOffcanvas,
+} from '@ng-bootstrap/ng-bootstrap';
 
 // import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -51,6 +55,7 @@ interface MenuItem {
 export class MenuTabsComponent implements OnInit {
   menuCategories: MenuCategory[] = [];
   isLoading: boolean = false;
+  isDeleteLoading: boolean = false;
   isActive: boolean = false;
   totalMeals: any[] = [];
   submenu: any[] = [];
@@ -58,6 +63,8 @@ export class MenuTabsComponent implements OnInit {
   selectedMenus: any[] = [];
   cartItems: any[] = [];
   quantity: false;
+  closeResult = '';
+  item: any;
   selectedCategory: string = '';
   selectedCategory1: string = '';
   selectedBillStatus: string = '';
@@ -223,6 +230,16 @@ export class MenuTabsComponent implements OnInit {
     // Store the selected category in localStorage
     localStorage.setItem('selectedCategory', category);
 
+    const selectedCategory = this.submenu.find(
+      (meal) => meal.title.toLowerCase() === category.toLowerCase()
+    );
+    this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
+    this.updateMenuCategoryState();
+    this.updateQueryParams();
+  }
+
+  updateCustomCategory(category: string) {
+    this.selectedCategory = category;
     const selectedCategory = this.submenu.find(
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
@@ -619,6 +636,48 @@ export class MenuTabsComponent implements OnInit {
     });
   }
 
+  openDeleteConfirmation(content: TemplateRef<any>, item: any) {
+    this.item = item; // Set the selected item in the component
+    this.modalService.open(content, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      windowClass: 'addItem-modal',
+    });
+  }
+
+  deleteButton() {
+    if (this.item) {
+      this.isDeleteLoading = true; // Set loading state to true
+      console.log(this.item._id, 'item');
+
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+
+      this._http
+        .deleteItems(token, this.item._id)
+        .subscribe(
+          (result) => {
+            if (result) {
+              this.toastr.success('Item Deleted Successfully');
+              this.itemDeleted.emit();
+              this.modalService.dismissAll();
+            } else {
+              this.toastr.error('Failed to Delete Item');
+            }
+          },
+          (error) => {
+            console.error('Error deleting item:', error);
+            this.toastr.error('Failed to delete item');
+          }
+        )
+        .add(() => {
+          this.isDeleteLoading = false; // Set loading state to false when the operation is complete
+        });
+    }
+  }
+
   isItemInCart(item: any): boolean {
     return this.cartItems.some(
       (cartItem) => cartItem.item_name === item.item_name
@@ -627,6 +686,10 @@ export class MenuTabsComponent implements OnInit {
 
   isAllButtonsDisabled(): boolean {
     return Object.keys(this.selectedMenus).length > 0;
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
   }
 }
 function takeUntil(

@@ -90,8 +90,6 @@
             <button type="submit" class="btn btn-outline-primary" [disabled]="!addProduct.valid">
               {{ editedItem ? 'Update Product' : 'Add Product' }}
             </button>
-            <button type="button" class="button-danger" *ngIf="editedItem"
-              (click)="onDelete(editedItem._id)">Delete</button>
           </div>
         </form>
       </div>

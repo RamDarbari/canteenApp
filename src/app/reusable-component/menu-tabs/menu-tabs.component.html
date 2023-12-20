@@ -15,7 +15,7 @@
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
-          <div class="d-flex align-items-center ">
+          <div class="d-flex align-items-center" style="border-bottom: 1px solid #8b8b8b;">
             <div class="menu-selection-card d-flex justify-content-start pt-3 ">
               <div class="breakfast">
                 <button [ngClass]="{'active-button': selectedCategory === 'Breakfast'}"
@@ -33,12 +33,6 @@
                 <button [ngClass]="{'active-button': selectedCategory === 'Snacks'}"
                   [disabled]="(isCategoryDisabled$ | async)['Snacks']" (click)="updateSelectedCategory('Snacks')">
                   Snacks
-                </button>
-              </div>
-              <div class="Custom">
-                <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
-                  (click)="updateSelectedCategory('custom')">
-                  Custom
                 </button>
               </div>
             </div>
@@ -83,6 +77,10 @@
                               <span class="material-symbols-rounded">
                                 edit
                               </span>
+                            </div>
+                            <div class="delete-field"
+                              (click)="openDeleteConfirmation(content, item); $event.stopPropagation();">
+                              <span class="material-symbols-rounded">delete</span>
                             </div>
                           </div>
                         </div>
@@ -146,6 +144,26 @@
     </div>
 
   </div>
+  <ng-template #content let-modal>
+    <section class="modal-section">
+      <app-loader *ngIf="isDeleteLoading"></app-loader>
+      <div class="container">
+        <div class="row">
+          <div class="">
+            <div class="add-product-container">
+              <h2 class="modal-title">Confirm Deletion</h2>
+              <p class="modal-message">Are you sure you want to delete this item? This action cannot be undone.</p>
+              <div class="modal-buttons d-flex justify-content-end">
+                <button class="btn btn-outline-primary" (click)="closeModal()">Cancel</button>
+                <button class="button-danger " (click)="deleteButton()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
   <ng-content select=".todaymenu"></ng-content>
 </section>
 
@@ -166,28 +184,28 @@
     <div class="row">
       <div class="d-flex flex-column align-items-center">
         <div class="tabs w-100">
-          <div class="menu-selection-card d-flex justify-content-start pt-3">
+          <div class="menu-selection-card d-flex justify-content-start pt-3" style="border-bottom: 1px solid #8b8b8b;">
             <div class="breakfast">
               <button [ngClass]="{'active-button': selectedCategory1 === 'Breakfast'}"
-                (click)="updateSelectedCategory('Breakfast')">
+                (click)="updateCustomCategory('Breakfast')">
                 Breakfast
               </button>
             </div>
             <div class="lunch">
               <button [ngClass]="{'active-button': selectedCategory1 === 'Lunch'}"
-                (click)="updateSelectedCategory('Lunch')">
+                (click)="updateCustomCategory('Lunch')">
                 Lunch
               </button>
             </div>
             <div class="snacks">
               <button [ngClass]="{'active-button': selectedCategory1 === 'Snacks'}"
-                (click)="updateSelectedCategory('Snacks')">
+                (click)="updateCustomCategory('Snacks')">
                 Snacks
               </button>
             </div>
             <div class="Custom">
               <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
-                (click)="updateSelectedCategory('custom')">
+                (click)="updateCustomCategory('custom')">
                 Custom
               </button>
             </div>

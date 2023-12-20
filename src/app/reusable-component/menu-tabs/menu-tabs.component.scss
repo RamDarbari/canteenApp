@@ -95,7 +95,7 @@ section {
     .menu-selection-card {
       margin-left: 20px;
       width: 90%;
-      border-bottom: 1px solid #8b8b8b;
+      // border-bottom: 1px solid #8b8b8b;
 
       .custom-order-div {
         width: 69%;
@@ -343,12 +343,44 @@ section {
 
 .edit-field {
   position: absolute;
-  right: -4px;
-  top: -7px;
+  right: 24px;
+  bottom: -17px;
 
   span {
     cursor: pointer;
-    font-size: 19px;
+    font-size: 24px;
+  }
+}
+.delete-field {
+  position: absolute;
+  right: 0px;
+  bottom: -17px;
+
+  span {
+    cursor: pointer;
+    font-size: 24px;
+    color: red;
+  }
+}
+
+.button-danger {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 10%;
+  background-color: #dc3545;
+  color: #fff;
+  border: 1px solid #dc3545;
+  margin-right: 0.5rem;
+  margin-left: 10px;
+  transition: all 0.3s ease-out;
+  border-color: #dc3545;
+  // margin-left: 30px;
+
+  &:hover {
+    background-color: #fff;
+    color: #dc3545;
   }
 }
 
@@ -401,5 +433,30 @@ section {
   border-radius: 4px;
   &:disabled {
     background-color: #eee;
+  }
+}
+
+.modal-section {
+  // background: rgba(0, 0, 0, 0.5); /* Add a semi-transparent black background */
+  height: 169px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .add-product-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    .modal-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .modal-message {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
   }
 }
