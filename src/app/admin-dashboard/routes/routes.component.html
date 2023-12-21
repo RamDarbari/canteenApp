@@ -69,7 +69,7 @@
                 aria-expanded="false">
                 <span class="material-symbols-rounded">notifications_active</span>
               </a>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+              <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
                 style="position: absolute; left: -145px; top: 100%;">
                 <li *ngFor="let message of messages" class="dropdown-item widget-media dz-scroll p-3 ps ps--active-y">
                   <a>{{ message }}</a>
@@ -77,6 +77,21 @@
                 <li *ngIf="messages.length === 0" class="dropdown-item widget-media dz-scroll p-3 ps ps--active-y">
                   <span>No new notifications</span>
                 </li>
+              </ul> -->
+
+              <ul class="dropdown-menu" style="position: absolute; left: -145px; top: 100%;"
+                aria-labelledby="dropdownMenuButton1">
+                <div class="backend-notifications">
+                  <li *ngFor="let message of messages" class="p-3">
+                    <a>{{ message }}</a>
+                  </li>
+                </div>
+
+                <div class="fontEnd-notifications">
+                  <li *ngIf="messages.length === 0" class="widget-media dz-scroll p-3 ps ps--active-y">
+                    <span>No new notifications</span>
+                  </li>
+                </div>
               </ul>
             </li>
             <li class="nav-item"><a class="nav-link" (click)="logout()">

@@ -44,6 +44,8 @@ app-loader {
   justify-content: center;
   align-items: center;
   margin-right: 10px;
+  margin-left: 5px;
+  padding: 5px;
 }
 
 .dropdown-menu {
@@ -126,4 +128,12 @@ app-loader {
     background-color: #fff;
     color: #dc3545;
   }
+}
+.close {
+  color: #dc3545;
+  font-size: 27px;
+}
+.modal-title {
+  padding-top: 19px;
+  font-size: 21px;
 }

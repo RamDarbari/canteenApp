@@ -86,11 +86,12 @@
     </div>
   </div>
   <ng-template #dateRangeModal let-modal>
-    <div class="modal-header">
+    <div class="modal-header d-flex align-items-center">
       <h4 class="modal-title">Select Date Range</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-times close" (click)="modal.dismiss('Cross click')" aria-hidden="true"></i>
+      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
-      </button>
+      </button> -->
     </div>
     <div class="modal-body">
       <!-- Add your date picker or date range picker here -->
@@ -99,11 +100,11 @@
           <label for="startDate">Start Date</label>
           <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="startDate" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mt-2">
           <label for="endDate">End Date</label>
           <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="endDate" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary mt-2">Submit</button>
       </form>
     </div>
   </ng-template>

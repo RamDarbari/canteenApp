@@ -6,7 +6,7 @@
         <div>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a>Today's Menu</a>
+              <a>Today's Menu </a>
             </li>
           </ol>
         </div>
@@ -68,19 +68,21 @@
                             (click)="addTodayMenu(meal._id, [{ id: item._id, menuName: meal.title, itemName: item.item_name }]); openSidebar()">
                             <div
                               class="card-body inner-body d-flex justify-content-center align-items-center text-center">
-                              <div>
+                              <div class="d-flex flex-column align-items-center ">
                                 <h6 class="card-subtitle mb-2">{{ item.item_name | titlecase }}</h6>
                                 <p class="card-text text-muted">RS. {{ item.price }}</p>
+                                <div class="d-flex">
+                                  <div class="edit-field" (click)="openEditModal(item); $event.stopPropagation();">
+                                    <span class="material-symbols-rounded">
+                                      edit
+                                    </span>
+                                  </div>
+                                  <div class="delete-field"
+                                    (click)="openDeleteConfirmation(content, item); $event.stopPropagation();">
+                                    <span class="material-symbols-rounded">delete</span>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div class="edit-field" (click)="openEditModal(item); $event.stopPropagation();">
-                              <span class="material-symbols-rounded">
-                                edit
-                              </span>
-                            </div>
-                            <div class="delete-field"
-                              (click)="openDeleteConfirmation(content, item); $event.stopPropagation();">
-                              <span class="material-symbols-rounded">delete</span>
                             </div>
                           </div>
                         </div>

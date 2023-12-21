@@ -342,20 +342,20 @@ section {
 }
 
 .edit-field {
-  position: absolute;
-  right: 24px;
-  bottom: -17px;
-
+  // position: absolute;
+  // right: 24px;
+  // bottom: -17px;
+  padding-top: 5px;
   span {
     cursor: pointer;
     font-size: 24px;
   }
 }
 .delete-field {
-  position: absolute;
-  right: 0px;
-  bottom: -17px;
-
+  // position: absolute;
+  // right: 0px;
+  // bottom: -17px;
+  padding-top: 5px;
   span {
     cursor: pointer;
     font-size: 24px;

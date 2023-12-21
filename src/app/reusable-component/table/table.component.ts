@@ -19,6 +19,7 @@ import {
   NgbOffcanvas,
 } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 interface Employee {
   EmployeeId: number;
@@ -132,6 +133,7 @@ export class TableComponent implements OnInit {
   }
 
   getOrderHistory() {
+    console.log('hello');
     this.isLoadingOrderHistory = true;
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
@@ -191,7 +193,61 @@ export class TableComponent implements OnInit {
     return formattedDate;
   }
 
+  // getOrderHistoryWithDateRange(startDate: string, endDate: string) {
+  //   console.log('getOrderHistoryWithDateRange');
+  //   try {
+  //     this.isLoadingOrderHistory = true;
+
+  //     const token = localStorage.getItem('user')
+  //       ? JSON.parse(localStorage.getItem('user')).data.token
+  //       : '';
+  //     const dateInterval = `${startDate} to ${endDate}`;
+
+  //     this.http
+  //       .getOrderHistory(
+  //         token,
+  //         this.currentPageOrderHistory,
+  //         this.searchName,
+  //         this.pageSizeOrderHistory,
+  //         'excel',
+  //         dateInterval
+  //       )
+  //       .subscribe(
+  //         (response: any) => {
+  //           // Call the function to download the Excel file
+  //           this.downloadExcel(response, `OrderHistory_${dateInterval}`);
+  //         },
+  //         (error) => {
+  //           console.error('Error fetching order history:', error);
+  //         }
+  //       )
+  //       .add(() => {
+  //         this.isLoadingOrderHistory = false;
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  // downloadExcel(data: any, filename: string) {
+  //   try {
+  //     // Assuming the data received is in the correct format for Excel (adjust as needed)
+  //     const jsonData = JSON.stringify(data);
+
+  //     // Create a Blob from the data
+  //     const blob = new Blob([jsonData], {
+  //       type: 'application/json',
+  //     });
+
+  //     // Trigger a file download using FileSaver.js
+  //     saveAs(blob, `${filename}.json`);
+  //   } catch (error) {
+  //     console.error('Error downloading file:', error);
+  //   }
+  // }
+
   getOrderHistoryWithDateRange(startDate: string, endDate: string) {
+    console.log('getOrderHistoryWithDateRange');
     try {
       this.isLoadingOrderHistory = true;
 
@@ -201,7 +257,7 @@ export class TableComponent implements OnInit {
       const dateInterval = `${startDate} to ${endDate}`;
 
       this.http
-        .getOrderHistory(
+        .getOrderHistoryExecl(
           token,
           this.currentPageOrderHistory,
           this.searchName,
@@ -226,18 +282,16 @@ export class TableComponent implements OnInit {
     }
   }
 
+  // .component.ts
   downloadExcel(data: any, filename: string) {
     try {
-      // Assuming the data received is in the correct format for Excel (adjust as needed)
-      const jsonData = JSON.stringify(data);
-
-      // Create a Blob from the data
-      const blob = new Blob([jsonData], {
-        type: 'application/json',
+      // Create a Blob from the binary data
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
 
       // Trigger a file download using FileSaver.js
-      saveAs(blob, `${filename}.json`);
+      saveAs(blob, `${filename}.xlsx`);
     } catch (error) {
       console.error('Error downloading file:', error);
     }
@@ -262,7 +316,7 @@ export class TableComponent implements OnInit {
       this.http
         .orderList(token, currentPage, totalRecords, totalPages, limit)
         .subscribe((response: any) => {
-          console.log(response, 'kkkkkkkkkkkkkkkkkkkkkkkkkk');
+          console.log(response, 'KHUSHNEEL  ');
           if (response && response.data && response.data.length > 0) {
             this.orderService.setOrders(response.data);
           }

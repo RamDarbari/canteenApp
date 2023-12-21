@@ -108,6 +108,28 @@ export class AdminService {
     );
   }
 
+  // getOrderHistory(
+  //   token: string,
+  //   currentPage: number,
+  //   searchName: string,
+  //   pageSize: number,
+  //   download: string,
+  //   dateInterval: string
+  // ) {
+  //   return this._http.get(`${this.apiUrl}/admin/listorder`, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     params: {
+  //       currentPage: currentPage.toString(),
+  //       search: searchName,
+  //       limit: pageSize.toString(),
+  //       download: download,
+  //       dateInterval: dateInterval,
+  //     },
+  //   });
+  // }
+
   getOrderHistory(
     token: string,
     currentPage: number,
@@ -127,9 +149,32 @@ export class AdminService {
         download: download,
         dateInterval: dateInterval,
       },
+      // responseType: 'arraybuffer',
     });
   }
 
+  getOrderHistoryExecl(
+    token: string,
+    currentPage: number,
+    searchName: string,
+    pageSize: number,
+    download: string,
+    dateInterval: string
+  ) {
+    return this._http.get(`${this.apiUrl}/admin/listorder`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        currentPage: currentPage.toString(),
+        search: searchName,
+        limit: pageSize.toString(),
+        download: download,
+        dateInterval: dateInterval,
+      },
+      responseType: 'arraybuffer',
+    });
+  }
   detailsCount(token: string, currentDate: string): Observable<any> {
     let date = new HttpParams().set('currentDate', currentDate);
 

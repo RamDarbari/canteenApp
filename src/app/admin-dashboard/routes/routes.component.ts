@@ -36,12 +36,12 @@ export class RoutesComponent implements OnInit {
   ngOnInit() {
     // Subscribe to socket events
     this.socketService.on('message').subscribe((data: any) => {
-      console.log('Received a message from the server:', data);
+      console.log('Received a message from the server:', data, 'khushneel');
       this.messages.push(data); // Store the message
     });
 
     this.socketService.on('notification').subscribe((data: any) => {
-      console.log('Received a notification from the server:', data);
+      console.log('Received a notification from the server: KHUSHNEEL', data);
       this.toaster.info('Received a notification from the server:', data);
       this.messages.push(data); // Store the notification
     });
