@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserModule } from './user/user.module';
 @NgModule({
   declarations: [RoutesComponent, DashboardComponent, UserListComponent],
   imports: [
@@ -23,6 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     NgChartsModule,
     MatTableModule,
+    // UserModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

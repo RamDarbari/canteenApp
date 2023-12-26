@@ -7,6 +7,25 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ScrollToService } from '@nicky-lenaers/ngx-scroll-to';
 
+interface cartItems {
+  itemId: string;
+  item_name: string;
+  price: number;
+  quantity: number;
+  initialPrice: number;
+}
+
+interface UserData {
+  _id: string;
+  EmployeeId: number;
+  FirstName: string;
+  LastName: string;
+  role: string;
+  email: string;
+  balance: number;
+  updatedAt: string;
+  wallet: number;
+}
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,13 +34,13 @@ import { ScrollToService } from '@nicky-lenaers/ngx-scroll-to';
 export class HeaderComponent implements OnInit {
   showUserSection: boolean = true;
   showAdminSection: boolean = true;
-  cartItems: any[] = [];
+  cartItems: cartItems[] = [];
   quantity: false;
   isAdmin: boolean = false;
   selectedBillStatus: string = 'unpaid';
   isLoading: boolean = false;
   hasWallet: boolean = false;
-  userProfileInfo: any;
+  userProfileInfo: UserData;
   emptyCart: any;
 
   constructor(

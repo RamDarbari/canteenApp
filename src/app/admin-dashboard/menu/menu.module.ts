@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuRoutingModule } from './menu-routing.module';
-import { MenuListComponent } from './menu-list/menu-list.component';
-import { AddProductComponent } from './add-product/add-product.component';
 import { MenuCatalogueComponent } from './menu-catalogue/menu-catalogue.component';
 import { ReusableComponentModule } from 'src/app/reusable-component/reusable-component.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,12 +12,7 @@ import { PagesModule } from 'src/app/pages/pages.module';
 import { MenuRoutesComponent } from './menu-routes/menu-routes.component';
 
 @NgModule({
-  declarations: [
-    MenuListComponent,
-    AddProductComponent,
-    MenuCatalogueComponent,
-    MenuRoutesComponent,
-  ],
+  declarations: [MenuCatalogueComponent, MenuRoutesComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -32,6 +25,6 @@ import { MenuRoutesComponent } from './menu-routes/menu-routes.component';
     CdkTableModule,
     PagesModule,
   ],
-  exports: [AddProductComponent],
+  exports: [],
 })
 export class MenuModule {}

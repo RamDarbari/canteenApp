@@ -2,6 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 import { detailsCount } from 'src/data';
 
+interface mostOrderItems {
+  _id: string;
+  count: number;
+}
+
+interface recentOrderItems {
+  item_name: string;
+  quantity: number;
+  price: number;
+}
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,8 +26,8 @@ export class DashboardComponent implements OnInit {
   };
   isLoading: boolean = false;
 
-  mostOrderItems: any[] = [];
-  recentOrderItems: any[] = [];
+  mostOrderItems: mostOrderItems[] = [];
+  recentOrderItems: recentOrderItems[] = [];
 
   constructor(private http: AdminService) {}
 

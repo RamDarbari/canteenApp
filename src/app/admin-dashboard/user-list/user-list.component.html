@@ -15,8 +15,9 @@
               </div>
             </div>
             <div class="card-body">
+              <app-loader *ngIf="isLoading" class="loader"></app-loader>
               <div class="table-responsive w-100">
-                <app-loader *ngIf="isLoading"></app-loader>
+
                 <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
                   <ng-container matColumnDef="EmployeeId">
                     <th mat-header-cell *matHeaderCellDef> EmployeeId</th>
@@ -78,6 +79,7 @@
     </div>
     <div class="sidebar">
       <ng-template #content let-offcanvas>
+        <app-loader *ngIf="isLoading"></app-loader>
         <div class="offcanvas-header">
           <h4 class="offcanvas-title">Employee Details</h4>
           <button type="button" class="btn-close border-0 outline-none" aria-label="Close"
@@ -115,8 +117,15 @@
               <input type="text" class="form-control" id="wallet" [(ngModel)]="selectedEmployee.wallet" name="wallet"
                 (input)="onWalletInput($event)" maxlength="4">
             </div>
-            <button type="button" class="btn btn-outline-primary" (click)="updateEmployee()"
-              *ngIf="selectedEmployee">Update</button>
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-primary" (click)="updateEmployee()"
+                *ngIf="selectedEmployee">Update</button>
+              <button type="button" class="btn btn-outline-primary" (click)="viewProfile(selectedEmployee)"
+                *ngIf="selectedEmployee">
+                View Profile
+              </button>
+            </div>
+
           </form>
         </div>
       </ng-template>

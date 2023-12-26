@@ -171,30 +171,6 @@
                   <th mat-header-cell *matHeaderCellDef>Date</th>
                   <td mat-cell *matCellDef="let element"> {{element.date}} </td>
                 </ng-container>
-                <!-- <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Action</th>
-                  <div mat-cell *matCellDef="let element" class="dropdown ml-auto">
-                    <div class="btn-link" style="cursor: pointer;" data-bs-toggle="dropdown">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M11.0005 12C11.0005 12.5523 11.4482 13 12.0005 13C12.5528 13 13.0005 12.5523 13.0005 12C13.0005 11.4477 12.5528 11 12.0005 11C11.4482 11 11.0005 11.4477 11.0005 12Z"
-                          stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path
-                          d="M18.0005 12C18.0005 12.5523 18.4482 13 19.0005 13C19.5528 13 20.0005 12.5523 20.0005 12C20.0005 11.4477 19.5528 11 19.0005 11C18.4482 11 18.0005 11.4477 18.0005 12Z"
-                          stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path
-                          d="M4.00049 12C4.00049 12.5523 4.4482 13 5.00049 13C5.55277 13 6.00049 12.5523 6.00049 12C6.00049 11.4477 5.55277 11 5.00049 11C4.4482 11 4.00049 11.4477 4.00049 12Z"
-                          stroke="#3E4954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </svg>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item text-black" (click)="changeOrderStatus(element._id, 'confirm')"><i
-                          class="far fa-check-circle me-1 text-success"></i>Accept order</a>
-                      <a class="dropdown-item text-black" (click)="changeOrderStatus(element._id, 'cancelled')"><i
-                          class="far fa-times-circle me-1 text-danger"></i>Reject order</a>
-                    </div>
-                  </div>
-                </ng-container> -->
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>Action</th>
                   <td mat-cell *matCellDef="let element" class="text-center">
@@ -227,3 +203,106 @@
   <ng-content select=".pendingOrder"></ng-content>
 </section>
 <!-- end  -->
+
+<!-- user order history  -->
+<section class="order-history-container pb-4" *ngIf="userorderhistory">
+  <div class="order-history-card">
+    <div class="row my-4">
+      <div class="col-12">
+        <div class="card ">
+          <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
+            <div class=" d-flex flex-wrap align-items-center justify-content-between ">
+              <button class="btn btn-outline-primary" (click)="openDateRangeModal()">Download Excel</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive w-100">
+              <app-loader *ngIf="isLoadingOrderHistory"></app-loader>
+              <div *ngIf="orderHistoryData.length === 0; else orderHistoryTable">
+                No items found matching the search criteria.
+              </div>
+              <ng-template #orderHistoryTable>
+                <table mat-table matSort [dataSource]="orderHistoryData" class="mat-elevation-z8">
+                  <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
+                    <th mat-header-cell *matHeaderCellDef> Order Id</th>
+                    <td mat-cell *matCellDef="let element" class="mat-cell-orderId">
+                      <span class="orderId" (click)="copyOrderId(element._id)">{{ element._id }}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="emp_id">
+                    <th mat-header-cell *matHeaderCellDef> Employee ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.emp_id}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="order_status">
+                    <th mat-header-cell *matHeaderCellDef> Order Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element.order_status}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="totalBalance">
+                    <th mat-header-cell *matHeaderCellDef> Total Amount</th>
+                    <td mat-cell *matCellDef="let element"> {{element.totalBalance}} </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="actions">
+                      <th mat-header-cell *matHeaderCellDef>Action</th>
+                      <td mat-cell *matCellDef="let element" style="min-width: 120px;">
+                        <select name="more-action" id="form-control" class="form-control">
+                          <option value=" ">Select</option>
+                          <option value="view-user">View </option>
+                        </select>
+                      </td>
+                    </ng-container> -->
+                  <!-- Define the table header row -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <!-- Define the table rows -->
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <!-- Paginator -->
+                <div class="mat-paginator">
+                  <mat-paginator [length]="totalItemsOrderHistory" [pageSizeOptions]="pageSizeOptions"
+                    [pageSize]="pageSizeOrderHistory" [pageIndex]="currentPageOrderHistory"
+                    (page)="pagesChangedOrderHistory($event)"></mat-paginator>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #dateRangeModal let-modal>
+    <div class="modal-header d-flex align-items-center">
+      <h4 class="modal-title">Select Date Range</h4>
+      <i class="fa fa-times close" style="cursor: pointer;" (click)="modal.dismiss('Cross click')"
+        aria-hidden="true"></i>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="onDateRangeSubmit()" #dateRangeForm="ngForm">
+        <div class="form-group m-2">
+          <label for="startDate">Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="startDate" required
+            (change)="onStartDateChange()" />
+        </div>
+        <div class="form-group m-2">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="endDate" [min]="startDate"
+            required />
+        </div>
+        <button type="submit" class="btn btn-outline-primary w-100 mt-2" [disabled]="dateRangeForm.invalid">
+          Submit
+        </button>
+      </form>
+    </div>
+  </ng-template>
+
+
+  <ng-content select=".userorderhistory"></ng-content>
+</section>
+<!-- end -->

@@ -12,6 +12,26 @@ interface MenuItem {
   menuName: string;
   itemName: string;
 }
+
+interface TodayMenu {
+  _id: string;
+  today_menu_id: string;
+  title: string;
+  time: string;
+  items: MenuItems[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface MenuItems {
+  _id: string;
+  item_name: string;
+  price: number;
+  quantity: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 @Component({
   selector: 'app-meal-card',
   templateUrl: './meal-card.component.html',
@@ -25,10 +45,7 @@ export class MealCardComponent implements OnInit {
   @Output() selectedItemChange: EventEmitter<MenuItem[]> = new EventEmitter<
     MenuItem[]
   >();
-  meals: any[] = [];
-  submenu: any[] = [];
-  items: any[] = [];
-  totalMeals: any[] = [];
+  meals: TodayMenu[] = [];
 
   constructor(
     private _https: CommonServiceService,
@@ -50,6 +67,7 @@ export class MealCardComponent implements OnInit {
       this._https.menuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
+          console.log(this.meals, 'mealslslslslslsl');
         } else {
           // this.toastr.error('No meals found');
         }

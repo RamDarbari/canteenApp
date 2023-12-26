@@ -18,7 +18,8 @@ import {
   NgbModalRef,
   NgbOffcanvas,
 } from '@ng-bootstrap/ng-bootstrap';
-import * as FileSaver from 'file-saver';
+import { saveAs } from 'file-saver-es';
+import { ActivatedRoute } from '@angular/router';
 
 interface Employee {
   EmployeeId: number;
@@ -38,6 +39,7 @@ interface Employee {
 export class TableComponent implements OnInit {
   @Input() orderHistory: boolean = false;
   @Input() pendingOrder: boolean = false;
+  @Input() userorderhistory: boolean = false;
   orderHistoryData: OrderHistory[] = [];
   orders: Order[] = [];
   pagedEmployeeData: Order[] = [];
@@ -90,8 +92,8 @@ export class TableComponent implements OnInit {
     private orderService: PendingOrdersService,
     private toastr: ToastrService,
     private clipboardService: ClipboardService,
-    private offcanvasService: NgbOffcanvas,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -113,6 +115,15 @@ export class TableComponent implements OnInit {
     this.refreshInterval = setInterval(() => {
       this.pendingOrderList();
     }, 30 * 1000);
+
+    this.route.queryParamMap.subscribe((queryParams) => {
+      const empIdFromQueryParam = queryParams.get('empId');
+
+      // Use empId from query parameter if present, otherwise use the existing value of searchName
+      this.searchName = empIdFromQueryParam || this.searchName;
+
+      this.getOrderHistory();
+    });
   }
 
   ngOnDestroy(): void {
@@ -134,10 +145,18 @@ export class TableComponent implements OnInit {
   getOrderHistory() {
     console.log('hello');
     this.isLoadingOrderHistory = true;
+
+    // Check if empId is present in the URL query parameters
+    const empIdFromQueryParam = this.route.snapshot.queryParamMap.get('empId');
+
+    // Use empId from query parameter if present, otherwise use the value of searchName
+    this.searchName = empIdFromQueryParam || this.searchName;
+
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     const startIndex = this.currentPageOrderHistory * this.limit + 1;
+
     this.http
       .getOrderHistory(
         token,
@@ -151,10 +170,18 @@ export class TableComponent implements OnInit {
         (response: any) => {
           this.orderHistoryData = response.data as OrderHistory[];
           this.totalItemsOrderHistory = response.totalRecords;
+
+          // Check if no items are found
+          // if (this.orderHistoryData.length === 0) {
+          //   this.toastr.info('No items found matching the search criteria.');
+          // }
+
           console.log(response);
         },
         (error) => {
           console.error('Error fetching order history:', error);
+          // You can also add a toastr message for the error if needed
+          this.toastr.error('Failed to fetch order history.');
         }
       )
       .add(() => {
@@ -247,7 +274,7 @@ export class TableComponent implements OnInit {
       const blob = new Blob([data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
-      FileSaver.saveAs(blob, `${filename}.xlsx`);
+      saveAs(blob, `${filename}.xlsx`);
     } catch (error) {
       console.error('Error downloading file:', error);
     }

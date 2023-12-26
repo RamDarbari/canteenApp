@@ -1,13 +1,13 @@
 section {
   background-color: #f6f6f6;
   display: flex;
-  flex-direction: column; // Stack children vertically
+  flex-direction: column;
   width: 1200px;
-  overflow: hidden; // Hide content overflow
+  overflow: hidden;
 }
 .disabled-card {
-  opacity: 0.5; // or any other style to visually indicate that the card is disabled
-  pointer-events: none; // disable mouse events on the card
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .totalItems {

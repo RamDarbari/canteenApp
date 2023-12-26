@@ -12,6 +12,7 @@ import { Subject, debounceTime } from 'rxjs';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ModalComponent } from 'src/app/reusable-component/modal/modal.component';
+import { Route, Router } from '@angular/router';
 
 interface Employee {
   EmployeeId: number;
@@ -49,12 +50,14 @@ export class UserListComponent implements OnInit {
   isLoading: boolean = false;
   private searchNameSubject = new Subject<string>();
   @Output() userAdded = new EventEmitter<void>();
+  empId: number;
 
   constructor(
     private http: AdminService,
     private offcanvasService: NgbOffcanvas,
     private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -156,6 +159,26 @@ export class UserListComponent implements OnInit {
       position: 'end',
       panelClass: 'details-panel',
     });
+  }
+
+  navigateToProfile(employeeId: number): void {
+    // debugger;
+    this.empId = employeeId;
+    this.router.navigate(['/profile'], {
+      queryParams: { empId: employeeId },
+    });
+  }
+
+  viewProfile(employee: Employee) {
+    // Get the employee ID
+    const employeeId = employee.EmployeeId;
+
+    // Navigate to the profile with the employee ID as a query parameter
+    this.router.navigate(['/profile'], {
+      queryParams: { empId: employeeId },
+    });
+
+    this.offcanvasService.dismiss();
   }
 
   openCustomOrderModal(event: Event): void {

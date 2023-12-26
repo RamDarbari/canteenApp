@@ -81,7 +81,8 @@
                 <select id="menuTitle" name="menuTitle" class="form-control" [(ngModel)]="selectedMenuTitle"
                   (change)="onMenuTitleChange()" aria-label="Default select example" value="menu._id">
                   <option value="" disabled>Select Menu Title</option>
-                  <option class="" *ngFor="let menu of menuItems" [value]="menu._id">{{ menu.title }}</option>
+                  <option class="" *ngFor="let menu of menuItems.slice(0, 3)" [value]="menu._id">{{ menu.title }}
+                  </option>
                 </select>
               </div>
             </div>

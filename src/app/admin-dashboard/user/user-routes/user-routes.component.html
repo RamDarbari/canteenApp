@@ -1,0 +1,26 @@
+<section class="communication-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <ul class="nav nav-tabs d-flex flex-wrap" id="nav-tab" role="tablist">
+              <li>
+                <a class="w-100 nav-item nav-link" [routerLink]="['./history']" [queryParams]="{ empId: empId }">
+                  Order History
+                </a>
+
+              </li>
+              <li>
+                <a class="w-100 nav-item nav-link" [routerLink]="['./wallet-history']" [queryParams]="{ empId: empId }">
+                  Wallet History
+                </a>
+              </li>
+            </ul>
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

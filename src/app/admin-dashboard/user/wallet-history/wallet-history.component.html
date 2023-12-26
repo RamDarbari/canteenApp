@@ -1,0 +1,75 @@
+<section class="wallet-history-container pb-4">
+  <div class="wallet-history-card">
+    <div class="row my-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive w-100">
+              <div *ngIf="dataSource.data.length === 0; else walletHistoryTable">
+                No items found in the wallet history.
+              </div>
+              <ng-template #walletHistoryTable>
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                  <!-- Define the columns based on the WalletHistory interface -->
+                  <ng-container matColumnDef="_id">
+                    <th mat-header-cell *matHeaderCellDef>Order Id</th>
+                    <td mat-cell *matCellDef="let element">{{ element._id }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="emp_id">
+                    <th mat-header-cell *matHeaderCellDef>Employee ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.emp_id }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="previousBalance">
+                    <th mat-header-cell *matHeaderCellDef>Previous Balance</th>
+                    <td mat-cell *matCellDef="let element">{{ element.previousBalance }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="priviousWallet">
+                    <th mat-header-cell *matHeaderCellDef>Previous Wallet</th>
+                    <td mat-cell *matCellDef="let element">{{ element.priviousWallet }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="payment">
+                    <th mat-header-cell *matHeaderCellDef>Payment</th>
+                    <td mat-cell *matCellDef="let element">{{ element.payment }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="updatedBalance">
+                    <th mat-header-cell *matHeaderCellDef>Updated Balance</th>
+                    <td mat-cell *matCellDef="let element">{{ element.updatedBalance }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="updatedWallet">
+                    <th mat-header-cell *matHeaderCellDef>Updated Wallet</th>
+                    <td mat-cell *matCellDef="let element">{{ element.updatedWallet }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="time">
+                    <th mat-header-cell *matHeaderCellDef>Time</th>
+                    <td mat-cell *matCellDef="let element">{{ element.time }}</td>
+                  </ng-container>
+                  <!-- Define the table header row -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <!-- Define the table rows -->
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

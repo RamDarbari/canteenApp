@@ -7,7 +7,6 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -18,13 +17,19 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
 import { OrderData, OrderDataItem } from 'src/data';
 import { ModalComponent } from '../modal/modal.component';
-import {
-  ModalDismissReasons,
-  NgbModal,
-  NgbOffcanvas,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 // import { NgxSpinnerService } from 'ngx-spinner';
+
+interface TodayMenu {
+  _id: string;
+  today_menu_id: string;
+  title: string;
+  time: string;
+  items: MenuItem[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 interface MenuItem {
   _id: string;
@@ -34,37 +39,32 @@ interface MenuItem {
   createdAt: string;
   updatedAt: string;
 }
+interface cartItems {
+  itemId: string;
+  item_name: string;
+  price: number;
+  quantity: number;
+  initialPrice: number;
+}
 
-interface MenuCategory {
+interface item {
   _id: string;
-  title: string;
-  time: string;
-  items: MenuItem[];
 }
-interface MenuItem {
-  id: string;
-  menuName: string;
-  itemName: string;
-}
-
 @Component({
   selector: 'app-menu-tabs',
   templateUrl: './menu-tabs.component.html',
   styleUrls: ['./menu-tabs.component.scss'],
 })
 export class MenuTabsComponent implements OnInit {
-  menuCategories: MenuCategory[] = [];
   isLoading: boolean = false;
   isDeleteLoading: boolean = false;
   isActive: boolean = false;
-  totalMeals: any[] = [];
-  submenu: any[] = [];
-  meals: any[] = [];
+  submenu: TodayMenu[] = [];
   selectedMenus: any[] = [];
-  cartItems: any[] = [];
+  cartItems: cartItems[] = [];
   quantity: false;
   closeResult = '';
-  item: any;
+  item: item;
   selectedCategory: string = '';
   selectedCategory1: string = '';
   selectedBillStatus: string = '';
@@ -136,7 +136,7 @@ export class MenuTabsComponent implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((cartItems) => {
         this.zone.run(() => {
-          this.cartItems = cartItems as any[]; // Explicitly define the type
+          this.cartItems = cartItems as cartItems[];
           this.updateMenuCategoryState();
         });
       });
@@ -636,7 +636,7 @@ export class MenuTabsComponent implements OnInit {
     });
   }
 
-  openDeleteConfirmation(content: TemplateRef<any>, item: any) {
+  openDeleteConfirmation(content: TemplateRef<any>, item: item) {
     this.item = item; // Set the selected item in the component
     this.modalService.open(content, {
       backdrop: 'static',

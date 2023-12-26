@@ -217,4 +217,12 @@ export class AdminService {
       },
     });
   }
+
+  employeeWaletDetails(token: string, empId: number) {
+    return this._http.get(`${this.apiUrl}/wallet-history?emp_id=${empId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

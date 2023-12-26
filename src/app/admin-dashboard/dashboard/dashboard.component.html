@@ -174,9 +174,8 @@
                   <span class="num">#{{ i + 1 }}</span>
                   <div class="w-100 item-details">
                     <a>
-                      <h2 class="">{{ item.item_name }}</h2>
+                      <h2 class="">{{ item._id }}</h2>
                     </a>
-                    <span class="d-inline-block me-3 order-price">{{ item.price | currency:'INR' }}</span>
                     <span class="order-times" style="color: #d0d0d0;">order x{{ item.count }}</span>
                   </div>
                 </div>
@@ -217,7 +216,7 @@
                     <tr *ngFor="let order of recentOrderItems">
                       <td>{{ order.item_name }}</td>
                       <td>{{ order.quantity }}</td>
-                      <td>{{ order.totalPrice | currency:'INR' }}</td>
+                      <td>{{ order.price | currency:'INR' }}</td>
                     </tr>
                   </tbody>
                 </table>

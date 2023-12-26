@@ -4,6 +4,17 @@ app-loader {
   position: absolute;
   width: 100%;
   z-index: 3;
+  right: 28px;
+  top: 7pc;
+  align-items: center;
+}
+
+.loader {
+  display: flex;
+  min-height: 600px;
+  position: absolute;
+  width: 100%;
+  z-index: 3;
   right: 2px;
   align-items: center;
   justify-content: center;
