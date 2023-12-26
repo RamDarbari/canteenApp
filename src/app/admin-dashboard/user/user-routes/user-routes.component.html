@@ -6,13 +6,14 @@
           <div class="card-body">
             <ul class="nav nav-tabs d-flex flex-wrap" id="nav-tab" role="tablist">
               <li>
-                <a class="w-100 nav-item nav-link" [routerLink]="['./history']" [queryParams]="{ empId: empId }">
+                <a class="w-100 nav-item nav-link" [routerLink]="['./history']" [queryParams]="{ empId: empId }"
+                  routerLinkActive="active" style="flex: 1">
                   Order History
                 </a>
-
               </li>
               <li>
-                <a class="w-100 nav-item nav-link" [routerLink]="['./wallet-history']" [queryParams]="{ empId: empId }">
+                <a class="w-100 nav-item nav-link" [routerLink]="['./wallet-history']" [queryParams]="{ empId: empId }"
+                  routerLinkActive="active" style="flex: 1">
                   Wallet History
                 </a>
               </li>

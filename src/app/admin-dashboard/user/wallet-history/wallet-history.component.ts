@@ -23,18 +23,7 @@ interface WalletHistory {
 export class WalletHistoryComponent implements OnInit {
   walletHistoryData: WalletHistory[] = [];
   dataSource: MatTableDataSource<WalletHistory>;
-  displayedColumns: string[] = [
-    '_id',
-    'emp_id',
-    'fullName',
-    'previousBalance',
-    'priviousWallet',
-    'payment',
-    'updatedBalance',
-    'updatedWallet',
-    'date',
-    'time',
-  ];
+  displayedColumns: string[] = ['payment', 'updatedWallet', 'date', 'time'];
   wallet: WalletHistory[] = [];
 
   constructor(private http: AdminService) {}
@@ -54,14 +43,16 @@ export class WalletHistoryComponent implements OnInit {
   private getEmpIdFromQueryParam(): number {
     const queryParams = new URLSearchParams(window.location.search);
     const empId = queryParams.get('empId');
-    return empId ? +empId : null; // Convert empId to number or return null
+    return empId ? +empId : null;
   }
 
   employeeWalletDetails(token: string, empId: number) {
+    console.log('llllllllllllllllllllllll');
     this.http.employeeWaletDetails(token, empId).subscribe(
       (response: any) => {
         this.wallet = response.data as WalletHistory[];
         this.dataSource = new MatTableDataSource(this.wallet);
+        console.log(this.wallet, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
       },
       (error) => {
         console.error('Error fetching wallet history:', error);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 
 interface UserData {
@@ -26,14 +26,30 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private http: CommonServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.getUserProfile();
     this.route.queryParams.subscribe((params) => {
-      this.empId = +params['empId'] || 0;
+      if (params['empId']) {
+        this.empId = +params['empId'];
+      } else {
+        const localStorageEmpId =
+          localStorage.getItem('user') &&
+          JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId;
+        this.empId = localStorageEmpId || 0;
+      }
+      this.getUserProfile();
     });
+  }
+
+  isUserProfileRoute(): boolean {
+    return this.router.url === '/user-profile/';
+  }
+
+  goBack(): void {
+    this.router.navigate(['/home']);
   }
 
   getUserProfile(): void {

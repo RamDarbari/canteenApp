@@ -35,8 +35,8 @@
                     </span></a>
                 </li> -->
                 <li>
-                  <a class="dropdown-item disabled-link">Pending Balance: {{ userProfileInfo?.balance | currency:'INR'
-                    }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user-profile']"
+                    routerLinkActive="router-link-active">Profile</a>
                 </li>
                 <li *ngIf="isAdmin">
                   <a class="dropdown-item" [routerLink]="['/admin/dashboard']"

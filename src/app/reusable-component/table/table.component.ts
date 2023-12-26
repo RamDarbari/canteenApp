@@ -103,8 +103,8 @@ export class TableComponent implements OnInit {
     this.getOrderHistory();
 
     this.formB = this.formBuilder.group({
-      startDate: [null], // Initialize with null or a default date
-      endDate: [null], // Initialize with null or a default date
+      startDate: [null],
+      endDate: [null],
     });
 
     this.orderSubscription = this.orderService.orders$.subscribe((orders) => {
@@ -118,11 +118,7 @@ export class TableComponent implements OnInit {
 
     this.route.queryParamMap.subscribe((queryParams) => {
       const empIdFromQueryParam = queryParams.get('empId');
-
-      // Use empId from query parameter if present, otherwise use the existing value of searchName
       this.searchName = empIdFromQueryParam || this.searchName;
-
-      this.getOrderHistory();
     });
   }
 

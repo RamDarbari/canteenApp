@@ -170,10 +170,7 @@ export class UserListComponent implements OnInit {
   }
 
   viewProfile(employee: Employee) {
-    // Get the employee ID
     const employeeId = employee.EmployeeId;
-
-    // Navigate to the profile with the employee ID as a query parameter
     this.router.navigate(['/profile'], {
       queryParams: { empId: employeeId },
     });

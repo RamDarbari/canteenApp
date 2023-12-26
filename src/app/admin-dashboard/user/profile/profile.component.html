@@ -1,6 +1,9 @@
 <section>
   <div class="container">
     <div class="row justify-content-between align-items-start mt-5">
+      <div *ngIf="isUserProfileRoute()" class="col-md-12 mb-3">
+        <button class="btn btn-primary" (click)="goBack()">Back</button>
+      </div>
       <div class="col-md-2 me-5 personal-info d-flex justify-content-center align-items-center">
         <div class="avatar">
           <span>
@@ -8,7 +11,6 @@
           </span>
         </div>
       </div>
-
       <div class="col-md-9 ">
         <h6 class="mb-3">Employee Info</h6>
         <div class="d-flex justify-content-start">
