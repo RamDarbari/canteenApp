@@ -195,10 +195,11 @@ header {
     display: flex;
     min-height: 600px;
     position: absolute;
-    width: 210%;
-    z-index: 999;
-    right: 2px;
+    width: 100%;
+    z-index: 3;
+    right: 28 px;
     align-items: center;
+    // justify-content: center;
   }
 }
 

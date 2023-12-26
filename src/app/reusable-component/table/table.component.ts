@@ -18,8 +18,7 @@ import {
   NgbModalRef,
   NgbOffcanvas,
 } from '@ng-bootstrap/ng-bootstrap';
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 interface Employee {
   EmployeeId: number;
@@ -164,87 +163,48 @@ export class TableComponent implements OnInit {
   }
 
   openDateRangeModal() {
-    // Open the date range modal
     this.modalRef = this.modalService.open(this.dateRangeModal, {
       centered: true,
+      backdrop: 'static',
     });
   }
 
   onDateRangeSubmit() {
-    // Close the modal
     this.modalRef.close();
-
-    // Get the form values and format them
     const formattedStartDate = this.formatDate(this.startDate);
     const formattedEndDate = this.formatDate(this.endDate);
-
-    // Log or perform actions with the formatted dates
     console.log('Formatted Start Date:', formattedStartDate);
     console.log('Formatted End Date:', formattedEndDate);
-
-    // Call the function to fetch data with the formatted date range
     this.getOrderHistoryWithDateRange(formattedStartDate, formattedEndDate);
   }
 
+  getMinDate(): string {
+    // Assuming you want to set the minimum date as today
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    return `${year}-${month < 10 ? '0' + month : month}-${day}`;
+  }
+
+  onStartDateChange() {
+    const startDate = new Date(this.startDate);
+    const minEndDate = new Date(startDate);
+    minEndDate.setDate(startDate.getDate() + 1);
+    const year = minEndDate.getFullYear();
+    const month = minEndDate.getMonth() + 1;
+    const day = minEndDate.getDate();
+    const formattedMinEndDate = `${year}-${
+      month < 10 ? '0' + month : month
+    }-${day}`;
+    this.endDate = formattedMinEndDate;
+  }
+
   formatDate(date: string): string {
-    // Assuming the input date is in the format "YYYY-MM-DD"
     const parts = date.split('-');
     const formattedDate = `${parts[1]}-${parts[2]}-${parts[0]}`;
     return formattedDate;
   }
-
-  // getOrderHistoryWithDateRange(startDate: string, endDate: string) {
-  //   console.log('getOrderHistoryWithDateRange');
-  //   try {
-  //     this.isLoadingOrderHistory = true;
-
-  //     const token = localStorage.getItem('user')
-  //       ? JSON.parse(localStorage.getItem('user')).data.token
-  //       : '';
-  //     const dateInterval = `${startDate} to ${endDate}`;
-
-  //     this.http
-  //       .getOrderHistory(
-  //         token,
-  //         this.currentPageOrderHistory,
-  //         this.searchName,
-  //         this.pageSizeOrderHistory,
-  //         'excel',
-  //         dateInterval
-  //       )
-  //       .subscribe(
-  //         (response: any) => {
-  //           // Call the function to download the Excel file
-  //           this.downloadExcel(response, `OrderHistory_${dateInterval}`);
-  //         },
-  //         (error) => {
-  //           console.error('Error fetching order history:', error);
-  //         }
-  //       )
-  //       .add(() => {
-  //         this.isLoadingOrderHistory = false;
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // downloadExcel(data: any, filename: string) {
-  //   try {
-  //     // Assuming the data received is in the correct format for Excel (adjust as needed)
-  //     const jsonData = JSON.stringify(data);
-
-  //     // Create a Blob from the data
-  //     const blob = new Blob([jsonData], {
-  //       type: 'application/json',
-  //     });
-
-  //     // Trigger a file download using FileSaver.js
-  //     saveAs(blob, `${filename}.json`);
-  //   } catch (error) {
-  //     console.error('Error downloading file:', error);
-  //   }
-  // }
 
   getOrderHistoryWithDateRange(startDate: string, endDate: string) {
     console.log('getOrderHistoryWithDateRange');
@@ -267,11 +227,11 @@ export class TableComponent implements OnInit {
         )
         .subscribe(
           (response: any) => {
-            // Call the function to download the Excel file
             this.downloadExcel(response, `OrderHistory_${dateInterval}`);
           },
           (error) => {
             console.error('Error fetching order history:', error);
+            this.toastr.error('No items found matching the search criteria.');
           }
         )
         .add(() => {
@@ -282,16 +242,12 @@ export class TableComponent implements OnInit {
     }
   }
 
-  // .component.ts
   downloadExcel(data: any, filename: string) {
     try {
-      // Create a Blob from the binary data
       const blob = new Blob([data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
-
-      // Trigger a file download using FileSaver.js
-      saveAs(blob, `${filename}.xlsx`);
+      FileSaver.saveAs(blob, `${filename}.xlsx`);
     } catch (error) {
       console.error('Error downloading file:', error);
     }
@@ -316,7 +272,7 @@ export class TableComponent implements OnInit {
       this.http
         .orderList(token, currentPage, totalRecords, totalPages, limit)
         .subscribe((response: any) => {
-          console.log(response, 'KHUSHNEEL  ');
+          console.log(response, '');
           if (response && response.data && response.data.length > 0) {
             this.orderService.setOrders(response.data);
           }
@@ -344,7 +300,7 @@ export class TableComponent implements OnInit {
 
   changeOrderStatus(order_id: string, status: string) {
     try {
-      this.isLoading = true; // Set loading to true when the request starts
+      this.isLoading = true;
 
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token

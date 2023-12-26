@@ -27,7 +27,6 @@
     }
   }
 }
-
 app-loader {
   display: flex;
   min-height: 600px;
@@ -36,6 +35,7 @@ app-loader {
   z-index: 3;
   right: 2px;
   align-items: center;
+  justify-content: center;
 }
 
 .dropdown {

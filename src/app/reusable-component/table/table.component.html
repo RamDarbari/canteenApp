@@ -9,7 +9,7 @@
               <span> Order History </span>
             </div>
             <div class=" d-flex flex-wrap align-items-center justify-content-between ">
-              <button class="btn btn-primary" (click)="openDateRangeModal()">Download Excel</button>
+              <button class="btn btn-outline-primary" (click)="openDateRangeModal()">Download Excel</button>
               <div class="dropdown">
                 <select id="menuTitle" name="menuTitle" class="form-control" aria-label="Default select example"
                   (change)="onSelectChange($event)">
@@ -19,7 +19,6 @@
                   <option value="cancelled">cancelled</option>
                 </select>
               </div>
-
               <div class="searchBar">
                 <input type="text" class="bg-transparent" placeholder="Search users..." [(ngModel)]="searchName"
                   (keydown)="searchDebounced()">
@@ -88,26 +87,29 @@
   <ng-template #dateRangeModal let-modal>
     <div class="modal-header d-flex align-items-center">
       <h4 class="modal-title">Select Date Range</h4>
-      <i class="fa fa-times close" (click)="modal.dismiss('Cross click')" aria-hidden="true"></i>
-      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button> -->
+      <i class="fa fa-times close" style="cursor: pointer;" (click)="modal.dismiss('Cross click')"
+        aria-hidden="true"></i>
     </div>
     <div class="modal-body">
-      <!-- Add your date picker or date range picker here -->
       <form (ngSubmit)="onDateRangeSubmit()" #dateRangeForm="ngForm">
-        <div class="form-group">
+        <div class="form-group m-2">
           <label for="startDate">Start Date</label>
-          <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="startDate" required>
+          <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="startDate" required
+            (change)="onStartDateChange()" />
         </div>
-        <div class="form-group mt-2">
+        <div class="form-group m-2">
           <label for="endDate">End Date</label>
-          <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="endDate" required>
+          <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="endDate" [min]="startDate"
+            required />
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        <button type="submit" class="btn btn-outline-primary w-100 mt-2" [disabled]="dateRangeForm.invalid">
+          Submit
+        </button>
       </form>
     </div>
   </ng-template>
+
+
   <ng-content select=".orderHistory"></ng-content>
 </section>
 <!-- end  -->
