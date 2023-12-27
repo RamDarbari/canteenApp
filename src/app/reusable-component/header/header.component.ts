@@ -1,5 +1,11 @@
 import { OrderData, OrderDataItem } from 'src/data';
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../modal/modal.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -42,6 +48,7 @@ export class HeaderComponent implements OnInit {
   hasWallet: boolean = false;
   userProfileInfo: UserData;
   emptyCart: any;
+  @Output() profile = new EventEmitter<void>();
 
   constructor(
     private modalService: NgbModal,
@@ -58,6 +65,10 @@ export class HeaderComponent implements OnInit {
     this.loadCartItems();
     this.loadBillStatus();
     this.getUserProfile();
+    this.profile.subscribe(() => {
+      this.getUserProfile();
+      // localStorage.setItem('sidebarState', 'open');
+    });
   }
 
   getUserRole(): string {
@@ -99,25 +110,22 @@ export class HeaderComponent implements OnInit {
   }
 
   get userProfileDetails() {
-    const userDetails = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails
-      : '';
-    return userDetails;
+    return this.userProfileInfo;
   }
 
-  get wallet() {
-    const userWalletBalance = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.wallet
-      : '';
-    return userWalletBalance;
-  }
+  // get wallet() {
+  //   const userWalletBalance = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.empDetails.wallet
+  //     : '';
+  //   return userWalletBalance;
+  // }
 
-  get totalBalance() {
-    const pendingBalance = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.balance
-      : '';
-    return pendingBalance;
-  }
+  // get totalBalance() {
+  //   const pendingBalance = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.empDetails.balance
+  //     : '';
+  //   return pendingBalance;
+  // }
 
   private saveCartItems(): void {
     localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
@@ -183,6 +191,9 @@ export class HeaderComponent implements OnInit {
 
     // Pass the modalType to the opened modal
     modalRef.componentInstance.modalType = 'login-modal';
+    modalRef.componentInstance.profile.subscribe(() => {
+      this.profile.emit();
+    });
   }
 
   setBillStatus(status: string) {
@@ -271,28 +282,38 @@ export class HeaderComponent implements OnInit {
   }
 
   getUserProfile(): void {
-    console.log('kkkkkkkkkkkkkkkkk');
-
-    console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;');
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
-    const emp_id = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
-      : '';
     try {
-      if (token && emp_id) {
-        console.log('sss');
-        this._https.userProfile(token, emp_id).subscribe((response: any) => {
-          if (response && response.data && response.data.length > 0) {
-            this.userProfileInfo = response.data[0];
-            console.log(response.message);
-            console.log(this.userProfileInfo, 'llllllllllll');
-          }
-        });
+      if (token) {
+        this._https
+          .userProfileWithoutEmpId(token)
+          .subscribe((response: any) => {
+            this.handleUserProfileResponse(response);
+          });
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  private handleUserProfileResponse(response: any): void {
+    if (response && response.statusCode === 200 && response.data) {
+      this.userProfileInfo = {
+        _id: response.data._id,
+        EmployeeId: response.data.EmployeeId,
+        FirstName: response.data.FirstName,
+        LastName: response.data.LastName,
+        role: response.data.role,
+        email: response.data.email,
+        balance: response.data.balance,
+        updatedAt: response.data.updatedAt,
+        wallet: response.data.wallet,
+      };
+      // this.setAvatarInitial();
+      console.log(response.message);
+      console.log(this.userProfileInfo, 'llllllllllll');
     }
   }
 

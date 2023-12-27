@@ -34,8 +34,13 @@ export class WalletHistoryComponent implements OnInit {
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     const empId = this.getEmpIdFromQueryParam();
-    if (empId) {
+
+    // Check if empId is present or not
+    if (empId !== null && empId !== undefined) {
       this.employeeWalletDetails(token, empId);
+    } else {
+      // Call the API without empId
+      this.employeeWalletDetails(token);
     }
   }
 
@@ -46,7 +51,7 @@ export class WalletHistoryComponent implements OnInit {
     return empId ? +empId : null;
   }
 
-  employeeWalletDetails(token: string, empId: number) {
+  employeeWalletDetails(token: string, empId?: number) {
     console.log('llllllllllllllllllllllll');
     this.http.employeeWaletDetails(token, empId).subscribe(
       (response: any) => {

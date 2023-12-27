@@ -80,6 +80,7 @@ export class TableComponent implements OnInit {
     'price',
     'actions',
   ];
+
   formB: FormGroup;
   formData: any[] = [];
   private modalRef: NgbModalRef;
@@ -139,7 +140,7 @@ export class TableComponent implements OnInit {
   }
 
   getOrderHistory() {
-    console.log('hello');
+    // console.log('hello');
     this.isLoadingOrderHistory = true;
 
     // Check if empId is present in the URL query parameters

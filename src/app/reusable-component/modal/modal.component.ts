@@ -44,6 +44,7 @@ export class ModalComponent implements OnInit {
   @Output() itemDeleted = new EventEmitter<void>();
   @Output() itemAdded = new EventEmitter<void>();
   @Output() listSub = new EventEmitter<void>();
+  @Output() profile = new EventEmitter<void>();
   @Input() selectedCategory: string;
   selectedMenuTitle: string = '';
   menuItems: MenuItem[] = [];
@@ -84,7 +85,6 @@ export class ModalComponent implements OnInit {
         price: this.editedItem.price,
       });
     } else {
-      // Clear the selectedMenuTitle if adding a new item
       this.selectedMenuTitle = '';
     }
 
@@ -92,20 +92,13 @@ export class ModalComponent implements OnInit {
 
     this.route.queryParams.subscribe((queryParams) => {
       this.selectedCategory = queryParams['selectedCategory'] || '';
-      // this.selectedMenuTitle = queryParams['selectedMenuTitle'] || ''; // Add this line
-
-      // Use the selected category and menu title as needed in your modal component
       console.log('Selected Category:', this.selectedCategory);
-      // console.log('Selected Menu Title:', this.selectedMenuTitle);
-      // Update your modal component logic here...
     });
   }
 
   private updateQueryParams() {
-    // Update the query parameters based on the selected category and menu title
     const queryParams = {
       selectedCategory: this.selectedCategory,
-      // selectedMenuTitle: this.selectedMenuTitle,
     };
 
     this.router.navigate([], {
@@ -156,21 +149,28 @@ export class ModalComponent implements OnInit {
       this.isLoading = true;
       this.loginService
         .verifyOTP(this.loginData, emp_id)
-        .subscribe((response) => {
-          if (response.success) {
-            this.isLoading = false;
-            localStorage.setItem('user', JSON.stringify(response));
-            const userRole = response.data.empDetails.role;
-            if (userRole === 'admin') {
-              this.toastr.success('Admin Login Successful');
-              this.router.navigate(['/admin']);
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              this.isLoading = false;
+              localStorage.setItem('user', JSON.stringify(response));
+              this.profile.emit();
+              const userRole = response.data.empDetails?.role;
+              if (userRole === 'admin') {
+                this.toastr.success('Admin Login Successful');
+                this.router.navigate(['/admin']);
+              } else {
+                this.toastr.success('Login Successful');
+              }
+
               this.modalService.dismissAll();
-            } else {
-              this.modalService.dismissAll();
-              this.toastr.success('Login Successful');
             }
+          },
+          (error) => {
+            console.error('Error verifying OTP:', error);
+            this.toastr.error('Failed to verify OTP');
           }
-        })
+        )
         .add(() => {
           this.isLoading = false;
         });

@@ -218,8 +218,12 @@ export class AdminService {
     });
   }
 
-  employeeWaletDetails(token: string, empId: number) {
-    return this._http.get(`${this.apiUrl}/wallet-history?emp_id=${empId}`, {
+  employeeWaletDetails(token: string, empId?: number): Observable<any> {
+    let url = `${this.apiUrl}/wallet-history`;
+    if (empId) {
+      url += `?emp_id=${empId}`;
+    }
+    return this._http.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

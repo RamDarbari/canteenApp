@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
         const localStorageEmpId =
           localStorage.getItem('user') &&
           JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId;
-        this.empId = localStorageEmpId || 0;
+        this.empId = localStorageEmpId;
       }
       this.getUserProfile();
     });
@@ -53,34 +53,50 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserProfile(): void {
-    console.log('kkkkkkkkkkkkkkkkk');
-    console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;');
-
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
 
-    // Get emp_id from query parameters or fallback to the one from localStorage
-    const emp_id =
-      this.getEmpIdFromQueryParam() ||
-      (localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.empDetails.EmployeeId
-        : '');
+    // Get emp_id from query parameters
+    const emp_id = this.getEmpIdFromQueryParam();
 
     try {
-      if (token && emp_id) {
-        console.log('sss');
-        this.http.userProfile(token, emp_id).subscribe((response: any) => {
-          if (response && response.data && response.data.length > 0) {
-            this.userProfileInfo = response.data[0];
-            this.setAvatarInitial();
-            console.log(response.message);
-            console.log(this.userProfileInfo, 'llllllllllll');
-          }
-        });
+      if (token) {
+        // If empId is available in the query parameters, use it in the API call
+        if (emp_id) {
+          this.http.userProfile(token, emp_id).subscribe((response: any) => {
+            this.handleUserProfileResponse(response);
+          });
+        } else {
+          // If empId is not available, call the API without empId in the URL
+          this.http
+            .userProfileWithoutEmpId(token)
+            .subscribe((response: any) => {
+              this.handleUserProfileResponse(response);
+            });
+        }
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  private handleUserProfileResponse(response: any): void {
+    if (response && response.statusCode === 200 && response.data) {
+      this.userProfileInfo = {
+        _id: response.data._id,
+        EmployeeId: response.data.EmployeeId,
+        FirstName: response.data.FirstName,
+        LastName: response.data.LastName,
+        role: response.data.role,
+        email: response.data.email,
+        balance: response.data.balance,
+        updatedAt: response.data.updatedAt,
+        wallet: response.data.wallet,
+      };
+      this.setAvatarInitial();
+      console.log(response.message);
+      console.log(this.userProfileInfo, 'llllllllllll');
     }
   }
 
@@ -88,7 +104,7 @@ export class ProfileComponent implements OnInit {
   private getEmpIdFromQueryParam(): number {
     const queryParams = new URLSearchParams(window.location.search);
     const empId = queryParams.get('empId');
-    return empId ? +empId : null; // Convert empId to number or return null
+    return empId ? +empId : null;
   }
 
   setAvatarInitial(): void {

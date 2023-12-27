@@ -156,8 +156,6 @@
           </div>
         </div>
       </div> -->
-
-
       <div class="col-xl-3 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
@@ -168,7 +166,6 @@
                 </div>
               </div>
               <div class="card-body">
-                <!-- Loop through the top 5 mostOrderItems -->
                 <div *ngFor="let item of mostOrderItems.slice(0, 5); let i = index"
                   class="d-flex align-items-center border-bottom">
                   <span class="num">#{{ i + 1 }}</span>
@@ -179,48 +176,82 @@
                     <span class="order-times" style="color: #d0d0d0;">order x{{ item.count }}</span>
                   </div>
                 </div>
-                <!-- End of loop -->
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-xl-9 col-xxl-12">
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="card">
-              <div class="card-header border-0 flex-wrap">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h2>
-                      RECENT ORDER ITEMS REQUESTED
-                    </h2>
-                  </div>
-                  <div>
-                    <button [routerLink]="['/order/order-details']" routerLinkActive="router-link-active"
-                      class="btn btn-outline-primary">View
-                      All</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body pb-2">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Item Name</th>
-                      <th>Quantity</th>
-                      <th>Total Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let order of recentOrderItems">
-                      <td>{{ order.item_name }}</td>
-                      <td>{{ order.quantity }}</td>
-                      <td>{{ order.price | currency:'INR' }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="w-100 d-flex justify-content-end me-2 mb-2">
+              <button [routerLink]="['/order/order-details']" routerLinkActive="router-link-active"
+                class="btn btn-outline-primary">View
+                All</button>
+            </div>
+            <div class="table-responsive w-100">
+              <table mat-table matSort [dataSource]="recentOrderItems" class="mat-elevation-z8">
+                <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
+                  <th mat-header-cell *matHeaderCellDef> Order Id</th>
+                  <td mat-cell *matCellDef="let element" class="mat-cell-orderId">
+                    <span class="orderId" (click)="copyOrderId(element._id)">{{ element._id }}</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="emp_id">
+                  <th mat-header-cell *matHeaderCellDef> Employee ID </th>
+                  <td mat-cell *matCellDef="let element"> {{element.emp_id}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fullName">
+                  <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="itemName">
+                  <th mat-header-cell *matHeaderCellDef>Item Info</th>
+                  <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
+                    <table class="mat-elevation-z8">
+                      <tr *ngFor="let record of order.order_rec">
+                        <td>{{ record.item_name }}</td>
+                        <td> {{ record.quantity }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef>Price</th>
+                  <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
+                    <div class="order-rec">
+                      <div *ngFor="let record of order.order_rec">
+                        {{ record.price }}
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="totalBalance">
+                  <th mat-header-cell *matHeaderCellDef> Total Amount</th>
+                  <td mat-cell *matCellDef="let element"> {{element.totalBalance}} </td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef>Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-center">
+                    <button class="button-success" (click)="changeOrderStatus(element._id, 'confirm')">
+                      Confirm
+                    </button>
+                    <button class="button-danger" (click)="changeOrderStatus(element._id, 'cancelled')">
+                      Reject
+                    </button>
+                  </td>
+                </ng-container>
+
+                <!-- Define the table header row -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPendingOrders"></tr>
+                <!-- Define the table rows -->
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPendingOrders"></tr>
+              </table>
             </div>
           </div>
         </div>

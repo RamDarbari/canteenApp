@@ -95,4 +95,10 @@ export class CommonServiceService {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
+
+  userProfileWithoutEmpId(token: string) {
+    return this._http.get(`${environment.apiUrl}/viewUser`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 }
