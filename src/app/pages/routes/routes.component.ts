@@ -24,7 +24,7 @@ export class RoutesComponent {
     this.socketService.on('notification').subscribe((data: any) => {
       console.log('Received a notification from the server:', data);
       this.messages.push(data); // Store the notification
-      this.toastr.info(`New notification: ${data}`);
+      // this.toastr.info(`New notification: ${data}`);
     });
   }
 }

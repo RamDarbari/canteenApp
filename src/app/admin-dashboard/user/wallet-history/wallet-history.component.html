@@ -33,6 +33,10 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <!-- Define the table rows -->
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  <div class="mat-paginator">
+                    <mat-paginator [length]="" [pageSizeOptions]="" [pageSize]="" [pageIndex]=""
+                      (page)="($event)"></mat-paginator>
+                  </div>
                 </table>
               </ng-template>
             </div>

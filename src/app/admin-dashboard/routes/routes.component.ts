@@ -42,7 +42,7 @@ export class RoutesComponent implements OnInit {
 
     this.socketService.on('notification').subscribe((data: any) => {
       console.log('Received a notification from the server:', data);
-      this.toaster.info('Received a notification from the server:', data);
+      // this.toaster.info('Received a notification from the server:', data);
       this.messages.push(data); // Store the notification
     });
   }

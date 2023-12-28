@@ -9,11 +9,11 @@ export class SocketioService {
   private socket: Socket;
 
   constructor() {
-    const empId = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data?.empDetails.EmployeeId
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data?.token
       : null;
 
-    this.socket = io(`http://10.8.11.160:5000?empId=${empId}`);
+    this.socket = io(`http://10.8.11.160:5000?token=${token}`);
   }
 
   public on(event: string): Observable<any> {

@@ -218,10 +218,17 @@ export class AdminService {
     });
   }
 
-  employeeWaletDetails(token: string, empId?: number): Observable<any> {
+  employeeWaletDetails(
+    token: string,
+    empId?: number,
+    currentPage = 0,
+    limit = 10
+  ): Observable<any> {
     let url = `${this.apiUrl}/wallet-history`;
     if (empId) {
-      url += `?emp_id=${empId}`;
+      url += `?emp_id=${empId}&currentPage=${currentPage}&limit=${limit}`;
+    } else {
+      url += `?currentPage=${currentPage}&limit=${limit}`;
     }
     return this._http.get(url, {
       headers: {

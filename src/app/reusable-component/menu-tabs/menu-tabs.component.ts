@@ -65,13 +65,14 @@ export class MenuTabsComponent implements OnInit {
   quantity: false;
   closeResult = '';
   item: item;
-  selectedCategory: string = '';
-  selectedCategory1: string = '';
+  selectedCategory: string = ''; // For Today's Menu
+  selectedButton: string = 'Breakfast'; // For Custom Order
   selectedBillStatus: string = '';
   @Input() todaymenu: boolean = false;
   @Input() custommenu: boolean = false;
   empId: string = '';
   selectedCategoryId: string = '';
+  selectedButtonId: string = '';
   showSidebar: boolean = false;
   isBreakfastDisabled: boolean = false;
   isLunchDisabled: boolean = false;
@@ -111,8 +112,11 @@ export class MenuTabsComponent implements OnInit {
     this.loadCartItems();
     const storedMenus = JSON.parse(localStorage.getItem('selectedMenus')) || {};
     this.selectedMenus = storedMenus;
-    const storedCategory = localStorage.getItem('selectedCategory');
-    this.selectedCategory = storedCategory || 'Breakfast';
+    const storedTodayCategory = localStorage.getItem('selectedTodayCategory');
+    this.selectedCategory = storedTodayCategory || 'Breakfast';
+
+    const storedCustomCategory = localStorage.getItem('selectedCustomCategory');
+    this.selectedButton = storedCustomCategory || 'Breakfast';
     const sidebarState = localStorage.getItem('sidebarState');
     if (sidebarState === 'open') {
       this.showSidebar = true;
@@ -226,10 +230,7 @@ export class MenuTabsComponent implements OnInit {
 
   updateSelectedCategory(category: string) {
     this.selectedCategory = category;
-
-    // Store the selected category in localStorage
-    localStorage.setItem('selectedCategory', category);
-
+    localStorage.setItem('selectedTodayCategory', category);
     const selectedCategory = this.submenu.find(
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
@@ -239,11 +240,12 @@ export class MenuTabsComponent implements OnInit {
   }
 
   updateCustomCategory(category: string) {
-    this.selectedCategory = category;
-    const selectedCategory = this.submenu.find(
+    this.selectedButton = category;
+    localStorage.setItem('selectedCustomCategory', category);
+    const selectedButton = this.submenu.find(
       (meal) => meal.title.toLowerCase() === category.toLowerCase()
     );
-    this.selectedCategoryId = selectedCategory ? selectedCategory._id : '';
+    this.selectedButtonId = selectedButton ? selectedButton._id : '';
     this.updateMenuCategoryState();
     this.updateQueryParams();
   }
@@ -469,7 +471,7 @@ export class MenuTabsComponent implements OnInit {
             itemId: item.itemId,
             quantity: item.quantity ? item.quantity.toString() : '0',
             item_name: item.item_name,
-            item_type: item.item_type,
+            menu_id: item.menu_id,
             price: item.price,
           }));
 

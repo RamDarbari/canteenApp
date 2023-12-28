@@ -8,7 +8,7 @@ export interface OrderDataItem {
   quantity: string;
   bill_status?: string;
   item_name: string;
-  item_type: string;
+  menu_id: string;
   price: string;
 }
 

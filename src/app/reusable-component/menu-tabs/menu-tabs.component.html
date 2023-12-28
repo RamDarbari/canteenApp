@@ -35,11 +35,13 @@
                   Snacks
                 </button>
               </div>
-            </div>
-            <div class="add-product">
-              <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-outline-primary" (click)="openAddItemModal($event)">Add
-                  Item</button>
+              <div class="custom-order-div">
+                <div>
+                  <button (click)="openAddItemModal($event)" class="custom-buttom m-0" data-toggle="modal"
+                    data-target="#loginModal">
+                    <span>Add Item</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -188,29 +190,22 @@
         <div class="tabs w-100">
           <div class="menu-selection-card d-flex justify-content-start pt-3" style="border-bottom: 1px solid #8b8b8b;">
             <div class="breakfast">
-              <button [ngClass]="{'active-button': selectedCategory1 === 'Breakfast'}"
-                (click)="updateCustomCategory('Breakfast')">
-                Breakfast
-              </button>
+              <button class="breakfast" (click)="updateCustomCategory('Breakfast')"
+                [ngClass]="{'active-button': selectedButton === 'Breakfast'}">Breakfast</button>
             </div>
             <div class="lunch">
-              <button [ngClass]="{'active-button': selectedCategory1 === 'Lunch'}"
-                (click)="updateCustomCategory('Lunch')">
-                Lunch
-              </button>
+              <button class="lunch" (click)="updateCustomCategory('Lunch')"
+                [ngClass]="{'active-button': selectedButton === 'Lunch'}">Lunch</button>
             </div>
             <div class="snacks">
-              <button [ngClass]="{'active-button': selectedCategory1 === 'Snacks'}"
-                (click)="updateCustomCategory('Snacks')">
-                Snacks
-              </button>
+              <button class="Snacks" (click)="updateCustomCategory('Snacks')"
+                [ngClass]="{'active-button': selectedButton === 'Snacks'}">Snacks</button>
             </div>
             <div class="Custom">
-              <button [ngClass]="{'active-button': selectedCategory1 === 'custom'}"
-                (click)="updateCustomCategory('custom')">
-                Custom
-              </button>
+              <button class="Custom" (click)="updateCustomCategory('Custom')"
+                [ngClass]="{'active-button': selectedButton === 'Custom'}">Custom</button>
             </div>
+
             <div class="custom-order-div">
               <div>
                 <button (click)="openCustomOrderModal($event)" class="custom-buttom m-0" data-toggle="modal"
@@ -227,7 +222,7 @@
                   <div>
                     <div *ngIf="submenu && submenu.length > 0">
                       <div *ngFor="let meal of submenu">
-                        <div *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()"
+                        <div *ngIf="meal.title.toLowerCase() === selectedButton.toLowerCase()"
                           class="d-flex justify-content-between align-items-center mb-20" style="height: 45px;">
                           <!-- <p class="card-title m-0">{{ selectedCategory }}</p> -->
                           <p></p>
@@ -242,7 +237,7 @@
                   <div class="card-body p-0" *ngIf="submenu && submenu.length > 0" style="min-height: 210px;">
                     <div style="padding: 0px 20px 0px 20px;" *ngFor="let meal of submenu">
                       <div class=" d-flex flex-wrap gap-3 justify-content-center"
-                        *ngIf="meal.title.toLowerCase() === selectedCategory.toLowerCase()">
+                        *ngIf="meal.title.toLowerCase() === selectedButton.toLowerCase()">
                         <div class="card-items" *ngFor="let item of meal.items">
                           <div class="card border-0 shadow h-100">
                             <div

@@ -25,43 +25,42 @@ export class WalletHistoryComponent implements OnInit {
   dataSource: MatTableDataSource<WalletHistory>;
   displayedColumns: string[] = ['payment', 'updatedWallet', 'date', 'time'];
   wallet: WalletHistory[] = [];
+  employeeId: number = 0;
 
   constructor(private http: AdminService) {}
 
   ngOnInit(): void {
-    // Fetch wallet history data
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
     const empId = this.getEmpIdFromQueryParam();
-
-    // Check if empId is present or not
     if (empId !== null && empId !== undefined) {
-      this.employeeWalletDetails(token, empId);
+      this.employeeWalletDetails(empId);
     } else {
-      // Call the API without empId
-      this.employeeWalletDetails(token);
+      this.employeeWalletDetails();
     }
   }
 
-  // Function to get empId from query parameter
   private getEmpIdFromQueryParam(): number {
     const queryParams = new URLSearchParams(window.location.search);
     const empId = queryParams.get('empId');
     return empId ? +empId : null;
   }
 
-  employeeWalletDetails(token: string, empId?: number) {
-    console.log('llllllllllllllllllllllll');
-    this.http.employeeWaletDetails(token, empId).subscribe(
-      (response: any) => {
-        this.wallet = response.data as WalletHistory[];
-        this.dataSource = new MatTableDataSource(this.wallet);
-        console.log(this.wallet, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-      },
-      (error) => {
-        console.error('Error fetching wallet history:', error);
-      }
-    );
+  employeeWalletDetails(empId?: number) {
+    try {
+      const token = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user')).data.token
+        : '';
+      this.http
+        .employeeWaletDetails(token, empId)
+        .subscribe((response: any) => {
+          this.wallet = response.data as WalletHistory[];
+          this.dataSource = new MatTableDataSource(this.wallet);
+          console.log(this.wallet, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+        });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   }
 }
