@@ -15,7 +15,10 @@ export class SocketioService {
     ? JSON.parse(localStorage.getItem('user')).data?.token
     : null;
 
-    this.socket = io(`${environment.apiUrl}?token=${token}`);
+  constructor() {
+    this.socket = io(this.serverUrl, {
+      query: { token: this.jwtToken },
+    });
   }
 
   public on(event: string): Observable<any> {
