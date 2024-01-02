@@ -10,7 +10,7 @@ import { environment } from '..//../environments/environment';
 export class SocketioService {
   private socket: Socket;
 
-  serverUrl = 'http://10.8.11.160:5000/';
+  serverUrl = `${environment.apiUrl}`;
   jwtToken = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user')).data?.token
     : null;
