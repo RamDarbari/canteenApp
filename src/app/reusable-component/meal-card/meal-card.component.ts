@@ -128,7 +128,7 @@ export class MealCardComponent implements OnInit {
       this.toastr.error(
         'Admins are restricted from ordering items from User panel'
       );
-      this.router.navigate(['/custom-order']);
+      this.router.navigate(['/admin/custom-order']);
       return;
     }
 

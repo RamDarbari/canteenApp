@@ -140,15 +140,9 @@ export class TableComponent implements OnInit {
   }
 
   getOrderHistory() {
-    // console.log('hello');
     this.isLoadingOrderHistory = true;
-
-    // Check if empId is present in the URL query parameters
     const empIdFromQueryParam = this.route.snapshot.queryParamMap.get('empId');
-
-    // Use empId from query parameter if present, otherwise use the value of searchName
     this.searchName = empIdFromQueryParam || this.searchName;
-
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
@@ -294,7 +288,7 @@ export class TableComponent implements OnInit {
       const limit = this.pageSizePendingOrder;
 
       this.http
-        .orderList(token, currentPage, totalRecords, totalPages, limit)
+        .pendingOrderList(token, currentPage, totalRecords, totalPages, limit)
         .subscribe((response: any) => {
           console.log(response, '');
           if (response && response.data && response.data.length > 0) {
@@ -330,21 +324,23 @@ export class TableComponent implements OnInit {
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
 
-      this.http.orderStatus(token, status, order_id).subscribe(
-        (response) => {
-          console.log(response, ';;;;;;;');
-          this.orders = this.orders.filter((order) => order._id !== order_id);
-          this.orderService.updateOrders(this.orders);
-          this.toastr.info('Order Status Has Been Updated');
-        },
-        (error) => {
-          console.error(error);
-          this.toastr.error('Error updating order status. Please try again.');
-        },
-        () => {
+      this.http
+        .orderStatus(token, status, order_id)
+        .subscribe(
+          (response) => {
+            console.log(response, ';;;;;;;');
+            this.orders = this.orders.filter((order) => order._id !== order_id);
+            this.orderService.updateOrders(this.orders);
+            this.toastr.info('Order Status Has Been Updated');
+          },
+          (error) => {
+            console.error(error);
+            this.toastr.error('Error updating order status. Please try again.');
+          }
+        )
+        .add(() => {
           this.isLoading = false;
-        }
-      );
+        });
     } catch (error) {
       console.log(error);
     }

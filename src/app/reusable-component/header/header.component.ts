@@ -90,43 +90,51 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
 
-    this.socketSubscription = this.socketService.on('notification').subscribe(
-      (data: any) => {
-        console.log('Received a notification from the server:', data);
-        this.messages.unshift(data); // Add the new notification to the beginning of the array
-        this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
-      },
-      (error) => {
-        console.error('Error receiving notification:', error);
-      }
-    );
-    // this.getApiNotifications(token);
+    if (token) {
+      this.socketSubscription = this.socketService.on('notification').subscribe(
+        (data: any) => {
+          console.log('Received a notification from the server:', data);
+          this.messages.unshift(data);
+          this.messages = this.messages.slice(0, 5);
+        },
+        (error) => {
+          console.error('Error receiving notification:', error);
+        }
+      );
+
+      this.getApiNotifications();
+    }
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from the socket service when the component is destroyed
     if (this.socketSubscription) {
       this.socketSubscription.unsubscribe();
     }
   }
+  navigateToUserProfile() {
+    this.router.navigate(['/user-profile']);
+  }
+  fetchApiNotifications(): void {
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
 
-  // fetchApiNotifications(): void {
-  //   const token = localStorage.getItem('user')
-  //     ? JSON.parse(localStorage.getItem('user')).data.token
-  //     : '';
+    try {
+      if (token) {
+        this._https.getApiNotifications(token).subscribe((response: any) => {
+          this.handleApiNotifications(response);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  //   try {
-  //     if (token) {
-  //       this._https.getApiNotifications(token).subscribe((response: any) => {
-  //         this.handleApiNotifications(response);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  getApiNotifications(): void {
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
 
-  getApiNotifications(token: string): void {
     this._https.getApiNotifications(token).subscribe(
       (response: any) => {
         this.apiNotifications = response.data;

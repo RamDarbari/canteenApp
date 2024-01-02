@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   userProfileInfo: UserData;
   avatarInitial: string;
   empId: number;
+  isAdmin: boolean = false;
 
   constructor(
     private http: CommonServiceService,
@@ -31,6 +32,7 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.getUserRole() === 'admin';
     this.route.queryParams.subscribe((params) => {
       if (params['empId']) {
         this.empId = +params['empId'];
@@ -44,8 +46,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  isUserProfileRoute(): boolean {
-    return this.router.url === '/user-profile/';
+  getUserRole(): string {
+    const userRole = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.empDetails.role
+      : '';
+    return userRole;
   }
 
   goBack(): void {

@@ -116,6 +116,13 @@ app-loader {
   border: none;
 }
 
+.form-button:disabled {
+  background-color: #6d00c2;
+  border-color: #6d00c2;
+  opacity: 0.7;
+  // cursor: not-allowed;
+}
+
 // Disable spin buttons on input
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -219,4 +226,7 @@ input::-webkit-inner-spin-button {
     background-color: #fff;
     color: #dc3545;
   }
+}
+.has-error {
+  border: 1px solid red;
 }

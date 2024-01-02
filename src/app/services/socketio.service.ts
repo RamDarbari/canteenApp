@@ -1,3 +1,4 @@
+// socketio.service.ts
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
@@ -9,10 +10,10 @@ import { environment } from '..//../environments/environment';
 export class SocketioService {
   private socket: Socket;
 
-  constructor() {
-    const token = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data?.token
-      : null;
+  serverUrl = 'http://10.8.11.160:5000/';
+  jwtToken = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user')).data?.token
+    : null;
 
     this.socket = io(`${environment.apiUrl}?token=${token}`);
   }
