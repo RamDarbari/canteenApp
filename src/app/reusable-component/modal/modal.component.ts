@@ -70,9 +70,7 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if the modal is used for editing
     if (this.modalType === 'addItem-modal' && this.editedItem) {
-      // Set the selectedMenuTitle based on the category of the edited item
       const editedItemCategory = this.menuItems.find(
         (menu) => menu._id === this.editedItem.menu_id
       );
@@ -87,13 +85,22 @@ export class ModalComponent implements OnInit {
     } else {
       this.selectedMenuTitle = '';
     }
-
-    this.menuList();
+    if (this.modalType !== 'login-modal') {
+      this.menuList();
+    }
 
     this.route.queryParams.subscribe((queryParams) => {
       this.selectedCategory = queryParams['selectedCategory'] || '';
       console.log('Selected Category:', this.selectedCategory);
     });
+
+    this.form.valueChanges.subscribe(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+  isFormValid(): boolean {
+    return this.form.valid;
   }
 
   private updateQueryParams() {
@@ -453,7 +460,7 @@ export class ModalComponent implements OnInit {
         role: formData.role,
       };
 
-      this.http.updateEmployee(token, employeeData).subscribe(
+      this.http.createEmployee(token, employeeData).subscribe(
         (response) => {
           console.log('Employee creation successful', response);
           // Additional logic if needed

@@ -8,6 +8,35 @@
           </a>
         </div>
         <div class="header-menu d-flex justify-content-end align-items-center">
+          <div class="notification" (click)="getApiNotifications()" *ngIf="hasToken">
+            <ul class="navbar-nav">
+              <li class="dropdown nav-item">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <span class="material-symbols-rounded">notifications_active</span>
+                </a>
+                <ul class="dropdown-menu" style="position: absolute; left: -145px; top: 100%; width: 275px;"
+                  aria-labelledby="dropdownMenuButton1">
+                  <div class="backend-notifications">
+                    <li *ngFor="let message of messages" class="p-3">
+                      <a>{{ message }}</a>
+                    </li>
+                  </div>
+                  <div class="backend-notifications">
+                    <li *ngFor="let notification of apiNotifications" class="p-3">
+                      <a>{{ notification.message }}</a>
+                    </li>
+                  </div>
+                  <div class="fontEnd-notifications">
+                    <li *ngIf="messages.length === 0 && apiNotifications.length === 0"
+                      class="widget-media dz-scroll p-3 ps ps--active-y">
+                      <span>No new notifications</span>
+                    </li>
+                  </div>
+                </ul>
+              </li>
+            </ul>
+          </div>
           <div class="cart d-flex justify-content-end">
             <button class="btn btn-primary d-flex " type="button" data-bs-toggle="offcanvas"
               class="bg-transparent btn-outline-light border-0" (click)="openEnd(content)" [disabled]="!hasToken">
@@ -34,9 +63,8 @@
                       {{userProfileDetails.FirstName}} {{userProfileDetails.LastName}}
                     </span></a>
                 </li> -->
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/user-profile']"
-                    routerLinkActive="router-link-active">Profile</a>
+                <li *ngIf="!isAdmin">
+                  <a class="dropdown-item" (click)="navigateToUserProfile()">Profile</a>
                 </li>
                 <li *ngIf="isAdmin">
                   <a class="dropdown-item" [routerLink]="['/admin/dashboard']"

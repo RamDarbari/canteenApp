@@ -460,3 +460,224 @@ section {
     }
   }
 }
+
+@media (min-width: 1200px) {
+  section {
+    .custom-container {
+      max-width: 600px;
+    }
+    .today-Sidebar,
+    .custom-Sidebar {
+      width: 100%;
+      margin-left: 20px;
+    }
+
+    .tabs {
+      .menu-selection-card {
+        padding: 0px 20px;
+
+        button {
+          width: 80px; // Adjusted for large desktop
+          font-size: 14px; // Adjusted for large desktop
+        }
+      }
+    }
+
+    .sidebar {
+      .inner-sidebar-body {
+        ul {
+          li {
+            span {
+              font-size: 14px; // Adjusted for large desktop
+            }
+          }
+        }
+      }
+
+      .offcanvas-body {
+        height: 93vh;
+      }
+
+      .item-info-body {
+        p {
+          font-size: 14px; // Adjusted for large desktop
+        }
+
+        button {
+          i {
+            width: 16px; // Adjusted for large desktop
+            height: 16px; // Adjusted for large desktop
+          }
+        }
+      }
+
+      .text-end {
+        .confirm-button {
+          width: 130px; // Adjusted for large desktop
+          height: 35px; // Adjusted for large desktop
+          font-size: 14px; // Adjusted for large desktop
+        }
+
+        .cancel-button {
+          width: 110px; // Adjusted for large desktop
+          height: 35px; // Adjusted for large desktop
+          font-size: 14px; // Adjusted for large desktop
+        }
+
+        button {
+          margin: 5px;
+        }
+      }
+    }
+  }
+}
+
+// Tablet styles
+@media (max-width: 1199px) {
+  section {
+    .today-Sidebar,
+    .custom-Sidebar {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .tabs {
+      .menu-selection-card {
+        padding: 0px 15px; // Adjusted for tablet
+        overflow: scroll;
+        .custom-order-div {
+          width: 70%; // Adjusted for tablet
+        }
+
+        button {
+          width: 70px; // Adjusted for tablet
+          font-size: 12px; // Adjusted for tablet
+        }
+      }
+    }
+
+    .sidebar {
+      .inner-sidebar-body {
+        ul {
+          li {
+            span {
+              font-size: 11px; // Adjusted for tablet
+            }
+          }
+        }
+      }
+
+      .offcanvas-body {
+        height: 85vh; // Adjusted for tablet
+      }
+
+      .item-info-body {
+        p {
+          font-size: 12px; // Adjusted for tablet
+        }
+
+        button {
+          i {
+            width: 14px; // Adjusted for tablet
+            height: 14px; // Adjusted for tablet
+          }
+        }
+      }
+
+      .text-end {
+        .confirm-button {
+          width: 110px; // Adjusted for tablet
+          height: 30px; // Adjusted for tablet
+          font-size: 12px; // Adjusted for tablet
+        }
+
+        .cancel-button {
+          width: 90px; // Adjusted for tablet
+          height: 30px; // Adjusted for tablet
+          font-size: 12px; // Adjusted for tablet
+        }
+
+        button {
+          margin: 5px;
+        }
+      }
+    }
+  }
+}
+
+// Mobile styles
+@media (max-width: 767px) {
+  section {
+    .today-Sidebar,
+    .custom-Sidebar {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .tabs {
+      .menu-selection-card {
+        padding: 0px 10px; // Adjusted for mobile
+
+        .custom-order-div {
+          width: 90%; // Adjusted for mobile
+        }
+
+        button {
+          width: 60px; // Adjusted for mobile
+          font-size: 10px; // Adjusted for mobile
+        }
+      }
+    }
+
+    .sidebar {
+      .inner-sidebar-body {
+        ul {
+          li {
+            span {
+              font-size: 10px; // Adjusted for mobile
+            }
+          }
+        }
+      }
+
+      .offcanvas-body {
+        height: 80vh; // Adjusted for mobile
+      }
+
+      .item-info-body {
+        p {
+          font-size: 10px; // Adjusted for mobile
+        }
+
+        button {
+          i {
+            width: 12px; // Adjusted for mobile
+            height: 12px; // Adjusted for mobile
+          }
+        }
+
+        .item-name-info {
+          width: 70%; // Adjusted for mobile
+        }
+      }
+
+      .text-end {
+        .confirm-button {
+          width: 90px; // Adjusted for mobile
+          height: 25px; // Adjusted for mobile
+          font-size: 10px; // Adjusted for mobile
+        }
+
+        .cancel-button {
+          width: 70px; // Adjusted for mobile
+          height: 25px; // Adjusted for mobile
+          font-size: 10px; // Adjusted for mobile
+        }
+
+        button {
+          margin: 5px;
+        }
+      }
+    }
+  }
+}

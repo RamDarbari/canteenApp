@@ -22,7 +22,7 @@ export class SidebarMenuService {
     {
       route_name: 'custom-order',
       route_icon_name: 'add',
-      route_loc: '/custom-order',
+      route_loc: '/admin/custom-order',
       route_icon_class: 'material-symbols-rounded',
     },
     {
@@ -34,7 +34,7 @@ export class SidebarMenuService {
     {
       route_name: 'menu',
       route_icon_name: 'restaurant_menu',
-      route_loc: '/admin/menu-catalogue',
+      route_loc: '/admin/today-menu',
       route_icon_class: 'material-symbols-rounded',
     },
   ];

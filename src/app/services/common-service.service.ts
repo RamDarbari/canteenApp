@@ -19,7 +19,7 @@ export class CommonServiceService {
   ) {}
 
   requestOTP(emp_id: number): Observable<any> {
-    const url = `${environment.apiUrl}/login`;
+    const url = `${environment.apiUrl}/user/modules/v1/auth/login`;
     const data = { emp_id };
 
     return this._http.post(url, data).pipe(
@@ -31,7 +31,7 @@ export class CommonServiceService {
   }
 
   verifyOTP(loginData: login, token: any): Observable<any> {
-    const url = `${environment.apiUrl}/verifyOTP`;
+    const url = `${environment.apiUrl}/user/modules/v1/auth/verify-otp`;
 
     return this._http.post(url, loginData).pipe(
       catchError((error) => {
@@ -41,22 +41,13 @@ export class CommonServiceService {
     );
   }
 
-  getCurrentUser(): any {
-    const user = localStorage.getItem('user');
-
-    if (user) {
-      return JSON.parse(user);
-    } else {
-      return null;
-    }
-  }
   menuList(): Observable<any> {
-    const url = `${environment.apiUrl}/listTodayMenu`;
+    const url = `${environment.apiUrl}/user/modules/v1/today-menu/list-today-menu`;
     return this._http.get(url);
   }
 
   placeOrder(orderData: OrderData, token: any) {
-    const url = `${environment.apiUrl}/addOrder`;
+    const url = `${environment.apiUrl}/user/modules/v1/order/add-order`;
 
     return this._http
       .post(url, orderData, {
@@ -91,14 +82,29 @@ export class CommonServiceService {
   // }
 
   userProfile(token: string, emp_id: number) {
-    return this._http.get(`${environment.apiUrl}/viewUser?emp_id=${emp_id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/auth/view-employee?emp_id=${emp_id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   }
 
   userProfileWithoutEmpId(token: string) {
-    return this._http.get(`${environment.apiUrl}/viewUser`, {
-      headers: { Authorization: `Bearer ${token}` },
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/auth/view-employee`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+  }
+
+  getApiNotifications(token: string): Observable<any> {
+    const url = `${environment.apiUrl}/user/modules/v1/notification/notification-list`;
+    return this._http.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 }

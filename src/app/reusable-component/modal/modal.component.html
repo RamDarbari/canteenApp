@@ -39,7 +39,7 @@
                   placeholder="Enter OTP" required>
               </div>
               <div class="d-flex justify-content-center">
-                <button type="submit" class="form-button">VERIFY OTP</button>
+                <button type="submit" [disabled]="verifyForm.invalid" class="form-button">VERIFY OTP</button>
               </div>
             </div>
           </form>

@@ -26,7 +26,7 @@ const routes: Routes = [
           { path: 'order-history', component: OrderHistoryComponent },
         ],
       },
-      { path: 'custom-order', component: CustomOrderComponent },
+
       // {
       //   path: '**',
       //   component: NotfoundComponent,

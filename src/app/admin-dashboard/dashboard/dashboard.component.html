@@ -171,7 +171,7 @@
                   <span class="num">#{{ i + 1 }}</span>
                   <div class="w-100 item-details">
                     <a>
-                      <h2 class="">{{ item._id }}</h2>
+                      <h2 class="">{{ item._id | titlecase }}</h2>
                     </a>
                     <span class="order-times" style="color: #d0d0d0;">order x{{ item.count }}</span>
                   </div>
