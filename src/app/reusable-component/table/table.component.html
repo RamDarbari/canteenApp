@@ -118,7 +118,7 @@
   <app-loader *ngIf="isLoading"></app-loader>
   <div class="pendingOrder-card">
     <div class="container">
-      <div class="row">
+      <div class="row my-4">
         <div class="col-xl-12">
           <div class="card ">
             <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
@@ -218,7 +218,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive w-100">
-              <app-loader *ngIf="isLoadingOrderHistory"></app-loader>
+              <!-- <app-loader *ngIf="isLoadingOrderHistory"></app-loader> -->
               <div *ngIf="orderHistoryData.length === 0; else orderHistoryTable">
                 No items found matching the search criteria.
               </div>

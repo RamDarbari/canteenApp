@@ -17,8 +17,8 @@ export class AdminService {
 
   addminMenuList(token: string, menuId?: string): Observable<any> {
     const apiUrl = menuId
-      ? `${environment.apiUrl}/admin/listSubMenu?menu_id=${menuId}`
-      : `${environment.apiUrl}/admin/listSubMenu`;
+      ? `${environment.apiUrl}/admin/modules/v1/submenu/list-submenu?menu_id=${menuId}`
+      : `${environment.apiUrl}/admin/modules/v1/submenu/list-submenu`;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -27,15 +27,22 @@ export class AdminService {
   }
 
   listmenu(token: string) {
-    return this._http.get(`${environment.apiUrl}/admin/listMenu`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/menu/list-menu`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   }
 
   addItem(data: any, token: any) {
-    return this._http.post(`${environment.apiUrl}/admin/addSubMenu`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this._http.post(
+      `${environment.apiUrl}/admin/modules/v1/submenu/add-submenu`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   }
 
   deleteItems(token: string, _id: string): Observable<any> {
@@ -44,7 +51,7 @@ export class AdminService {
     });
 
     return this._http.delete(
-      `${environment.apiUrl}/admin/deleteSubMenu?id=${_id}`,
+      `${environment.apiUrl}/admin/modules/v1/submenu/delete-submenu?id=${_id}`,
       {
         headers,
       }
@@ -53,7 +60,7 @@ export class AdminService {
 
   updateItems(token: string, id: string, updatedData: any) {
     return this._http.put(
-      `${environment.apiUrl}/admin/updateSubmenu`,
+      `${environment.apiUrl}/admin/modules/v1/submenu/update-submenu`,
       updatedData,
       {
         headers: {
@@ -64,36 +71,42 @@ export class AdminService {
   }
 
   userList(token: any, currentPage: number, limit: number, search: string) {
-    return this._http.get(`${environment.apiUrl}/admin/listUsers`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        currentPage: currentPage.toString(),
-        limit: limit.toString(), // Add the limit parameter
-        search: search,
-      },
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/auth/employee-list`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          currentPage: currentPage.toString(),
+          limit: limit.toString(), // Add the limit parameter
+          search: search,
+        },
+      }
+    );
   }
 
-  orderList(
+  pendingOrderList(
     token: string,
     currentPage: number,
     totalRecords: number,
     totalPages: number,
     limit: number
   ) {
-    return this._http.get(`${environment.apiUrl}/admin/pendingOrderList`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        currentPage: currentPage.toString(),
-        totalRecords: totalRecords.toString(),
-        totalPages: totalPages.toString(),
-        limit: limit.toString(),
-      },
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/order/pending-order`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          currentPage: currentPage.toString(),
+          totalRecords: totalRecords.toString(),
+          totalPages: totalPages.toString(),
+          limit: limit.toString(),
+        },
+      }
+    );
   }
 
   orderStatus(token: string, status: string, order_id: string) {
@@ -106,33 +119,11 @@ export class AdminService {
     };
 
     return this._http.post(
-      `${environment.apiUrl}/admin/order/updateStatus?status=${status}`,
+      `${environment.apiUrl}/admin/modules/v1/order/update-status?status=${status}`,
       body,
       { headers }
     );
   }
-
-  // getOrderHistory(
-  //   token: string,
-  //   currentPage: number,
-  //   searchName: string,
-  //   pageSize: number,
-  //   download: string,
-  //   dateInterval: string
-  // ) {
-  //   return this._http.get(`${environment.apiUrl}/admin/listorder`, {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     params: {
-  //       currentPage: currentPage.toString(),
-  //       search: searchName,
-  //       limit: pageSize.toString(),
-  //       download: download,
-  //       dateInterval: dateInterval,
-  //     },
-  //   });
-  // }
 
   getOrderHistory(
     token: string,
@@ -142,19 +133,21 @@ export class AdminService {
     download: string,
     dateInterval: string
   ) {
-    return this._http.get(`${environment.apiUrl}/admin/listorder`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        currentPage: currentPage.toString(),
-        search: searchName,
-        limit: pageSize.toString(),
-        download: download,
-        dateInterval: dateInterval,
-      },
-      // responseType: 'arraybuffer',
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/order/list-order`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          currentPage: currentPage.toString(),
+          search: searchName,
+          limit: pageSize.toString(),
+          download: download,
+          dateInterval: dateInterval,
+        },
+      }
+    );
   }
 
   getOrderHistoryExecl(
@@ -165,34 +158,41 @@ export class AdminService {
     download: string,
     dateInterval: string
   ) {
-    return this._http.get(`${environment.apiUrl}/admin/listorder`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        currentPage: currentPage.toString(),
-        search: searchName,
-        limit: pageSize.toString(),
-        download: download,
-        dateInterval: dateInterval,
-      },
-      responseType: 'arraybuffer',
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/order/list-order`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          currentPage: currentPage.toString(),
+          search: searchName,
+          limit: pageSize.toString(),
+          download: download,
+          dateInterval: dateInterval,
+        },
+        responseType: 'arraybuffer',
+      }
+    );
   }
+
   detailsCount(token: string, currentDate: string): Observable<any> {
     let date = new HttpParams().set('currentDate', currentDate);
 
-    return this._http.get(`${environment.apiUrl}/admin/count`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: date,
-    });
+    return this._http.get(
+      `${environment.apiUrl}/admin/modules/v1/dashboard/dashboard-list`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: date,
+      }
+    );
   }
 
   addTodayMenu(token: string, payload?: any): Observable<any> {
     return this._http.post(
-      `${environment.apiUrl}/admin/addTodayMenu`,
+      `${environment.apiUrl}/admin/modules/v1/today-menu/add-today-menu`,
       payload,
       {
         headers: {
@@ -204,7 +204,7 @@ export class AdminService {
 
   updateBalance(token: string, emp_id: number, payment: number, bill: number) {
     return this._http.post(
-      `${environment.apiUrl}/admin/updateBalance`,
+      `${environment.apiUrl}/admin/modules/v1/wallet/update-balance`,
       {
         emp_id,
         payment,
@@ -218,9 +218,9 @@ export class AdminService {
     );
   }
 
-  updateEmployee(token: string, employeeData: UserData) {
+  createEmployee(token: string, employeeData: UserData) {
     return this._http.post(
-      `${environment.apiUrl}/admin/createUser`,
+      `${environment.apiUrl}/admin/modules/v1/auth/create-employee`,
       employeeData,
       {
         headers: {
@@ -236,7 +236,7 @@ export class AdminService {
     currentPage = 0,
     limit = 10
   ): Observable<any> {
-    let url = `${environment.apiUrl}/wallet-history`;
+    let url = `${environment.apiUrl}/admin/modules/v1/wallet/wallet-history`;
     if (empId) {
       url += `?emp_id=${empId}&currentPage=${currentPage}&limit=${limit}`;
     } else {
