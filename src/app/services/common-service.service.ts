@@ -101,4 +101,12 @@ export class CommonServiceService {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
+  getApiNotifications(token: string): Observable<any> {
+    const url = `${environment.apiUrl}/notification`;
+    return this._http.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

@@ -28,7 +28,7 @@
 
           </div>
           <div class="card-body">
-            <div class="table-responsive w-100">
+            <div class="table-responsive w-100" style="min-height: 500px;">
               <app-loader *ngIf="isLoadingOrderHistory"></app-loader>
               <table mat-table matSort [dataSource]="orderHistoryData" class="mat-elevation-z8">
                 <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
@@ -72,7 +72,6 @@
                 <!-- Define the table rows -->
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
               </table>
-              <!-- Paginator -->
               <div class="mat-paginator">
                 <mat-paginator [length]="totalItemsOrderHistory" [pageSizeOptions]="pageSizeOptions"
                   [pageSize]="pageSizeOrderHistory" [pageIndex]="currentPageOrderHistory"
@@ -118,81 +117,83 @@
 <section class="pendingOrder-container pb-4" *ngIf="pendingOrder">
   <app-loader *ngIf="isLoading"></app-loader>
   <div class="pendingOrder-card">
-    <div class="row my-4">
-      <div class="col-12">
-        <div class="card ">
-          <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
-            <span> Pending Order's </span>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive w-100">
-              <table mat-table matSort [dataSource]="pagedEmployeeData" class="mat-elevation-z8">
-                <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
-                  <th mat-header-cell *matHeaderCellDef> Order Id</th>
-                  <td mat-cell *matCellDef="let element" class="mat-cell-orderId">
-                    <span class="orderId" (click)="copyOrderId(element._id)">{{ element._id }}</span>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="emp_id">
-                  <th mat-header-cell *matHeaderCellDef> Employee ID </th>
-                  <td mat-cell *matCellDef="let element"> {{element.emp_id}} </td>
-                </ng-container>
-                <ng-container matColumnDef="fullName">
-                  <th mat-header-cell *matHeaderCellDef> Employee Name </th>
-                  <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
-                </ng-container>
-                <ng-container matColumnDef="itemName">
-                  <th mat-header-cell *matHeaderCellDef>Item Info</th>
-                  <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
-                    <table class="mat-elevation-z8">
-                      <tr *ngFor="let record of order.order_rec">
-                        <td>{{ record.item_name }}</td>
-                        <td> {{ record.quantity }}</td>
-                      </tr>
-                    </table>
-                  </td>
-                </ng-container>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card ">
+            <div class="card-header py-4 d-flex flex-wrap align-items-center justify-content-between">
+              <span> Pending Order's </span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive w-100">
+                <table mat-table matSort [dataSource]="pagedEmployeeData" class="mat-elevation-z8">
+                  <ng-container matColumnDef="_id" class="mat-column-_id mat-header-cell-orderId mat-cell-orderId">
+                    <th mat-header-cell *matHeaderCellDef> Order Id</th>
+                    <td mat-cell *matCellDef="let element" class="mat-cell-orderId">
+                      <span class="orderId" (click)="copyOrderId(element._id)">{{ element._id }}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="emp_id">
+                    <th mat-header-cell *matHeaderCellDef> Employee ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.emp_id}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="itemName">
+                    <th mat-header-cell *matHeaderCellDef>Item Info</th>
+                    <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
+                      <table class="mat-elevation-z8">
+                        <tr *ngFor="let record of order.order_rec">
+                          <td>{{ record.item_name }}</td>
+                          <td> {{ record.quantity }}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="price">
-                  <th mat-header-cell *matHeaderCellDef>Price</th>
-                  <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
-                    <div class="order-rec">
-                      <div *ngFor="let record of order.order_rec">
-                        {{ record.price }}
+                  <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>Price</th>
+                    <td mat-cell *matCellDef="let order" class="mat-cell-order-rec">
+                      <div class="order-rec">
+                        <div *ngFor="let record of order.order_rec">
+                          {{ record.price }}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="totalBalance">
-                  <th mat-header-cell *matHeaderCellDef> Total Amount</th>
-                  <td mat-cell *matCellDef="let element"> {{element.totalBalance}} </td>
-                </ng-container>
-                <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef>Date</th>
-                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                </ng-container>
-                <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Action</th>
-                  <td mat-cell *matCellDef="let element" class="text-center">
-                    <button class="button-success" (click)="changeOrderStatus(element._id, 'confirm')">
-                      Confirm
-                    </button>
-                    <button class="button-danger" (click)="changeOrderStatus(element._id, 'cancelled')">
-                      Reject
-                    </button>
-                  </td>
-                </ng-container>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="totalBalance">
+                    <th mat-header-cell *matHeaderCellDef> Total Amount</th>
+                    <td mat-cell *matCellDef="let element"> {{element.totalBalance}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">
+                      <button class="button-success" (click)="changeOrderStatus(element._id, 'confirm')">
+                        Confirm
+                      </button>
+                      <button class="button-danger" (click)="changeOrderStatus(element._id, 'cancelled')">
+                        Reject
+                      </button>
+                    </td>
+                  </ng-container>
 
-                <!-- Define the table header row -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsPendingOrders"></tr>
-                <!-- Define the table rows -->
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsPendingOrders"></tr>
-              </table>
-              <!-- Paginator -->
-              <div class="mat-paginator">
-                <mat-paginator [length]="totalItemsPendingOrder" [pageSizeOptions]="pageSizeOptionsPendingOrder"
-                  [pageSize]="pageSizePendingOrder" [pageIndex]="currentPagePendingOrder"
-                  (page)="pageChangedPendingOrder($event)"></mat-paginator>
+                  <!-- Define the table header row -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsPendingOrders"></tr>
+                  <!-- Define the table rows -->
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsPendingOrders"></tr>
+                </table>
+                <!-- Paginator -->
+                <div class="mat-paginator">
+                  <mat-paginator [length]="totalItemsPendingOrder" [pageSizeOptions]="pageSizeOptionsPendingOrder"
+                    [pageSize]="pageSizePendingOrder" [pageIndex]="currentPagePendingOrder"
+                    (page)="pageChangedPendingOrder($event)"></mat-paginator>
+                </div>
               </div>
             </div>
           </div>

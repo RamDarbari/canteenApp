@@ -6,6 +6,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { NotfoundComponent } from '../notfound/notfound.component';
 import { authGuard } from './guard/auth.guard';
 import { MenuCatalogueComponent } from './menu/menu-catalogue/menu-catalogue.component';
+import { CustomOrderComponent } from './orders/custom-order/custom-order.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'userList', component: UserListComponent },
-      { path: 'menu-catalogue', component: MenuCatalogueComponent },
+      { path: 'today-menu', component: MenuCatalogueComponent },
+      { path: 'custom-order', component: CustomOrderComponent },
       { path: '**', redirectTo: 'dashboard' },
     ],
   },

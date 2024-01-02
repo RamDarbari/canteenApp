@@ -13,7 +13,7 @@ export class SocketioService {
       ? JSON.parse(localStorage.getItem('user')).data?.token
       : null;
 
-    this.socket = io(`http://10.8.11.160:5000?token=${token}`);
+    this.socket = io(`http://10.8.10.160:5000?token=${token}`);
   }
 
   public on(event: string): Observable<any> {

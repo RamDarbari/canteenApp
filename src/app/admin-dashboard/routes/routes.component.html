@@ -56,30 +56,12 @@
           </div> -->
 
           <ul class="navbar-nav top-right-menu d-flex flex-wrap gap-2">
-            <!-- <li class="nav-item">
-              <a routerLink="/home/admin" routerLinkActive="nav-active" class="nav-link">
-                <span class="material-symbols-rounded">settings</span>
-              </a>
-            </li>
-            <li class="nav-item"><a class="nav-link">
-                <span class="material-symbols-rounded">apps</span>
-              </a></li> -->
             <li class="dropdown nav-item">
               <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <span class="material-symbols-rounded">notifications_active</span>
               </a>
-              <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
-                style="position: absolute; left: -145px; top: 100%;">
-                <li *ngFor="let message of messages" class="dropdown-item widget-media dz-scroll p-3 ps ps--active-y">
-                  <a>{{ message }}</a>
-                </li>
-                <li *ngIf="messages.length === 0" class="dropdown-item widget-media dz-scroll p-3 ps ps--active-y">
-                  <span>No new notifications</span>
-                </li>
-              </ul> -->
-
-              <ul class="dropdown-menu" style="position: absolute; left: -145px; top: 100%;"
+              <ul class="dropdown-menu" style="position: absolute; left: -145px; top: 100%; width: 275px;"
                 aria-labelledby="dropdownMenuButton1">
                 <div class="backend-notifications">
                   <li *ngFor="let message of messages" class="p-3">
@@ -94,6 +76,9 @@
                 </div>
               </ul>
             </li>
+            <!-- <li *ngFor="let notification of apiNotifications" class="p-3">
+              <a>{{ notification }}</a>
+            </li> -->
             <li class="nav-item"><a class="nav-link" (click)="logout()">
                 <span class="material-symbols-rounded">logout</span>
               </a></li>

@@ -15,7 +15,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SelectedmenusService } from 'src/app/services/selectedmenus.service';
-import { OrderData, OrderDataItem } from 'src/data';
+import { OrderData, OrderDataItem, adminOrderData } from 'src/data';
 import { ModalComponent } from '../modal/modal.component';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
@@ -475,7 +475,7 @@ export class MenuTabsComponent implements OnInit {
             price: item.price,
           }));
 
-          const orderPayload: OrderData = {
+          const orderPayload: adminOrderData = {
             bill_status: 'unpaid',
             order_rec: orderItems,
             emp_id: this.empId,
