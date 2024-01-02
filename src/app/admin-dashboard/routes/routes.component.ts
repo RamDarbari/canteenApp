@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SidebarMenuService } from 'src/app/services/sidebar-menu.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 
@@ -22,31 +24,92 @@ export class RoutesComponent implements OnInit {
   sideBottom: boolean = false;
   menuHide = false;
   messages: string[] = [];
+  socketSubscription: Subscription;
+  apiNotifications: any[] = [];
 
   constructor(
     public menuItems: SidebarMenuService,
     private router: Router,
     public toaster: ToastrService,
     private socketService: SocketioService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private _https: CommonServiceService
   ) {
     this.menuData = this.menuItems.appSidebarmenu;
   }
 
   ngOnInit() {
-    // Subscribe to socket events
-    this.socketService.on('message').subscribe((data: any) => {
-      console.log('Received a message from the server:', data, '');
-      this.messages.push(data); // Store the message
-    });
+    // // Subscribe to socket events
+    // this.socketService.on('message').subscribe((data: any) => {
+    //   console.log('Received a message from the server:', data, '');
+    //   this.messages.push(data); // Store the message
+    // });
 
-    this.socketService.on('notification').subscribe((data: any) => {
-      console.log('Received a notification from the server:', data);
-      // this.toaster.info('Received a notification from the server:', data);
-      this.messages.push(data); // Store the notification
-    });
+    // this.socketService.on('notification').subscribe((data: any) => {
+    //   console.log('Received a notification from the server:', data);
+    //   // this.toaster.info('Received a notification from the server:', data);
+    //   this.messages.push(data); // Store the notification
+    // });
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+
+    this.socketSubscription = this.socketService.on('notification').subscribe(
+      (data: any) => {
+        console.log('Received a notification from the server:', data);
+        this.messages.unshift(data); // Add the new notification to the beginning of the array
+        this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
+      },
+      (error) => {
+        console.error('Error receiving notification:', error);
+      }
+    );
+    // this.getApiNotifications(token);
   }
 
+  ngOnDestroy(): void {
+    // Unsubscribe from the socket service when the component is destroyed
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+    }
+  }
+
+  // fetchApiNotifications(): void {
+  //   const token = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.token
+  //     : '';
+
+  //   try {
+  //     if (token) {
+  //       this._https.getApiNotifications(token).subscribe((response: any) => {
+  //         this.handleApiNotifications(response);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  getApiNotifications(token: string): void {
+    this._https.getApiNotifications(token).subscribe(
+      (response: any) => {
+        this.apiNotifications = response.data;
+      },
+      (error) => {
+        console.error('Error fetching API notifications:', error);
+        this.toastr.error('Error fetching notifications');
+      }
+    );
+  }
+
+  private handleApiNotifications(response: any): void {
+    if (response && response.statusCode === 200 && response.data) {
+      const apiNotifications = response.data.notifications || [];
+      // Append API notifications to the existing notifications array
+      this.messages = [...apiNotifications, ...this.messages];
+      this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
+    }
+  }
   reverseChange() {
     this.headerfullwidth = false;
     this.mainFullwidth = false;

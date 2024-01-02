@@ -4,14 +4,11 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError, throwError } from 'rxjs';
 import { OrderDataItem, UserData } from 'src/data';
-import { environment } from 'src/environments/environment';
-
+import { environment } from '..//../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  private apiUrl = environment.apiUrl;
-
   constructor(
     private _http: HttpClient,
     private _router: Router,
@@ -20,8 +17,8 @@ export class AdminService {
 
   addminMenuList(token: string, menuId?: string): Observable<any> {
     const apiUrl = menuId
-      ? `${this.apiUrl}/admin/listSubMenu?menu_id=${menuId}`
-      : `${this.apiUrl}/admin/listSubMenu`;
+      ? `${environment.apiUrl}/admin/listSubMenu?menu_id=${menuId}`
+      : `${environment.apiUrl}/admin/listSubMenu`;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -30,13 +27,13 @@ export class AdminService {
   }
 
   listmenu(token: string) {
-    return this._http.get(`${this.apiUrl}/admin/listMenu`, {
+    return this._http.get(`${environment.apiUrl}/admin/listMenu`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
 
   addItem(data: any, token: any) {
-    return this._http.post(`${this.apiUrl}/admin/addSubMenu`, data, {
+    return this._http.post(`${environment.apiUrl}/admin/addSubMenu`, data, {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
@@ -46,21 +43,28 @@ export class AdminService {
       Authorization: `Bearer ${token}`,
     });
 
-    return this._http.delete(`${this.apiUrl}/admin/deleteSubMenu?id=${_id}`, {
-      headers,
-    });
+    return this._http.delete(
+      `${environment.apiUrl}/admin/deleteSubMenu?id=${_id}`,
+      {
+        headers,
+      }
+    );
   }
 
   updateItems(token: string, id: string, updatedData: any) {
-    return this._http.put(`${this.apiUrl}/admin/updateSubmenu`, updatedData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return this._http.put(
+      `${environment.apiUrl}/admin/updateSubmenu`,
+      updatedData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   userList(token: any, currentPage: number, limit: number, search: string) {
-    return this._http.get(`${this.apiUrl}/admin/listUsers`, {
+    return this._http.get(`${environment.apiUrl}/admin/listUsers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -79,7 +83,7 @@ export class AdminService {
     totalPages: number,
     limit: number
   ) {
-    return this._http.get(`${this.apiUrl}/admin/pendingOrderList`, {
+    return this._http.get(`${environment.apiUrl}/admin/pendingOrderList`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -102,7 +106,7 @@ export class AdminService {
     };
 
     return this._http.post(
-      `${this.apiUrl}/admin/order/updateStatus?status=${status}`,
+      `${environment.apiUrl}/admin/order/updateStatus?status=${status}`,
       body,
       { headers }
     );
@@ -116,7 +120,7 @@ export class AdminService {
   //   download: string,
   //   dateInterval: string
   // ) {
-  //   return this._http.get(`${this.apiUrl}/admin/listorder`, {
+  //   return this._http.get(`${environment.apiUrl}/admin/listorder`, {
   //     headers: {
   //       Authorization: `Bearer ${token}`,
   //     },
@@ -138,7 +142,7 @@ export class AdminService {
     download: string,
     dateInterval: string
   ) {
-    return this._http.get(`${this.apiUrl}/admin/listorder`, {
+    return this._http.get(`${environment.apiUrl}/admin/listorder`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -161,7 +165,7 @@ export class AdminService {
     download: string,
     dateInterval: string
   ) {
-    return this._http.get(`${this.apiUrl}/admin/listorder`, {
+    return this._http.get(`${environment.apiUrl}/admin/listorder`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -178,7 +182,7 @@ export class AdminService {
   detailsCount(token: string, currentDate: string): Observable<any> {
     let date = new HttpParams().set('currentDate', currentDate);
 
-    return this._http.get(`${this.apiUrl}/admin/count`, {
+    return this._http.get(`${environment.apiUrl}/admin/count`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -187,16 +191,20 @@ export class AdminService {
   }
 
   addTodayMenu(token: string, payload?: any): Observable<any> {
-    return this._http.post(`${this.apiUrl}/admin/addTodayMenu`, payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return this._http.post(
+      `${environment.apiUrl}/admin/addTodayMenu`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   updateBalance(token: string, emp_id: number, payment: number, bill: number) {
     return this._http.post(
-      `${this.apiUrl}/admin/updateBalance`,
+      `${environment.apiUrl}/admin/updateBalance`,
       {
         emp_id,
         payment,
@@ -211,11 +219,15 @@ export class AdminService {
   }
 
   updateEmployee(token: string, employeeData: UserData) {
-    return this._http.post(`${this.apiUrl}/admin/createUser`, employeeData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return this._http.post(
+      `${environment.apiUrl}/admin/createUser`,
+      employeeData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   employeeWaletDetails(
@@ -224,7 +236,7 @@ export class AdminService {
     currentPage = 0,
     limit = 10
   ): Observable<any> {
-    let url = `${this.apiUrl}/wallet-history`;
+    let url = `${environment.apiUrl}/wallet-history`;
     if (empId) {
       url += `?emp_id=${empId}&currentPage=${currentPage}&limit=${limit}`;
     } else {

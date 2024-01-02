@@ -2,6 +2,7 @@ import { OrderData, OrderDataItem } from 'src/data';
 import {
   Component,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
   TemplateRef,
@@ -12,6 +13,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ScrollToService } from '@nicky-lenaers/ngx-scroll-to';
+import { SocketioService } from 'src/app/services/socketio.service';
+import { Subscription } from 'rxjs';
 
 interface cartItems {
   itemId: string;
@@ -37,7 +40,7 @@ interface UserData {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   showUserSection: boolean = true;
   showAdminSection: boolean = true;
   cartItems: cartItems[] = [];
@@ -48,7 +51,10 @@ export class HeaderComponent implements OnInit {
   hasWallet: boolean = false;
   userProfileInfo: UserData;
   emptyCart: any;
+  messages: string[] = [];
   @Output() profile = new EventEmitter<void>();
+  apiNotifications: any[] = [];
+  socketSubscription: Subscription;
 
   constructor(
     private modalService: NgbModal,
@@ -56,7 +62,8 @@ export class HeaderComponent implements OnInit {
     private _https: CommonServiceService,
     private toastr: ToastrService,
     private router: Router,
-    private scrollToService: ScrollToService
+    private scrollToService: ScrollToService,
+    private socketService: SocketioService
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +76,75 @@ export class HeaderComponent implements OnInit {
       this.getUserProfile();
       // localStorage.setItem('sidebarState', 'open');
     });
+    // this.socketService.on('message').subscribe((data: any) => {
+    //   console.log('Received a message from the server:', data, '');
+    //   this.messages.push(data); // Store the message
+    // });
+
+    // this.socketService.on('notification').subscribe((data: any) => {
+    //   console.log('Received a notification from the server:', data);
+    //   // this.toaster.info('Received a notification from the server:', data);
+    //   this.messages.push(data); // Store the notification
+    // });
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+
+    this.socketSubscription = this.socketService.on('notification').subscribe(
+      (data: any) => {
+        console.log('Received a notification from the server:', data);
+        this.messages.unshift(data); // Add the new notification to the beginning of the array
+        this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
+      },
+      (error) => {
+        console.error('Error receiving notification:', error);
+      }
+    );
+    // this.getApiNotifications(token);
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from the socket service when the component is destroyed
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+    }
+  }
+
+  // fetchApiNotifications(): void {
+  //   const token = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.token
+  //     : '';
+
+  //   try {
+  //     if (token) {
+  //       this._https.getApiNotifications(token).subscribe((response: any) => {
+  //         this.handleApiNotifications(response);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  getApiNotifications(token: string): void {
+    this._https.getApiNotifications(token).subscribe(
+      (response: any) => {
+        this.apiNotifications = response.data;
+      },
+      (error) => {
+        console.error('Error fetching API notifications:', error);
+        this.toastr.error('Error fetching notifications');
+      }
+    );
+  }
+
+  private handleApiNotifications(response: any): void {
+    if (response && response.statusCode === 200 && response.data) {
+      const apiNotifications = response.data.notifications || [];
+      // Append API notifications to the existing notifications array
+      this.messages = [...apiNotifications, ...this.messages];
+      this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
+    }
   }
 
   getUserRole(): string {
@@ -225,7 +301,7 @@ export class HeaderComponent implements OnInit {
           const orderPayload: OrderData = {
             bill_status: 'unpaid',
             order_rec: orderItems,
-            emp_id: '3673',
+            // emp_id: '',
           };
           const token = localStorage.getItem('user')
             ? JSON.parse(localStorage.getItem('user')).data.token

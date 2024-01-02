@@ -15,9 +15,8 @@
               </div>
             </div>
             <div class="card-body">
-              <app-loader *ngIf="isLoading" class="loader"></app-loader>
-              <div class="table-responsive w-100">
-
+              <div class="table-responsive w-100" style="min-height: 500px;">
+                <app-loader *ngIf="isLoading" class="loader"></app-loader>
                 <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
                   <ng-container matColumnDef="EmployeeId">
                     <th mat-header-cell *matHeaderCellDef> EmployeeId</th>
@@ -63,7 +62,6 @@
                   </ng-container> -->
                   <!-- Define the table header row -->
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <!-- Define the table rows -->
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
                 <!-- Paginator -->
@@ -117,7 +115,7 @@
               <input type="text" class="form-control" id="wallet" [(ngModel)]="selectedEmployee.wallet" name="wallet"
                 (input)="onWalletInput($event)" maxlength="4">
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between" style="width: 30%;">
               <button type="button" class="btn btn-outline-primary" (click)="updateEmployee()"
                 *ngIf="selectedEmployee">Update</button>
               <button type="button" class="btn btn-outline-primary" (click)="viewProfile(selectedEmployee)"

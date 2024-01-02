@@ -15,6 +15,12 @@ export interface OrderDataItem {
 export interface OrderData {
   order_rec: OrderDataItem[];
   bill_status: string;
+  // emp_id: string;
+}
+
+export interface adminOrderData {
+  order_rec: OrderDataItem[];
+  bill_status: string;
   emp_id: string;
 }
 

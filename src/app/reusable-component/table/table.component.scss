@@ -105,6 +105,7 @@ app-loader {
   border: 1px solid #198754;
   margin-right: 0.5rem;
   transition: all 0.3s ease-out;
+  width: 100px;
 
   &:hover {
     background-color: #fff;
@@ -121,8 +122,10 @@ app-loader {
   background-color: #dc3545;
   color: #fff;
   border: 1px solid #dc3545;
+  margin-top: 0.5rem;
   margin-right: 0.5rem;
   transition: all 0.3s ease-out;
+  width: 100px;
 
   &:hover {
     background-color: #fff;
