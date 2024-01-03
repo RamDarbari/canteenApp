@@ -10,7 +10,20 @@
             </div>
             <div class=" d-flex flex-wrap align-items-center justify-content-between ">
               <button class="btn btn-outline-primary" (click)="openDateRangeModal()">Download Excel</button>
-
+              <div class="dropdown">
+                <div class="custom-select d-flex align-items-center" style="width: 186px;">
+                  <select id="excelOption" name="excelOption" class="form-control" aria-label="Excel Option"
+                    (change)="onExcelOptionChange($event)">
+                    <option style="display: none;" value="" disabled selected>Excell Sort</option>
+                    <!-- <option value="all">Download All</option> -->
+                    <option value="weekly">Download Weekly</option>
+                    <option value="monthly">Download Monthly</option>
+                  </select>
+                  <div class="dropdown-arrow">
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
               <div class="dropdown">
                 <div class="custom-select d-flex align-items-center">
                   <select id="menuTitle" name="menuTitle" class="form-control" aria-label="Default select example"
