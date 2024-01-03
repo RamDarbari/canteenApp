@@ -143,7 +143,7 @@ export class ModalComponent implements OnInit {
         });
     } catch (error) {
       console.error('Error sending OTP:', error);
-      this.toastr.error('Failed to send OTP');
+      this.toastr.error(error.error.message || 'Failed to send OTP');
       this.isLoading = false;
     }
   }
@@ -156,34 +156,28 @@ export class ModalComponent implements OnInit {
       this.isLoading = true;
       this.loginService
         .verifyOTP(this.loginData, emp_id)
-        .subscribe(
-          (response) => {
-            if (response.success) {
-              this.isLoading = false;
-              localStorage.setItem('user', JSON.stringify(response));
-              this.profile.emit();
-              const userRole = response.data.empDetails?.role;
-              if (userRole === 'admin') {
-                this.toastr.success('Admin Login Successful');
-                this.router.navigate(['/admin']);
-              } else {
-                this.toastr.success('Login Successful');
-              }
-
-              this.modalService.dismissAll();
+        .subscribe((response) => {
+          if (response.success) {
+            this.isLoading = false;
+            localStorage.setItem('user', JSON.stringify(response));
+            this.profile.emit();
+            const userRole = response.data.empDetails?.role;
+            if (userRole === 'admin') {
+              this.toastr.success('Admin Login Successful');
+              this.router.navigate(['/admin']);
+            } else {
+              this.toastr.success('Login Successful');
             }
-          },
-          (error) => {
-            console.error('Error verifying OTP:', error);
-            this.toastr.error('Failed to verify OTP');
+
+            this.modalService.dismissAll();
           }
-        )
+        })
         .add(() => {
           this.isLoading = false;
         });
     } catch (error) {
       console.error('Error verifying OTP:', error);
-      this.toastr.error('Failed to verify OTP');
+      this.toastr.error(error.error.message || 'Failed to verify OTP');
     }
   }
 
@@ -287,7 +281,7 @@ export class ModalComponent implements OnInit {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      this.toastr.error('Failed to submit form');
+      this.toastr.error(error.error.message || 'Failed to submit form');
     }
   }
 
@@ -319,12 +313,12 @@ export class ModalComponent implements OnInit {
         },
         (error) => {
           console.error('Error deleting item:', error);
-          this.toastr.error('Failed to delete item');
+          this.toastr.error(error.error.message || 'Failed to delete item');
         }
       );
     } catch (error) {
       console.error('Error deleting item:', error);
-      this.toastr.error('Failed to delete item');
+      this.toastr.error(error.error.message || 'Failed to delete item');
     }
   }
 
@@ -380,7 +374,7 @@ export class ModalComponent implements OnInit {
         );
       } catch (error) {
         console.error('Error updating item:', error);
-        this.toastr.error('Failed to update item');
+        this.toastr.error(error.error.message || 'Failed to update item');
       }
     }
   }
@@ -436,12 +430,15 @@ export class ModalComponent implements OnInit {
         },
         (error) => {
           console.error('Error adding custom order to API:', error);
-          this.toastr.error('Failed to add custom order. Please try again.');
+          this.toastr.error(
+            error.error.message ||
+              'Failed to add custom order. Please try again.'
+          );
         }
       );
     } catch (error) {
       console.error('Error submitting custom order:', error);
-      this.toastr.error('Failed to submit custom order');
+      this.toastr.error(error.error.message || 'Failed to submit custom order');
     }
   }
 
@@ -470,12 +467,12 @@ export class ModalComponent implements OnInit {
         },
         (error) => {
           console.error('Error creating employee:', error);
-          this.toastr.error('Failed to create employee');
+          this.toastr.error(error.error.message || 'Failed to create employee');
         }
       );
     } catch (error) {
       console.error('Error submitting employee:', error);
-      this.toastr.error('Failed to submit employee');
+      this.toastr.error(error.error.message || 'Failed to submit employee');
     }
   }
 }

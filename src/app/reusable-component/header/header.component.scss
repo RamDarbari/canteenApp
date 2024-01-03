@@ -91,7 +91,7 @@ header {
 
   .lower-header {
     background: #ffffff;
-    width: 1200px;
+    // width: 1200px;
     min-height: 487px;
     border-radius: 30px;
     z-index: 1;
@@ -133,6 +133,7 @@ header {
         background-color: transparent;
         transition: all 0.3s ease-in-out;
         color: #9122e8;
+        font-size: 18px;
         &:hover {
           background-color: #9122e8;
           color: white;
@@ -179,6 +180,15 @@ header {
   }
 }
 
+.profile {
+  background: linear-gradient(
+    75.98deg,
+    #ffcb46 0%,
+    #eeb219 100.74%,
+    #ffdc82 100.75%
+  );
+  height: 65px;
+}
 .offcanvas-header {
   border: 1px solid #dddddd;
 

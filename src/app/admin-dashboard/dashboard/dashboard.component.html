@@ -16,7 +16,7 @@
           <div class="col-xl-6 col-sm-6">
             <div class="card">
               <div class="card-body info-cards d-flex align-items-center justify-content-between"
-                [routerLink]="['/admin/menu-catalogue']" routerLinkActive="router-link-active">
+                [routerLink]="['/admin/today-menu']" routerLinkActive="router-link-active">
                 <div class="menu">
                   <span class="font-w500 fs-16 d-block mb-2">Total Menus</span>
                   <h2>{{ totalDetailsCounts.today_menu_items }}</h2>
@@ -75,7 +75,7 @@
               <div class="card-body info-cards d-flex align-items-center justify-content-between "
                 [routerLink]="['/order/order-history']" routerLinkActive="router-link-active">
                 <div class="menu">
-                  <span class="font-w500 fs-16 d-block mb-2">Total Oders</span>
+                  <span class="font-w500 fs-16 d-block mb-2">Total Orders</span>
                   <h2>{{totalDetailsCounts.total_orders}}</h2>
                 </div>
                 <div class="svg d-inline-block position-relative donut-chart-sale">

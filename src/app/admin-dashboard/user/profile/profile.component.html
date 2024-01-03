@@ -1,12 +1,10 @@
 <section>
+  <div *ngIf="!isAdmin">
+    <app-header [showUserSection]="false" [showProfileSection]="true"></app-header>
+  </div>
   <div class="container">
     <div class="row justify-content-between align-items-start mt-5">
-      <div *ngIf="!isAdmin" class="col-md-12 mb-3">
-        <button class="btn btn-outline-primary" (click)="goBack()"><span class="material-symbols-rounded">
-            arrow_back
-          </span></button>
-      </div>
-      <div class="col-md-2 me-5 personal-info d-flex justify-content-center align-items-center">
+      <div class="col-md-2 mb-5 personal-info d-flex justify-content-center align-items-center">
         <div class="avatar">
           <span>
             {{avatarInitial}}
@@ -29,18 +27,13 @@
                   }}
                 </p>
               </div>
-              <div class="card-header">
-                <h5 class="card-title">Department</h5>
-                <p class="card-subtitle mb-2 text-muted">Open Source</p>
-              </div>
             </div>
           </div>
-          <!-- User Info -->
           <div class="col-md-4">
             <div class="card mb-4">
               <div class="card-header">
-                <h5 class="card-title">Username</h5>
-                <p class="card-subtitle mb-2 text-muted">{{ userProfileInfo?.EmployeeId }}</p>
+                <h5 class="card-title">Department</h5>
+                <p class="card-subtitle mb-2 text-muted">Open Source</p>
               </div>
               <div class="card-header">
                 <h5 class="card-title">Email ID</h5>

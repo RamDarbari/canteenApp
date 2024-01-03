@@ -2,6 +2,7 @@ import { OrderData, OrderDataItem } from 'src/data';
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -41,8 +42,8 @@ interface UserData {
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  showUserSection: boolean = true;
-  showAdminSection: boolean = true;
+  // showUserSection: boolean = true;
+  // showAdminSection: boolean = true;
   cartItems: cartItems[] = [];
   quantity: false;
   isAdmin: boolean = false;
@@ -55,6 +56,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() profile = new EventEmitter<void>();
   apiNotifications: any[] = [];
   socketSubscription: Subscription;
+  @Input() showProfileSection: boolean = false;
+  @Input() showUserSection: boolean = false;
 
   constructor(
     private modalService: NgbModal,
@@ -76,16 +79,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.getUserProfile();
       // localStorage.setItem('sidebarState', 'open');
     });
-    // this.socketService.on('message').subscribe((data: any) => {
-    //   console.log('Received a message from the server:', data, '');
-    //   this.messages.push(data); // Store the message
-    // });
-
-    // this.socketService.on('notification').subscribe((data: any) => {
-    //   console.log('Received a notification from the server:', data);
-    //   // this.toaster.info('Received a notification from the server:', data);
-    //   this.messages.push(data); // Store the notification
-    // });
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
@@ -141,7 +134,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Error fetching API notifications:', error);
-        this.toastr.error('Error fetching notifications');
+        this.toastr.error(
+          error.error.message || 'Error fetching notifications'
+        );
       }
     );
   }

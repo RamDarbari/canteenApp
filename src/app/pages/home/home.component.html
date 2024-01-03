@@ -90,7 +90,7 @@
         <div class="top-menu-heading mb-3">
           <h2>Today’s Menu</h2>
         </div>
-        <div class="menu-selection-card d-flex justify-content-between mb-5">
+        <div class="menu-selection-card d-flex justify-content-between mb-3">
           <div class="breakfast">
             <button class="breakfast" (click)="updateSelectedCategory('Breakfast')"
               [ngClass]="{'active-button': selectedCategory === 'Breakfast'}">
@@ -162,7 +162,7 @@
             </button>
           </div>
         </div>
-        <div>
+        <div class="w-100">
           <app-meal-card [displayNormalMealCard]="false" [displayAddItemToCartCard]="true"
             [selectedCategory]="selectedCategory"></app-meal-card>
         </div>
