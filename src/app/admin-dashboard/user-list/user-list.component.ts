@@ -105,7 +105,9 @@ export class UserListComponent implements OnInit {
           },
           (error) => {
             console.error('Error updating user', error);
-            this.toastr.error('Failed to update user balance.');
+            this.toastr.error(
+              error.error.message || 'Failed to update user balance.'
+            );
           }
         )
         .add(() => {

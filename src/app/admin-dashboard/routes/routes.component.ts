@@ -39,65 +39,62 @@ export class RoutesComponent implements OnInit {
   }
 
   ngOnInit() {
-    // // Subscribe to socket events
-    // this.socketService.on('message').subscribe((data: any) => {
-    //   console.log('Received a message from the server:', data, '');
-    //   this.messages.push(data); // Store the message
-    // });
-
-    // this.socketService.on('notification').subscribe((data: any) => {
-    //   console.log('Received a notification from the server:', data);
-    //   // this.toaster.info('Received a notification from the server:', data);
-    //   this.messages.push(data); // Store the notification
-    // });
+    // Subscribe to socket events
     const token = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user')).data.token
       : '';
 
-    this.socketSubscription = this.socketService.on('notification').subscribe(
-      (data: any) => {
-        console.log('Received a notification from the server:', data);
-        this.messages.unshift(data); // Add the new notification to the beginning of the array
-        this.messages = this.messages.slice(0, 5); // Limit to 5 notifications
-      },
-      (error) => {
-        console.error('Error receiving notification:', error);
-      }
-    );
-    // this.getApiNotifications(token);
-  }
+    if (token) {
+      this.socketSubscription = this.socketService.on('notification').subscribe(
+        (data: any) => {
+          console.log('Received a notification from the server:', data);
+          this.messages.unshift(data);
+          this.messages = this.messages.slice(0, 5);
+        },
+        (error) => {
+          console.error('Error receiving notification:', error);
+        }
+      );
 
+      this.getApiNotifications();
+    }
+  }
   ngOnDestroy(): void {
-    // Unsubscribe from the socket service when the component is destroyed
     if (this.socketSubscription) {
       this.socketSubscription.unsubscribe();
     }
   }
 
-  // fetchApiNotifications(): void {
-  //   const token = localStorage.getItem('user')
-  //     ? JSON.parse(localStorage.getItem('user')).data.token
-  //     : '';
+  fetchApiNotifications(): void {
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
 
-  //   try {
-  //     if (token) {
-  //       this._https.getApiNotifications(token).subscribe((response: any) => {
-  //         this.handleApiNotifications(response);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+    try {
+      if (token) {
+        this._https.getApiNotifications(token).subscribe((response: any) => {
+          this.handleApiNotifications(response);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  getApiNotifications(token: string): void {
+  getApiNotifications(): void {
+    const token = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')).data.token
+      : '';
+
     this._https.getApiNotifications(token).subscribe(
       (response: any) => {
         this.apiNotifications = response.data;
       },
       (error) => {
         console.error('Error fetching API notifications:', error);
-        this.toastr.error('Error fetching notifications');
+        this.toastr.error(
+          error.error.message || 'Error fetching notifications'
+        );
       }
     );
   }

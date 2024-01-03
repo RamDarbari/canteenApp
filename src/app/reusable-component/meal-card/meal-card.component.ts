@@ -75,7 +75,8 @@ export class MealCardComponent implements OnInit {
     } catch (error) {
       console.error(error);
       this.toastr.error(
-        'An unexpected error occurred. Please try again later.'
+        error.error.message ||
+          'An unexpected error occurred. Please try again later.'
       );
     }
   }

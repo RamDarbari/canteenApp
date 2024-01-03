@@ -267,7 +267,8 @@ export class MenuTabsComponent implements OnInit {
     } catch (error) {
       console.error(error);
       this.toastr.error(
-        'An unexpected error occurred. Please try again later.'
+        error.error.message ||
+          'An unexpected error occurred. Please try again later.'
       );
     }
   }
@@ -317,7 +318,8 @@ export class MenuTabsComponent implements OnInit {
     } catch (error) {
       console.error(error);
       this.toastr.error(
-        'An unexpected error occurred. Please try again later.'
+        error.error.message ||
+          'An unexpected error occurred. Please try again later.'
       );
     }
   }
@@ -422,7 +424,7 @@ export class MenuTabsComponent implements OnInit {
               error.error && error.error.message
                 ? error.error.message
                 : 'An error occurred.';
-            this.toastr.error(errorMessage);
+            this.toastr.error(error.error.message || errorMessage);
           }
         )
         .add(() => {
@@ -671,7 +673,7 @@ export class MenuTabsComponent implements OnInit {
           },
           (error) => {
             console.error('Error deleting item:', error);
-            this.toastr.error('Failed to delete item');
+            this.toastr.error(error.error.message || 'Failed to delete item');
           }
         )
         .add(() => {

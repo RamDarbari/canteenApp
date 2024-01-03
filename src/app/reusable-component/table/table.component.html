@@ -10,15 +10,22 @@
             </div>
             <div class=" d-flex flex-wrap align-items-center justify-content-between ">
               <button class="btn btn-outline-primary" (click)="openDateRangeModal()">Download Excel</button>
+
               <div class="dropdown">
-                <select id="menuTitle" name="menuTitle" class="form-control" aria-label="Default select example"
-                  (change)="onSelectChange($event)">
-                  <option style="display: none;" value="" disabled selected>Order Status</option>
-                  <option value="confirm">confirm</option>
-                  <option value="pending">pending</option>
-                  <option value="cancelled">cancelled</option>
-                </select>
+                <div class="custom-select d-flex align-items-center">
+                  <select id="menuTitle" name="menuTitle" class="form-control" aria-label="Default select example"
+                    (change)="onSelectChange($event)">
+                    <option style="display: none;" value="" disabled selected>Order Status</option>
+                    <option value="confirm">confirm</option>
+                    <option value="pending">pending</option>
+                    <option value="cancelled">cancelled</option>
+                  </select>
+                  <div class="dropdown-arrow">
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                  </div>
+                </div>
               </div>
+
               <div class="searchBar">
                 <input type="text" class="bg-transparent" placeholder="Search users..." [(ngModel)]="searchName"
                   (keydown)="searchDebounced()">

@@ -146,7 +146,10 @@ export class DashboardComponent implements OnInit {
         },
         (error) => {
           console.error(error);
-          this.toastr.error('Error updating order status. Please try again.');
+          this.toastr.error(
+            error.error.message ||
+              'Error updating order status. Please try again.'
+          );
         },
         () => {
           this.isLoading = false;

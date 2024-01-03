@@ -20,6 +20,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver-es';
 import { ActivatedRoute } from '@angular/router';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 interface Employee {
   EmployeeId: number;
@@ -89,6 +90,7 @@ export class TableComponent implements OnInit {
 
   constructor(
     private http: AdminService,
+    private _http: CommonServiceService,
     private formBuilder: FormBuilder,
     private orderService: PendingOrdersService,
     private toastr: ToastrService,
@@ -102,6 +104,7 @@ export class TableComponent implements OnInit {
       this.getOrderHistory();
     });
     this.getOrderHistory();
+    // this.getUserOrder();
 
     this.formB = this.formBuilder.group({
       startDate: [null],
@@ -171,8 +174,11 @@ export class TableComponent implements OnInit {
         },
         (error) => {
           console.error('Error fetching order history:', error);
-          // You can also add a toastr message for the error if needed
-          this.toastr.error('Failed to fetch order history.');
+
+          // Display the error message in the toastr
+          this.toastr.error(
+            error.error.message || 'Failed to fetch order history.'
+          );
         }
       )
       .add(() => {
@@ -187,10 +193,18 @@ export class TableComponent implements OnInit {
     });
   }
 
+  onExcelOptionChange(event: any): void {
+    const selectedValue = event.target.value;
+    console.log('Selected Excel Option:', selectedValue);
+
+    // Call your API or perform actions based on the selected option
+    this.downloadData(selectedValue);
+  }
+
   onDateRangeSubmit() {
     this.modalRef.close();
-    const formattedStartDate = this.formatDate(this.startDate);
-    const formattedEndDate = this.formatDate(this.endDate);
+    const formattedStartDate = this.formatDate(new Date(this.startDate));
+    const formattedEndDate = this.formatDate(new Date(this.endDate));
     console.log('Formatted Start Date:', formattedStartDate);
     console.log('Formatted End Date:', formattedEndDate);
     this.getOrderHistoryWithDateRange(formattedStartDate, formattedEndDate);
@@ -218,10 +232,11 @@ export class TableComponent implements OnInit {
     this.endDate = formattedMinEndDate;
   }
 
-  formatDate(date: string): string {
-    const parts = date.split('-');
-    const formattedDate = `${parts[1]}-${parts[2]}-${parts[0]}`;
-    return formattedDate;
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}-${day}-${year}`;
   }
 
   getOrderHistoryWithDateRange(startDate: string, endDate: string) {
@@ -232,7 +247,7 @@ export class TableComponent implements OnInit {
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';
-      const dateInterval = `${startDate} to ${endDate}`;
+      const dateInterval = `${startDate}to${endDate}`;
 
       this.http
         .getOrderHistoryExecl(
@@ -249,7 +264,10 @@ export class TableComponent implements OnInit {
           },
           (error) => {
             console.error('Error fetching order history:', error);
-            this.toastr.error('No items found matching the search criteria.');
+            this.toastr.error(
+              error.error.message ||
+                'No items found matching the search criteria.'
+            );
           }
         )
         .add(() => {
@@ -260,6 +278,24 @@ export class TableComponent implements OnInit {
     }
   }
 
+  downloadData(option: string) {
+    const currentDate = new Date();
+    const endDate = this.formatDate(currentDate);
+    let startDate = '';
+
+    if (option === 'weekly') {
+      const sevenDaysAgo = new Date(currentDate);
+      sevenDaysAgo.setDate(currentDate.getDate() - 7);
+      startDate = this.formatDate(sevenDaysAgo);
+    } else if (option === 'monthly') {
+      const thirtyDaysAgo = new Date(currentDate);
+      thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+      startDate = this.formatDate(thirtyDaysAgo);
+    }
+
+    this.getOrderHistoryWithDateRange(startDate, endDate);
+  }
+
   downloadExcel(data: any, filename: string) {
     try {
       const blob = new Blob([data], {
@@ -268,6 +304,7 @@ export class TableComponent implements OnInit {
       saveAs(blob, `${filename}.xlsx`);
     } catch (error) {
       console.error('Error downloading file:', error);
+      this.toastr.error(error.error.message);
     }
   }
 
@@ -298,6 +335,7 @@ export class TableComponent implements OnInit {
         });
     } catch (error) {
       console.log(error);
+      this.toastr.error(error.error.message);
     }
   }
 
@@ -362,4 +400,20 @@ export class TableComponent implements OnInit {
     this.clipboardService.copyFromContent(orderId);
     this.toastr.success('Order ID copied to clipboard');
   }
+
+  // getUserOrder() {
+  //   const token = localStorage.getItem('user')
+  //     ? JSON.parse(localStorage.getItem('user')).data.token
+  //     : '';
+
+  //   try {
+  //     this._http.userOrder(token).subscribe((responce) => {
+  //       if (responce) {
+  //         console.log(responce, 'okkkkkkkkkkkkkk');
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 }

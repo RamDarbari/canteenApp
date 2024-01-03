@@ -24,7 +24,7 @@ export class CommonServiceService {
 
     return this._http.post(url, data).pipe(
       catchError((error) => {
-        this.toastr.error('Error in requestOTP:');
+        this.toastr.error(error.error.message || 'Error in requestOTP:');
         return throwError(error);
       })
     );
@@ -35,7 +35,9 @@ export class CommonServiceService {
 
     return this._http.post(url, loginData).pipe(
       catchError((error) => {
-        this.toastr.error('Error in Verify-Otp:', error);
+        this.toastr.error(
+          error.error.message || error.error || 'Error in Verify-Otp:'
+        );
         return throwError(error);
       })
     );
@@ -106,5 +108,19 @@ export class CommonServiceService {
         Authorization: `Bearer ${token}`,
       },
     });
+  }
+
+  userOrder(token: string, searchName: string) {
+    return this._http.get(
+      `${environment.apiUrl}/user/modules/v1/order/user-order`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          search: searchName,
+        },
+      }
+    );
   }
 }

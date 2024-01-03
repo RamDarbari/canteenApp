@@ -34,10 +34,10 @@
                   <!-- Define the table rows -->
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
-                <div class="mat-paginator">
+                <!-- <div class="mat-paginator">
                   <mat-paginator [length]="totalRecords" [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="limit"
                     [pageIndex]="currentPage" (page)="onPageChange($event)"></mat-paginator>
-                </div>
+                </div> -->
               </ng-template>
             </div>
           </div>

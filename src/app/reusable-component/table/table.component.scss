@@ -46,20 +46,21 @@ app-loader {
   margin-right: 10px;
   margin-left: 5px;
   padding: 5px;
+  cursor: pointer;
 }
 
-.dropdown-menu {
-  min-width: 15.375rem;
-  // padding: 0rem 0 1rem;
-  top: 100%;
-}
+.custom-select {
+  width: 143px;
 
-.dropdown-toggle::after {
-  content: none;
-}
+  .dropdown-arrow {
+    position: relative;
+    right: 22px;
+    background: transparent;
 
-.dropdown-item:active {
-  background-color: $light-primmary-color;
+    i {
+      color: #212529;
+    }
+  }
 }
 
 /* Add these styles to your component's stylesheet */

@@ -1,7 +1,7 @@
 .about-us {
   min-height: 563px;
   background-color: #f6f6f6;
-  width: 91%;
+  width: 98%;
 
   .employee-images {
     img {
@@ -37,6 +37,7 @@
         border: 1px solid #9122e8;
         background-color: transparent;
         color: #9122e8;
+        font-size: 18px;
         transition: all 0.3s ease-in-out;
         &:hover {
           background-color: #9122e8;
