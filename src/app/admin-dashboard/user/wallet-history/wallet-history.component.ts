@@ -78,7 +78,6 @@ export class WalletHistoryComponent implements OnInit {
         .subscribe((response: any) => {
           this.wallet = response.data as WalletHistory[];
           this.dataSource = new MatTableDataSource(this.wallet);
-          console.log(this.wallet, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
         });
     } catch (error) {
       console.error('An error occurred:', error);

@@ -47,7 +47,6 @@ export class RoutesComponent implements OnInit {
     if (token) {
       this.socketSubscription = this.socketService.on('notification').subscribe(
         (data: any) => {
-          console.log('Received a notification from the server:', data);
           this.messages.unshift(data);
           this.messages = this.messages.slice(0, 5);
         },
@@ -123,7 +122,6 @@ export class RoutesComponent implements OnInit {
     this.headerShrink = !this.headerShrink;
     this.sideTitleNone = !this.sideTitleNone;
     this.sideBottom = !this.sideBottom;
-    console.log(this.headerfullwidth, 'worked');
   }
 
   collapse() {}

@@ -56,10 +56,7 @@ export class MealCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Meals:', this.meals);
-    console.log('Selected Category:', this.selectedCategory);
     this.filterMeals();
-    // this.filterSubMenuList();
   }
 
   filterMeals() {
@@ -67,9 +64,6 @@ export class MealCardComponent implements OnInit {
       this._https.menuList().subscribe((response) => {
         if (response.data && response.data.length > 0) {
           this.meals = response.data;
-          console.log(this.meals, 'mealslslslslslsl');
-        } else {
-          // this.toastr.error('No meals found');
         }
       });
     } catch (error) {

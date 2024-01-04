@@ -57,6 +57,5 @@ export class HomeComponent implements OnInit {
 
   updateSelectedCategory(category: string) {
     this.selectedCategory = category;
-    console.log('Selected Category:', this.selectedCategory);
   }
 }

@@ -95,7 +95,6 @@ export class DashboardComponent implements OnInit {
       : '';
     this.http.detailsCount(token, currentDate).subscribe(
       (response: any) => {
-        console.log('count', response);
         if (response && response.data) {
           this.totalDetailsCounts = response.data[0];
           const menuRevenueData = response.data.menu_revenue;
@@ -107,9 +106,7 @@ export class DashboardComponent implements OnInit {
           //   (menu) => menu.count_orders
           // );
           this.mostOrderItems = response.data[0].mostOrderItem;
-          console.log(this.mostOrderItems, 'llllllllllllllllllllllllllll');
           this.recentOrderItems = response.data[0].recent_pending_orders;
-          console.log(this.recentOrderItems, 'oooooooooooooooooooooooooooo');
         }
       },
       (error) => {
@@ -136,7 +133,6 @@ export class DashboardComponent implements OnInit {
 
       this.http.orderStatus(token, status, order_id).subscribe(
         (response) => {
-          console.log(response, ';;;;;;;');
           this.orders = this.orders.filter((order) => order._id !== order_id);
           this.orderService.updateOrders(this.orders);
           this.toastr.info('Order Status Has Been Updated');

@@ -86,7 +86,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (token) {
       this.socketSubscription = this.socketService.on('notification').subscribe(
         (data: any) => {
-          console.log('Received a notification from the server:', data);
           this.messages.unshift(data);
           this.messages = this.messages.slice(0, 5);
         },
@@ -313,7 +312,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this._https
             .placeOrder(orderPayload, token)
             .subscribe((response) => {
-              console.log(response);
               this.isLoading = true;
               localStorage.removeItem('cartItems');
               this.offcanvasService.dismiss();
@@ -325,10 +323,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
               this.isLoading = false;
             });
         } else {
-          console.log('No items in the cart.');
+          this.toastr.error('No items in the cart.');
         }
       } else {
-        console.log('No items in the cart.');
+        this.toastr.error('No items in the cart.');
       }
     } catch (error) {
       console.error('Error placing order:', error);
@@ -390,9 +388,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         updatedAt: response.data.updatedAt,
         wallet: response.data.wallet,
       };
-      // this.setAvatarInitial();
-      console.log(response.message);
-      console.log(this.userProfileInfo, 'llllllllllll');
     }
   }
 

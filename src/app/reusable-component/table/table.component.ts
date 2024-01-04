@@ -137,7 +137,6 @@ export class TableComponent implements OnInit {
 
   onSelectChange(event: any): void {
     const selectedValue = event.target.value;
-    console.log('Selected value:', selectedValue);
     this.searchName = selectedValue;
     this.getOrderHistory();
   }
@@ -164,18 +163,9 @@ export class TableComponent implements OnInit {
         (response: any) => {
           this.orderHistoryData = response.data as OrderHistory[];
           this.totalItemsOrderHistory = response.totalRecords;
-
-          // Check if no items are found
-          // if (this.orderHistoryData.length === 0) {
-          //   this.toastr.info('No items found matching the search criteria.');
-          // }
-
-          console.log(response);
         },
         (error) => {
           console.error('Error fetching order history:', error);
-
-          // Display the error message in the toastr
           this.toastr.error(
             error.error.message || 'Failed to fetch order history.'
           );
@@ -195,9 +185,6 @@ export class TableComponent implements OnInit {
 
   onExcelOptionChange(event: any): void {
     const selectedValue = event.target.value;
-    console.log('Selected Excel Option:', selectedValue);
-
-    // Call your API or perform actions based on the selected option
     this.downloadData(selectedValue);
   }
 
@@ -205,8 +192,6 @@ export class TableComponent implements OnInit {
     this.modalRef.close();
     const formattedStartDate = this.formatDate(new Date(this.startDate));
     const formattedEndDate = this.formatDate(new Date(this.endDate));
-    console.log('Formatted Start Date:', formattedStartDate);
-    console.log('Formatted End Date:', formattedEndDate);
     this.getOrderHistoryWithDateRange(formattedStartDate, formattedEndDate);
   }
 
@@ -240,7 +225,6 @@ export class TableComponent implements OnInit {
   }
 
   getOrderHistoryWithDateRange(startDate: string, endDate: string) {
-    console.log('getOrderHistoryWithDateRange');
     try {
       this.isLoadingOrderHistory = true;
 
@@ -327,7 +311,6 @@ export class TableComponent implements OnInit {
       this.http
         .pendingOrderList(token, currentPage, totalRecords, totalPages, limit)
         .subscribe((response: any) => {
-          console.log(response, '');
           if (response && response.data && response.data.length > 0) {
             this.orderService.setOrders(response.data);
           }
@@ -340,7 +323,6 @@ export class TableComponent implements OnInit {
   }
 
   pageChangedPendingOrder(event: PageEvent) {
-    console.log('Page changed:', event);
     this.currentPagePendingOrder = event.pageIndex;
     this.pageSizePendingOrder = event.pageSize;
     this.pendingOrderList();
@@ -366,7 +348,6 @@ export class TableComponent implements OnInit {
         .orderStatus(token, status, order_id)
         .subscribe(
           (response) => {
-            console.log(response, ';;;;;;;');
             this.orders = this.orders.filter((order) => order._id !== order_id);
             this.orderService.updateOrders(this.orders);
             this.toastr.info('Order Status Has Been Updated');
@@ -400,20 +381,4 @@ export class TableComponent implements OnInit {
     this.clipboardService.copyFromContent(orderId);
     this.toastr.success('Order ID copied to clipboard');
   }
-
-  // getUserOrder() {
-  //   const token = localStorage.getItem('user')
-  //     ? JSON.parse(localStorage.getItem('user')).data.token
-  //     : '';
-
-  //   try {
-  //     this._http.userOrder(token).subscribe((responce) => {
-  //       if (responce) {
-  //         console.log(responce, 'okkkkkkkkkkkkkk');
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
 }

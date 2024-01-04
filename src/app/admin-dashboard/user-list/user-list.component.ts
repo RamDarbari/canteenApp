@@ -97,7 +97,6 @@ export class UserListComponent implements OnInit {
         .updateBalance(token, emp_id, payment, bill)
         .subscribe(
           (response) => {
-            console.log('balance updated', response);
             this.loadUserData();
             this.selectedEmployee = null;
             this.offcanvasService.dismiss();
@@ -132,11 +131,9 @@ export class UserListComponent implements OnInit {
       .userList(token, startIndex, this.limit, this.searchName)
       .subscribe(
         (response: any) => {
-          console.log('res', response);
           if (response && response.data) {
             this.dataSource = response.data;
             this.totalItems = response.totalPages * this.limit;
-            console.log('dataSource', this.dataSource);
           }
         },
         (error) => {

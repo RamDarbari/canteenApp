@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -91,7 +90,6 @@ export class ModalComponent implements OnInit {
 
     this.route.queryParams.subscribe((queryParams) => {
       this.selectedCategory = queryParams['selectedCategory'] || '';
-      console.log('Selected Category:', this.selectedCategory);
     });
 
     this.form.valueChanges.subscribe(() => {
@@ -132,7 +130,7 @@ export class ModalComponent implements OnInit {
           if (response.message === 'success') {
             this.otpVerified = true;
             this.toastr.success('Otp Sent Successfully');
-            localStorage.setItem('user', JSON.stringify(response));
+            // localStorage.setItem('user', JSON.stringify(response));
           } else {
             this.otpVerified = false;
             this.toastr.error('Failed to send OTP');
@@ -159,7 +157,7 @@ export class ModalComponent implements OnInit {
         .subscribe((response) => {
           if (response.success) {
             this.isLoading = false;
-            localStorage.setItem('user', JSON.stringify(response));
+            // localStorage.setItem('user', JSON.stringify(response));
             this.profile.emit();
             const userRole = response.data.empDetails?.role;
             if (userRole === 'admin') {
@@ -228,8 +226,6 @@ export class ModalComponent implements OnInit {
           if (!this.selectedMenuTitle && this.menuItems.length > 0) {
             this.selectedMenuTitle = this.menuItems[0]._id;
           }
-
-          console.log(this.menuItems, 'vvvvvhvhvhvvhvhvhvhvhvhvh');
         }
       });
     } catch (error) {
@@ -364,7 +360,6 @@ export class ModalComponent implements OnInit {
           (error) => {
             console.error('Error updating item:', error);
 
-            // Check if the error has a message property
             if (error && error.error && error.error.message) {
               this.toastr.error(error.error.message); // Display the error message using Toastr
             } else {
@@ -422,7 +417,6 @@ export class ModalComponent implements OnInit {
         : '';
       this.http.addItem(newItem, token).subscribe(
         (response) => {
-          console.log('API response:', response);
           this.toastr.success(`${formData.item_name} added to your order`);
           form.resetForm();
           this.modalService.dismissAll();
@@ -443,7 +437,6 @@ export class ModalComponent implements OnInit {
   }
 
   onSubmitEmployee(formData: any, form: NgForm): void {
-    console.log('onSubmitEmployee function called with data:', formData);
     try {
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
@@ -458,9 +451,7 @@ export class ModalComponent implements OnInit {
       };
 
       this.http.createEmployee(token, employeeData).subscribe(
-        (response) => {
-          console.log('Employee creation successful', response);
-          // Additional logic if needed
+        () => {
           this.toastr.success('Employee Created Successfully');
           this.userAdded.emit();
           this.modalService.dismissAll();

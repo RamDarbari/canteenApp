@@ -313,7 +313,6 @@ export class MenuTabsComponent implements OnInit {
       this.menuService.updateSelectedMenus(storedMenus);
       this.fetchSelectedMenus();
       this.updateMenuCategoryState();
-      console.log('Menu added to localStorage:', storedMenus);
       this.cdr.detectChanges();
     } catch (error) {
       console.error(error);
@@ -333,10 +332,6 @@ export class MenuTabsComponent implements OnInit {
         subMenuItems: storedMenus[menuType],
       }));
       this.updateMenuCategoryState();
-      console.log(
-        'Fetched selectedMenus from localStorage:',
-        this.selectedMenus
-      );
       this.cdr.detectChanges();
     } catch (error) {
       console.error(
@@ -368,21 +363,7 @@ export class MenuTabsComponent implements OnInit {
           menuType: type,
           subMenuItems: storedMenus[type],
         }));
-
-        console.log(
-          'Deleted item at index',
-          index,
-          'from menu with Type',
-          menuType
-        );
         this.updateMenuCategoryState();
-      } else {
-        console.log(
-          'Unable to delete item at index',
-          index,
-          'from menu with Type',
-          menuType
-        );
       }
     } catch (error) {
       console.error(
@@ -409,7 +390,6 @@ export class MenuTabsComponent implements OnInit {
         .addTodayMenu(token, payload)
         .subscribe(
           (response) => {
-            console.log('Response from addTodayMenu API:', response);
             localStorage.removeItem('selectedMenus');
             this.selectedMenus = [];
             this.toastr.success('Today menu added successfully!');
@@ -457,13 +437,12 @@ export class MenuTabsComponent implements OnInit {
         const cartItems = this.cartService.getCartItems();
         const billStatus = this.selectedBillStatus;
 
-        if (!cartItems || cartItems.length === 0) {
-          console.log('No items in the cart.');
-          return;
-        }
+        // if (!cartItems || cartItems.length === 0) {
+        //   console.log('No items in the cart.');
+        //   return;
+        // }
 
         if (cartItems && cartItems.length > 0) {
-          // Check if emp_id is provided
           if (!this.empId) {
             this.toastr.error('Please add an employee id.');
             return;
@@ -493,7 +472,6 @@ export class MenuTabsComponent implements OnInit {
             .placeOrder(orderPayload, token)
             .subscribe(
               (response) => {
-                console.log(response);
                 localStorage.removeItem('cartItems');
                 localStorage.removeItem('selectedBillStatus');
                 this.loadCartItems();
@@ -513,11 +491,7 @@ export class MenuTabsComponent implements OnInit {
             .add(() => {
               this.isLoading = false;
             });
-        } else {
-          console.log('No items in the cart.');
         }
-      } else {
-        console.log('No items in the cart.');
       }
     } catch (error) {
       console.error('Error placing order:', error);
@@ -652,9 +626,7 @@ export class MenuTabsComponent implements OnInit {
 
   deleteButton() {
     if (this.item) {
-      this.isDeleteLoading = true; // Set loading state to true
-      console.log(this.item._id, 'item');
-
+      this.isDeleteLoading = true;
       const token = localStorage.getItem('user')
         ? JSON.parse(localStorage.getItem('user')).data.token
         : '';

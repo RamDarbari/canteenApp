@@ -5,18 +5,46 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { OrderData, login } from 'src/data';
 import { environment } from '..//../environments/environment';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonServiceService {
-  token!: string;
+  private secretKey = 'jwt-encryption'; // Replace with your secret key
 
   constructor(
     private _http: HttpClient,
     private _router: Router,
     private toastr: ToastrService
   ) {}
+
+  private encrypt(data: any): string {
+    const encryptedData = CryptoJS.AES.encrypt(
+      JSON.stringify(data),
+      this.secretKey
+    ).toString();
+    return encryptedData;
+  }
+
+  private decrypt(encryptedData: string): any {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, this.secretKey);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    return decryptedData;
+  }
+
+  private saveEncryptedData(key: string, data: any): void {
+    const encryptedData = this.encrypt(data);
+    localStorage.setItem(key, encryptedData);
+  }
+
+  private getDecryptedData(key: string): any {
+    const encryptedData = localStorage.getItem(key);
+    if (encryptedData) {
+      return this.decrypt(encryptedData);
+    }
+    return null;
+  }
 
   requestOTP(emp_id: number): Observable<any> {
     const url = `${environment.apiUrl}/user/modules/v1/auth/login`;
@@ -26,6 +54,12 @@ export class CommonServiceService {
       catchError((error) => {
         this.toastr.error(error.error.message || 'Error in requestOTP:');
         return throwError(error);
+      }),
+      map((response: any) => {
+        if (response.message === 'success') {
+          this.saveEncryptedData('user', response.data);
+        }
+        return response;
       })
     );
   }
@@ -39,6 +73,12 @@ export class CommonServiceService {
           error.error.message || error.error || 'Error in Verify-Otp:'
         );
         return throwError(error);
+      }),
+      map((response: any) => {
+        if (response.success) {
+          this.saveEncryptedData('user', response.data);
+        }
+        return response;
       })
     );
   }
@@ -108,19 +148,5 @@ export class CommonServiceService {
         Authorization: `Bearer ${token}`,
       },
     });
-  }
-
-  userOrder(token: string, searchName: string) {
-    return this._http.get(
-      `${environment.apiUrl}/user/modules/v1/order/user-order`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          search: searchName,
-        },
-      }
-    );
   }
 }

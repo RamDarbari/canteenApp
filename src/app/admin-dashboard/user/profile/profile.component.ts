@@ -100,8 +100,6 @@ export class ProfileComponent implements OnInit {
         wallet: response.data.wallet,
       };
       this.setAvatarInitial();
-      console.log(response.message);
-      console.log(this.userProfileInfo, 'llllllllllll');
     }
   }
 
