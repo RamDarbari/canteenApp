@@ -1,7 +1,6 @@
 {
   "name": "canteen",
   "version": "0.0.0",
-  "homepage": "https://stgphys.appsndevs.com/cafeteria/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
