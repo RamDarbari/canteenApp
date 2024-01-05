@@ -4,6 +4,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/dist
 
 # Node
 /node_modules
@@ -41,3 +42,5 @@ testem.log
 Thumbs.db
 
 package-lock.json
+# /environment.development.ts
+# /environment.ts

@@ -182,7 +182,7 @@ engine.io-client
 
 engine.io-parser
 
-file-saver
+file-saver-es
 MIT
 The MIT License
 
