@@ -30,7 +30,6 @@ interface TodayMenu {
   createdAt: string;
   updatedAt: string;
 }
-
 interface MenuItem {
   _id: string;
   item_name: string;
@@ -81,6 +80,7 @@ export class MenuTabsComponent implements OnInit {
   @Output() itemAdded = new EventEmitter<void>();
   @Output() listSub = new EventEmitter<void>();
   displayedColumns: string[] = ['item_name', 'price', 'quantity'];
+  dataSource: TodayMenu[] = [];
 
   private selectedMenusSubject: BehaviorSubject<any[]> = new BehaviorSubject<
     any[]
@@ -144,6 +144,7 @@ export class MenuTabsComponent implements OnInit {
           this.updateMenuCategoryState();
         });
       });
+    this.filterMeals();
   }
 
   ngOnDestroy(): void {
@@ -694,6 +695,34 @@ export class MenuTabsComponent implements OnInit {
 
   closeModal() {
     this.modalService.dismissAll();
+  }
+
+  filterMeals() {
+    try {
+      this._https.menuList().subscribe(
+        (response) => {
+          if (response.data && response.data.length > 0) {
+            this.dataSource = response.data;
+            this.cdr.detectChanges();
+          } else {
+            this.toastr.error('No meals found');
+          }
+        },
+        (error) => {
+          console.error(error);
+          this.toastr.error(
+            error.error.message ||
+              'An unexpected error occurred. Please try again later.'
+          );
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      this.toastr.error(
+        error.error.message ||
+          'An unexpected error occurred. Please try again later.'
+      );
+    }
   }
 }
 function takeUntil(

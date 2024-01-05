@@ -80,27 +80,6 @@ export class MealCardComponent implements OnInit {
       );
     }
   }
-
-  // filterSubMenuList() {
-  //   try {
-  //     const token = localStorage.getItem('user')
-  //       ? JSON.parse(localStorage.getItem('user')).data.token
-  //       : '';
-  //     this.http.addminMenuList(token).subscribe((response) => {
-  //       if (response.data && response.data.length > 0) {
-  //         this.submenu = response.data;
-  //       } else {
-  //         this.toastr.error('No meals found');
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //     this.toastr.error(
-  //       'An unexpected error occurred. Please try again later.'
-  //     );
-  //   }
-  // }
-
   openLoginModal(event: Event): void {
     const modalRef = this.modalService.open(ModalComponent, {
       backdrop: 'static',

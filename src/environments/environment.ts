@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://seasia-cafe.onrender.com',
+  apiUrl: 'http://10.8.11.154:5000',
 };

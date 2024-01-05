@@ -63,6 +63,7 @@ export class TableComponent implements OnInit {
   @ViewChild('dateRangeModal') dateRangeModal: TemplateRef<any>;
   download: string = '';
   dateInterval: string = '';
+  currentOrderItem: any;
   displayedColumns: string[] = [
     'date',
     '_id',
@@ -401,19 +402,20 @@ export class TableComponent implements OnInit {
     this.toastr.success('Order ID copied to clipboard');
   }
 
-  // getUserOrder() {
-  //   const token = localStorage.getItem('user')
-  //     ? JSON.parse(localStorage.getItem('user')).data.token
-  //     : '';
+  deleteOrderItem(orderId: string, itemId: string): void {
+    try {
+      const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).data.token : '';
 
-  //   try {
-  //     this._http.userOrder(token).subscribe((responce) => {
-  //       if (responce) {
-  //         console.log(responce, 'okkkkkkkkkkkkkk');
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+      this.currentOrderItem = { orderId, itemId }; 
+
+      this.http.deleteOrderItem(token, orderId, itemId).subscribe(
+        (response) => {
+          this.pendingOrderList()
+          console.log(response);
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

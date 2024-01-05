@@ -248,4 +248,22 @@ export class AdminService {
       },
     });
   }
+
+  deleteOrderItem(token: string, orderId: string, itemId: string) {
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: {
+        order_id: orderId,
+        item_id: itemId,
+      },
+    };
+
+    return this._http.delete(
+      `${environment.apiUrl}/admin/modules/v1/order/delete-item`,
+      options
+    );
+  }
+
 }
