@@ -15,6 +15,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { CartService } from 'src/app/services/cart.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { login } from 'src/data';
+import * as CryptoJS from 'crypto-js';
 
 interface MenuItem {
   _id: string;
@@ -128,36 +129,47 @@ export class ModalComponent implements OnInit {
         .requestOTP(this.loginData.emp_id)
         .subscribe((response) => {
           if (response.message === 'success') {
-            this.otpVerified = true;
+            // Store encrypted response data in localStorage
+            this.loginService.saveEncryptedData('user', response.data);
+
             this.toastr.success('Otp Sent Successfully');
-            // localStorage.setItem('user', JSON.stringify(response));
+            this.otpVerified = true; // Open the verify-otp form
           } else {
-            this.otpVerified = false;
             this.toastr.error('Failed to send OTP');
           }
         })
         .add(() => {
-          this.isLoading = false;
+          this.isLoading = false; // Stop the loader
         });
     } catch (error) {
       console.error('Error sending OTP:', error);
       this.toastr.error(error.error.message || 'Failed to send OTP');
-      this.isLoading = false;
+      this.isLoading = false; // Stop the loader
     }
   }
 
   verifyOTP() {
     try {
-      const emp_id = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')).data.emp_id
-        : null;
+      // Decrypt user data from localStorage
+      const encryptedUserData = localStorage.getItem('user');
+      console.log('Encrypted User Data:', encryptedUserData);
+
+      const userData = this.loginService.getDecryptedData(encryptedUserData);
+      console.log('Decrypted User Data:', userData);
+
+      if (!userData) {
+        console.error('User data not found.');
+        return;
+      }
+
       this.isLoading = true;
       this.loginService
-        .verifyOTP(this.loginData, emp_id)
+        .verifyOTP(this.loginData, userData.data.token)
         .subscribe((response) => {
           if (response.success) {
             this.isLoading = false;
-            // localStorage.setItem('user', JSON.stringify(response));
+            // Store encrypted response data in localStorage
+            this.loginService.saveEncryptedData('user', response.data);
             this.profile.emit();
             const userRole = response.data.empDetails?.role;
             if (userRole === 'admin') {
@@ -166,7 +178,6 @@ export class ModalComponent implements OnInit {
             } else {
               this.toastr.success('Login Successful');
             }
-
             this.modalService.dismissAll();
           }
         })

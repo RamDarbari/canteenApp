@@ -167,10 +167,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get hasToken(): boolean {
-    const userJSON = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')).data.token
-      : '';
-    return !!userJSON;
+    try {
+      const encryptedToken = localStorage.getItem('user');
+      if (encryptedToken) {
+        // Decrypt the token
+        const decryptedToken = this._https.getDecryptedData(encryptedToken);
+        // console.log(decryptedToken, ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
+
+        return (
+          decryptedToken && decryptedToken.data && decryptedToken.data.token
+        );
+      }
+      return false;
+    } catch (error) {
+      console.error('Error checking for token:', error);
+      return false;
+    }
   }
 
   get hasCartItems(): boolean {

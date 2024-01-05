@@ -10,9 +10,11 @@ export class SocketioService {
   private socket: Socket;
 
   serverUrl = 'http://10.8.11.160:5000/';
-  jwtToken = localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user')).data?.token
-    : null;
+  jwtToken;
+
+  // localStorage.getItem('user')
+  // ? JSON.parse(localStorage.getItem('user'))?.data?.token
+  // : null;
 
   constructor() {
     this.socket = io(this.serverUrl, {

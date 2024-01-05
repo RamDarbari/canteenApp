@@ -27,23 +27,25 @@ export class CommonServiceService {
     return encryptedData;
   }
 
-  private decrypt(encryptedData: string): any {
+  public decrypt(encryptedData: string): any {
     const bytes = CryptoJS.AES.decrypt(encryptedData, this.secretKey);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return decryptedData;
   }
 
-  private saveEncryptedData(key: string, data: any): void {
+  public saveEncryptedData(key: string, data: any): void {
     const encryptedData = this.encrypt(data);
     localStorage.setItem(key, encryptedData);
   }
-
-  private getDecryptedData(key: string): any {
-    const encryptedData = localStorage.getItem(key);
-    if (encryptedData) {
-      return this.decrypt(encryptedData);
+  public getDecryptedData(encryptedData: string): any {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, this.secretKey);
+      const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return decryptedData;
+    } catch (error) {
+      console.error('Error during decryption:', error);
+      return null;
     }
-    return null;
   }
 
   requestOTP(emp_id: number): Observable<any> {
